@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}
+    Index page
+{% endblock title %}
+{% block subtitle_hero %}
+    All spends
+{% endblock subtitle_hero %}
+{% block content %}
+    <div class="block">
+        <center>
+            <h1 class="title">All spends</h1>
+        </center>
+    </div>
+    <div class="container">
+        <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+            <thead>
+                <tr>
+                    <th>
+                        <abbr title="Position">Date</abbr>
+                    </th>
+                    <th>
+                        <abbr title="Played">Trat</abbr>
+                    </th>
+                    <th>
+                        <abbr title="Won">Skok</abbr>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for day in days %}
+                    <tr>
+                        <th>{{ day.date }}</th>
+                        <td>{{ day.amount }}</td>
+                        <td>{{ day.category }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock content %}

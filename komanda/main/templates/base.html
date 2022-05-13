@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet"
+              href="{% static 'css/bulma/bulma.css' %}"
+              type="text/css">
+        <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+        <script src="{% static 'js/dropdown.js' %}"></script>
+        <script src="{% static 'js/awesome-font.js' %}"></script>
+        <title>
+            {% block title %}Testing env{% endblock %}
+        </title>
+    </head>
+    <body>
+        <div class="block">
+            <section class="hero is-primary">
+                <div class="hero-body">
+                    <p class="title">
+                        Environmental tests
+                    </p>
+                    <p class="subtitle">
+                        {% block subtitle_hero %}
+                            Subtitle
+                        {% endblock subtitle_hero %}
+                    </p>
+                </div>
+            </section>
+        </div>
+        <div class="block">
+            <div class="container">
+                <div class="columns">
+                    <div class="column">
+                        <center>
+                            <a href='add'>
+                                <button class="button is-primary is-light is-rounded">Add</button>
+                            </a>
+                        </center>
+                    </div>
+                    <div class="column">
+                        <center>
+                            <a href='all'>
+                                <button class="button is-link is-light is-rounded">All</button>
+                            </a>
+                        </center>
+                    </div>
+                    <div class="column">
+                        <center>
+                            <a href='.'>
+                                <button class="button is-warning is-light is-rounded">Main</button>
+                            </a>
+                        </center>
+                    </div>
+                    <div class="column">
+                        <center>
+                            <a href='all'>
+                                <button class="button is-info is-light is-rounded" disabled>Stats</button>
+                            </a>
+                        </center>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% block content %}
+        {% endblock content %}
+    </body>
+</html>

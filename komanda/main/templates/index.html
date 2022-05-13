@@ -1,1 +1,44 @@
-TEST
+{% extends 'base.html' %}
+{% block title %}
+    Index page
+{% endblock title %}
+{% block subtitle_hero %}
+    Page for index
+{% endblock subtitle_hero %}
+{% block content %}
+    <div class="block">
+        <center>
+            <h1 class="title">List of categories</h1>
+        </center>
+    </div>
+    <div class="container">
+        <div class="field is-grouped is-grouped-multiline">
+            {% for category in categories %}
+            <div class="control">
+                <div class="tags are-medium has-addons">
+                    <span class="tag">{{ category }}</span>
+                    <a class="tag is-delete" href="delete/{{ category.id }}"></a>
+                </div>
+            </div>    
+            {% endfor %}
+        </div>
+        <div class="block">
+            <form method="POST" class="post-form">
+                {% csrf_token %}
+                <div class="block">
+                    <div class="field">
+                        <p class="control">
+                            <input class="input is-primary"
+                                   type="text"
+                                   name="name"
+                                   placeholder="Name of category"
+                                   required
+                                   id="{{ form.name.id_for_label }}">
+                        </p>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}
