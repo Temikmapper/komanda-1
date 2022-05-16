@@ -1,16 +1,5 @@
-{% extends 'base.html' %}
-{% block title %}
-    Index page
-{% endblock title %}
-{% block subtitle_hero %}
-    Monthly page
-{% endblock subtitle_hero %}
-{% block content %}
-    <section class="section">
-        <center>
-            <h1 class="title">Monthly</h1>
-        </center>
-    </section>
+{% extends 'yearly.html' %}
+{% block spends_table %}
     <div class="container">
         <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
             <thead>
@@ -37,4 +26,4 @@
             </tbody>
         </table>
     </div>
-{% endblock content %}
+{% endblock spends_table %}
