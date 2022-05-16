@@ -20,7 +20,7 @@
                     <tr>
                         <th>{{ day.date }}</th>
                         <td>{{ day.amount }}</td>
-                        <td>{% for category in day.category %} <span class="tag is-light is-normal">{{ category }}</span>{%endfor%}</td>
+                        <td>{{ day.category }}</td>
                     </tr>
                 {% endfor %}
             </tbody>

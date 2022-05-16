@@ -1,5 +1,6 @@
 from calendar import monthrange
 from datetime import datetime, timedelta
+from decimal import Decimal
 from django.shortcuts import render, redirect
 from main.models import Spendings, Categories
 from main.forms import SpendForm, CategoryAddForm
@@ -85,10 +86,67 @@ def monthly(request, year, month): #TODO рефакторить
     start_of_month = datetime(year, month, 1)
     end_of_month = datetime(year, month, last_day)
 
-    data = Spendings.objects.filter(date__gte=start_of_month).filter(
-        date__lte=end_of_month).order_by('date')
+    # data = Spendings.objects.filter(date__gte=start_of_month).filter(
+    #     date__lte=end_of_month).order_by('date')
+
+    cur_day = start_of_month
+    data = []
+    while (cur_day != end_of_month+timedelta(1)):
+        spends_in_day = Spendings.objects.filter(date=cur_day)
+        if (len(spends_in_day) != 0):
+            spends_list = []
+            total_amount = Decimal(0)
+            for spend in spends_in_day:
+                spends_list.append(spend.category.name)
+                total_amount+=spend.amount
+            data.append({'date': cur_day.date(),'amount': total_amount, 'category': spends_list})
+        else:
+            data.append({'date': cur_day.date(), 'amount': Decimal(0), 'category': ['No spends']})
+        cur_day+=timedelta(1)
 
     return render(request, 'monthly.html',
+                  {'date': CURRENT_DATE,
+                   'days': data,
+                   'year': year,
+                   'monthes': monthes,
+                   'cur_month': month_names[month]})
+
+def monthly_raw(request, year, month):
+    month_names = {1: 'January',
+                   2: 'February',
+                   3: 'March',
+                   4: 'April',
+                   5: 'May',
+                   6: 'June',
+                   7: 'July',
+                   8: 'August',
+                   9: 'September',
+                   10: 'October',
+                   11: 'November',
+                   12: 'December'}
+    jan = {'id':1, 'name':'January'}
+    feb = {'id':2, 'name':'February'}
+    mar = {'id':3, 'name':'March'}
+    apr = {'id':4, 'name':'April'}
+    may = {'id':5, 'name':'May'}
+    jun = {'id':6, 'name':'June'}
+    jul = {'id':7, 'name':'July'}
+    aug = {'id':8, 'name':'August'}
+    sep = {'id':9, 'name':'September'}
+    oct = {'id':10, 'name':'October'}
+    nov = {'id':11, 'name':'November'}
+    dec = {'id':12, 'name':'Decemeber'}
+    monthes = [jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec]
+
+    last_day = monthrange(year, month)[1]
+
+    start_of_month = datetime(year, month, 1)
+    end_of_month = datetime(year, month, last_day)
+
+    data = Spendings.objects.filter(date__gte=start_of_month).filter(
+        date__lte=end_of_month).order_by('date')
+    
+    return render(request, 'monthly_raw.html',
                   {'date': CURRENT_DATE,
                    'days': data,
                    'year': year,
