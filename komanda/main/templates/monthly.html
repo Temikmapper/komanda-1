@@ -1,4 +1,7 @@
 {% extends 'yearly.html' %}
+{% block settings %}
+    <a href={% url 'monthly_raw' year month %}><button class="button">View expenses</button></a>
+{% endblock %}
 {% block spends_table %}
     <div class="container">
         <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
@@ -13,6 +16,9 @@
                     <th>
                         <abbr title="Won">Kategr</abbr>
                     </th>
+                    <th>
+                        <abbr title="Won">Balance</abbr>
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -21,6 +27,12 @@
                         <th>{{ day.date }}</th>
                         <td>{{ day.amount }}</td>
                         <td>{% for category in day.category %} <span class="tag is-light is-normal">{{ category }}</span>{%endfor%}</td>
+                        <td>{% if day.accumulated_balance < 0 %}
+                            <span class="tag is-danger is-light is-medium">{{ day.accumulated_balance }}</span>
+                            {% endif %}
+                            {% if day.accumulated_balance > 0 %}
+                            <span class="tag is-success is-light is-medium">{{ day.accumulated_balance }}</span>
+                            {% endif %}</td>
                     </tr>
                 {% endfor %}
             </tbody>
