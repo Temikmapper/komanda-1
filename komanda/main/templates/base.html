@@ -29,40 +29,23 @@
                 </div>
             </section>
         </div>
-        <div class="block">
-            <div class="container">
-                <div class="columns">
-                    <div class="column">
-                        <center>
-                            <a href='add'>
-                                <button class="button is-primary is-light is-rounded">Add</button>
-                            </a>
-                        </center>
-                    </div>
-                    <div class="column">
-                        <center>
-                            <a href='all'>
-                                <button class="button is-link is-light is-rounded">All</button>
-                            </a>
-                        </center>
-                    </div>
-                    <div class="column">
-                        <center>
-                            <a href='.'>
-                                <button class="button is-warning is-light is-rounded">Main</button>
-                            </a>
-                        </center>
-                    </div>
-                    <div class="column">
-                        <center>
-                            <a href='all'>
-                                <button class="button is-info is-light is-rounded" disabled>Stats</button>
-                            </a>
-                        </center>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <center>
+                <a href={% url 'add_spend' %}>
+                    <button class="button is-primary is-light is-rounded">Add</button>
+                </a>
+                <a href={% url 'show_all' %}>
+                    <button class="button is-link is-light is-rounded">All</button>
+                </a>
+                <a href={% url 'index' %}>
+                    <button class="button is-warning is-light is-rounded">Main</button>
+                </a>
+                <a href={% url 'monthly' date.year date.month %}>
+                    <button class="button is-warning is-light is-rounded">Mntly</button>
+                </a>
+                <a href='../all'>
+                    <button class="button is-info is-light is-rounded" disabled>Stats</button>
+                </a>
+        </center>
         {% block content %}
         {% endblock content %}
     </body>
