@@ -18,4 +18,4 @@ class IncomeEditForm(forms.ModelForm):
 
     class Meta:
         model = Incomes
-        fields = ('value',)
+        fields = ('value', 'name')

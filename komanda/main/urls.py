@@ -13,4 +13,5 @@ urlpatterns = [
     path('monthly/<int:year>/<int:month>/raw', views.monthly_raw, name='monthly_raw'),
     path('monthly/<int:year>/<int:month>/income', views.monthly_income, name='monthly_income'),
     path('monthly/<int:year>/<int:month>/income/<int:id>/edit', views.income_edit, name='income_edit'),
+    path('income/delete/<int:id>', views.income_delete, name='income_delete')
 ]

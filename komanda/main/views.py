@@ -173,6 +173,11 @@ def income_edit(request, year, month, id):
                    'form': form,
                    })
 
+def income_delete(request, id):
+    income = Incomes.objects.get(id=id)
+    income.delete()
+    return redirect('index')
+
 
 def get_balance_for_monthly_table(start_of_month, end_of_month):
     cur_day = start_of_month
