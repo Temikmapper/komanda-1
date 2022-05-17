@@ -1,6 +1,27 @@
 {% extends 'yearly.html' %}
 {% block settings %}
-    <a href={% url 'monthly_raw' year month %}><button class="button">View expenses</button></a>
+    <div class="block">
+        <div class="container">
+            <div class="columns">
+                <div class="column">
+                    <h1 class="title">Per day: {{ daily_income }}</h1>
+                    <h2 class="subtitle">
+                        <span>Free: {{ monthly_income }} </span><a href={% url 'monthly_income' year month %}><span class="icon is-small"><i class="fa-regular fa-pen-to-square fa-xs"></i></span></a>
+                    </h2>
+                </div>
+                <div class="column"></div>
+                <div class="column" style="text-align:right;">
+                    <left>
+                    <a href={% url 'monthly_raw' year month %}>
+                        <button class="button">
+                            <span class="icon is-small"><i class="fa-regular fa-pen-to-square"></i></span><span>Edit expenses</span>
+                        </button>
+                    </a>
+                    </left>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 {% block spends_table %}
     <div class="container">
@@ -26,13 +47,17 @@
                     <tr>
                         <th>{{ day.date }}</th>
                         <td>{{ day.amount }}</td>
-                        <td>{% for category in day.category %} <span class="tag is-light is-normal">{{ category }}</span>{%endfor%}</td>
-                        <td>{% if day.accumulated_balance < 0 %}
-                            <span class="tag is-danger is-light is-medium">{{ day.accumulated_balance }}</span>
+                        <td>
+                            {% for category in day.category %}<span class="tag is-light is-normal">{{ category }}</span>{% endfor %}
+                        </td>
+                        <td>
+                            {% if day.accumulated_balance < 0 %}
+                                <span class="tag is-danger is-light is-medium">{{ day.accumulated_balance }}</span>
                             {% endif %}
                             {% if day.accumulated_balance > 0 %}
-                            <span class="tag is-success is-light is-medium">{{ day.accumulated_balance }}</span>
-                            {% endif %}</td>
+                                <span class="tag is-success is-light is-medium">{{ day.accumulated_balance }}</span>
+                            {% endif %}
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>

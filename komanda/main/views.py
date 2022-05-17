@@ -1,3 +1,4 @@
+from audioop import reverse
 from calendar import monthrange
 from datetime import datetime, timedelta
 from decimal import ROUND_05UP, ROUND_CEILING, ROUND_FLOOR, ROUND_HALF_EVEN, Decimal
@@ -53,6 +54,10 @@ def delete_category(request, id):
     category.delete()
     return redirect('index')
 
+def delete_expense(request, id, year, month):
+    expense = Spendings.objects.get(id=id)
+    expense.delete()
+    return redirect('index') #TODO редикрет обратно в raw
 
 def monthly(request, year, month):  # TODO рефакторить
     month_names = {1: 'January',
@@ -90,7 +95,9 @@ def monthly(request, year, month):  # TODO рефакторить
 
     return render(request, 'monthly.html',
                   {'date': CURRENT_DATE,
-                   'days': data,
+                   'days': data[0],
+                   'daily_income': data[1],
+                   'monthly_income': data[2],
                    'year': year,
                    'month': month,
                    'monthes': monthes,
@@ -136,6 +143,7 @@ def monthly_raw(request, year, month):
                   {'date': CURRENT_DATE,
                    'days': data,
                    'year': year,
+                   'month': month,
                    'monthes': monthes,
                    'cur_month': month_names[month]})
 
@@ -172,4 +180,4 @@ def get_balance_for_monthly_table(start_of_month, end_of_month):
                          'accumulated_balance': accumulated_balance.quantize(Decimal("1.00"), ROUND_FLOOR)})
         cur_day += timedelta(1)
     
-    return data
+    return data, daily_income.quantize(Decimal("1.00"), ROUND_FLOOR), montly_income.quantize(Decimal("1.00"), ROUND_FLOOR)

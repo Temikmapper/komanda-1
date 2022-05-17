@@ -13,6 +13,9 @@
                     <th>
                         <abbr title="Won">Kategr</abbr>
                     </th>
+                    <th>
+                        <abbr title="Won">Delete</abbr>
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -21,6 +24,7 @@
                         <th>{{ day.date }}</th>
                         <td>{{ day.amount }}</td>
                         <td>{{ day.category }}</td>
+                        <td><a href={% url 'delete_expense' year month day.id %}><button class="delete"></button></a></td>
                     </tr>
                 {% endfor %}
             </tbody>
