@@ -19,3 +19,9 @@ class IncomeEditForm(forms.ModelForm):
     class Meta:
         model = Incomes
         fields = ('value', 'name')
+
+class IncomeAddForm(forms.ModelForm):
+
+    class Meta:
+        model = Incomes
+        fields = ('value', 'name')

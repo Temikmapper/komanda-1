@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from decimal import ROUND_05UP, ROUND_CEILING, ROUND_FLOOR, ROUND_HALF_EVEN, Decimal
 from django.shortcuts import render, redirect
 from main.models import Spendings, Categories, Incomes
-from main.forms import SpendForm, CategoryAddForm, IncomeEditForm
+from main.forms import SpendForm, CategoryAddForm, IncomeEditForm, IncomeAddForm
 
 
 def get_curent_date():
@@ -141,10 +141,19 @@ def monthly_raw(request, year, month):
 def monthly_income(request, year, month):
     date = datetime(year, month, 1)
 
+    if request.method == "POST":
+        form = IncomeAddForm(request.POST)
+        if form.is_valid():
+            income = form.save(commit=False)
+            income.date = date
+            income.save()
+    else:
+        form = IncomeAddForm()
+
     incomes = Incomes.objects.filter(date=date)
 
     if len(incomes) == 0:
-        Incomes.objects.create(date=date, name='Salar')
+        Incomes.objects.create(date=date, name='Salary')
         incomes = [Incomes.objects.get(date=date)]
 
     return render(request, 'monthly_income.html',
@@ -152,7 +161,8 @@ def monthly_income(request, year, month):
                    'cur_month': MONTH_NAMES[month],
                    'year': year,
                    'month': month,
-                   'incomes': incomes})
+                   'incomes': incomes,
+                   'form': form})
 
 
 def income_edit(request, year, month, id):
