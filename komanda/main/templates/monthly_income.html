@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}
+    Index page
+{% endblock title %}
+{% block subtitle_hero %}
+    Edit income
+{% endblock subtitle_hero %}
+{% block content %}
+    <section class="section">
+        <center>
+            <h1 class="title">{{ cur_month }}</h1>
+        </center>
+    </section>
+    <div class="container">
+        <div class="block">
+            {% for income in incomes %}
+                <div class="box">
+                    <div class="field">
+                        <h4 class="title is-4">{{ income.name }}</h4>
+                        <label class="label">Current value: {{ income.value }}</label>
+                    </div>
+                    <a href={% url 'income_edit' year month income.id %}><button class="button is-primary">Edit</button>
+                </div>
+            {% endfor %}
+            <form method="POST" class="post-form">
+                {% comment %} {% csrf_token %} {% endcomment %}
+                <div class="field">
+                    <h4 class="title is-4">Add new income</h4>
+                    <div class="control">
+                        <label class="label">Name</label>
+                        <input class="input is-primary" type="text" placeholder="Salary">
+                    </div>
+                    <div class="control">
+                        <label class="label">Value</label>
+                        <input class="input is-primary" type="text" placeholder="3 000 000">
+                    </div>
+                </div>
+                <button class="button is-primary">Add</button>
+            </form>
+        </div>
+    </div>
+{% endblock content %}

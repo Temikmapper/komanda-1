@@ -11,5 +11,6 @@ urlpatterns = [
     path('monthly/<int:year>/<int:month>', views.monthly, name='monthly'),
     path('monthly/<int:year>/<int:month>/raw/delete/<int:id>', views.delete_expense, name='delete_expense'),
     path('monthly/<int:year>/<int:month>/raw', views.monthly_raw, name='monthly_raw'),
-    path('monthly/<int:year>/<int:month>/income', views.monthly_income, name='monthly_income')
+    path('monthly/<int:year>/<int:month>/income', views.monthly_income, name='monthly_income'),
+    path('monthly/<int:year>/<int:month>/income/<int:id>/edit', views.income_edit, name='income_edit'),
 ]

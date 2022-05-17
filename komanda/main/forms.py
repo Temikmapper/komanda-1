@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Spendings, Categories
+from .models import Incomes, Spendings, Categories
 
 class SpendForm(forms.ModelForm):
 
@@ -13,3 +13,9 @@ class CategoryAddForm(forms.ModelForm):
     class Meta:
         model = Categories
         fields = ('name',)
+
+class IncomeEditForm(forms.ModelForm):
+
+    class Meta:
+        model = Incomes
+        fields = ('value',)

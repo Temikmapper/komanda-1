@@ -3,8 +3,8 @@ from calendar import monthrange
 from datetime import datetime, timedelta
 from decimal import ROUND_05UP, ROUND_CEILING, ROUND_FLOOR, ROUND_HALF_EVEN, Decimal
 from django.shortcuts import render, redirect
-from main.models import Spendings, Categories
-from main.forms import SpendForm, CategoryAddForm
+from main.models import Spendings, Categories, Incomes
+from main.forms import SpendForm, CategoryAddForm, IncomeEditForm
 
 
 def get_curent_date():
@@ -15,6 +15,18 @@ def get_curent_date():
 
 
 CURRENT_DATE = get_curent_date()
+MONTH_NAMES = {1: 'January',
+               2: 'February',
+               3: 'March',
+               4: 'April',
+               5: 'May',
+               6: 'June',
+               7: 'July',
+               8: 'August',
+               9: 'September',
+               10: 'October',
+               11: 'November',
+               12: 'December'}
 
 
 def index(request):
@@ -54,24 +66,14 @@ def delete_category(request, id):
     category.delete()
     return redirect('index')
 
+
 def delete_expense(request, id, year, month):
     expense = Spendings.objects.get(id=id)
     expense.delete()
-    return redirect('index') #TODO редикрет обратно в raw
+    return redirect('index')  # TODO редикрет обратно в raw
+
 
 def monthly(request, year, month):  # TODO рефакторить
-    month_names = {1: 'January',
-                   2: 'February',
-                   3: 'March',
-                   4: 'April',
-                   5: 'May',
-                   6: 'June',
-                   7: 'July',
-                   8: 'August',
-                   9: 'September',
-                   10: 'October',
-                   11: 'November',
-                   12: 'December'}
     jan = {'id': 1, 'name': 'January'}
     feb = {'id': 2, 'name': 'February'}
     mar = {'id': 3, 'name': 'March'}
@@ -101,22 +103,10 @@ def monthly(request, year, month):  # TODO рефакторить
                    'year': year,
                    'month': month,
                    'monthes': monthes,
-                   'cur_month': month_names[month]})
+                   'cur_month': MONTH_NAMES[month]})
 
 
 def monthly_raw(request, year, month):
-    month_names = {1: 'January',
-                   2: 'February',
-                   3: 'March',
-                   4: 'April',
-                   5: 'May',
-                   6: 'June',
-                   7: 'July',
-                   8: 'August',
-                   9: 'September',
-                   10: 'October',
-                   11: 'November',
-                   12: 'December'}
     jan = {'id': 1, 'name': 'January'}
     feb = {'id': 2, 'name': 'February'}
     mar = {'id': 3, 'name': 'March'}
@@ -145,13 +135,50 @@ def monthly_raw(request, year, month):
                    'year': year,
                    'month': month,
                    'monthes': monthes,
-                   'cur_month': month_names[month]})
+                   'cur_month': MONTH_NAMES[month]})
+
+
+def monthly_income(request, year, month):
+    date = datetime(year, month, 1)
+
+    incomes = Incomes.objects.filter(date=date)
+
+    if len(incomes) == 0:
+        Incomes.objects.create(date=date, name='Salar')
+        incomes = [Incomes.objects.get(date=date)]
+
+    return render(request, 'monthly_income.html',
+                  {'date': CURRENT_DATE,
+                   'cur_month': MONTH_NAMES[month],
+                   'year': year,
+                   'month': month,
+                   'incomes': incomes})
+
+
+def income_edit(request, year, month, id):
+    income = Incomes.objects.get(id=id)
+
+    if request.method == "POST":
+        form = IncomeEditForm(request.POST, instance=income)
+        if form.is_valid():
+            income = form.save(commit=False)
+            income.name
+            income.save()
+    else:
+        form = IncomeEditForm(instance=income)
+
+    return render(request, 'income_edit.html',
+                  {'date': CURRENT_DATE,
+                   'income': income,
+                   'form': form,
+                   })
+
 
 def get_balance_for_monthly_table(start_of_month, end_of_month):
     cur_day = start_of_month
     data = []
     accumulated = Decimal(0)
-    montly_income = Decimal(2000) #TODO fromDB
+    montly_income = Decimal(2000)  # TODO fromDB
     num_of_days = (end_of_month-start_of_month).days+1
     accumulated_income = Decimal(0)
     accumulated_balance = Decimal(0)
@@ -170,14 +197,14 @@ def get_balance_for_monthly_table(start_of_month, end_of_month):
             accumulated += total_amount
             accumulated_balance -= total_amount
             data.append({'date': cur_day.date(),
-                         'amount': total_amount, 
-                         'category': spends_list, 
+                         'amount': total_amount,
+                         'category': spends_list,
                          'accumulated_balance': accumulated_balance.quantize(Decimal("1.00"), ROUND_FLOOR)})
         else:
-            data.append({'date': cur_day.date(), 
-                         'amount': Decimal(0).quantize(Decimal("1.00"), ROUND_FLOOR), 
-                         'category': ['No spends'], 
+            data.append({'date': cur_day.date(),
+                         'amount': Decimal(0).quantize(Decimal("1.00"), ROUND_FLOOR),
+                         'category': ['No spends'],
                          'accumulated_balance': accumulated_balance.quantize(Decimal("1.00"), ROUND_FLOOR)})
         cur_day += timedelta(1)
-    
+
     return data, daily_income.quantize(Decimal("1.00"), ROUND_FLOOR), montly_income.quantize(Decimal("1.00"), ROUND_FLOOR)
