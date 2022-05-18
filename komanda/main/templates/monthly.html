@@ -1,76 +1,87 @@
 {% extends 'yearly.html' %}
 {% block settings %}
     <div class="block">
-        <div class="container">
-            <div class="columns">
-                <div class="column">
-                    <h1 class="title">Per day: {{ daily_income }}</h1>
-                    <h2 class="subtitle">
-                        <span>Free: {{ monthly_income }}</span><a href={% url 'monthly_income' year month %}><span class="icon is-small"><i class="fa-regular fa-pen-to-square fa-xs"></i></span></a>
-                    </h2>
-                </div>
-                <div class="column"></div>
-                <div class="column" style="text-align:right;">
-                    <left>
-                    <a href={% url 'monthly_raw' year month %}>
-                        <button class="button">
-                            <span class="icon is-small"><i class="fa-regular fa-pen-to-square"></i></span><span>Edit expenses</span>
-                        </button>
+        <div class="columns">
+            <div class="column">
+                <h1 class="title">Per day: {{ daily_income }}</h1>
+                <h2 class="subtitle">
+                    <span>Free: {{ monthly_income }}</span>
+                    <a href={% url 'monthly_income' year month %}>
+                        <span class="icon is-small">
+                            <i class="fa-regular fa-pen-to-square fa-xs">
+                            </i>
+                        </span>
                     </a>
-                    </left>
-                </div>
+                </h2>
+            </div>
+            <div class="column"></div>
+            <div class="column" style="text-align:right;">
+                <left>
+                <a href={% url 'monthly_raw' year month %}>
+                    <button class="button">
+                        <span class="icon is-small"><i class="fa-regular fa-pen-to-square"></i></span><span>Edit expenses</span>
+                    </button>
+                </a>
+                </left>
             </div>
         </div>
     </div>
 {% endblock %}
 {% block spends_table %}
-    <div class="container">
-        <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-            <thead>
-                <tr>
-                    <th>
-                        <abbr title="Position">Date</abbr>
-                    </th>
-                    <th>
-                        <abbr title="Played">Trat</abbr>
-                    </th>
-                    <th>
-                        <abbr title="Won">Kategr</abbr>
-                    </th>
-                    <th>
-                        <abbr title="Won">Balance</abbr>
-                    </th>
+    <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+        <thead>
+            <tr>
+                <th>
+                    <abbr title="Position">Date</abbr>
+                </th>
+                <th>
+                    <abbr title="Played">Trat</abbr>
+                </th>
+                <th>
+                    <abbr title="Won">Kategr</abbr>
+                </th>
+                <th>
+                    <abbr title="Won">Balance</abbr>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for day in days %}
+                <tr {% if day.date|date:"n" == date.month_ %}
+                        {% if day.date|date:"d" == date.day_ %}
+                            class="is-selected"
+                        {% endif %}
+                    {% endif %}>
+                    <th>{{ day.date|date:"d, D"}} </th>
+                    <td>{{ day.amount }}</td>
+                    <td>
+                        {% for category in day.category %}
+                            <span class="tag is-light 
+                            {% if category == 'No spends' %}
+                                is-normal
+                            {% else %}
+                                is-warning
+                            {% endif %}"> {{ category }}</span>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% if day.accumulated_balance < 0 %}
+                            <span class="tag is-danger is-light is-medium">{{ day.accumulated_balance }}</span>
+                        {% endif %}
+                        {% if day.accumulated_balance > 0 %}
+                            <span class="tag is-success is-light is-medium">{{ day.accumulated_balance }}</span>
+                        {% endif %}
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                {% for day in days %}
-                    <tr>
-                        <th>{{ day.date }}</th>
-                        <td>{{ day.amount }}</td>
-                        <td>
-                            {% for category in day.category %}
-                                <span class="tag is-light {% if category == 'No spends' %}is-normal{% endif %}{% if category != 'No spends' %}is-warning{% endif %}"> {{ category }}</span>
-                            {% endfor %}
-                        </td>
-                        <td>
-                            {% if day.accumulated_balance < 0 %}
-                                <span class="tag is-danger is-light is-medium">{{ day.accumulated_balance }}</span>
-                            {% endif %}
-                            {% if day.accumulated_balance > 0 %}
-                                <span class="tag is-success is-light is-medium">{{ day.accumulated_balance }}</span>
-                            {% endif %}
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-            <tfoot>
-                <tr>
-                    <th>
-                        <abbr title="Position">Total</abbr>
-                    </th>
-                    <th colspan="3">{{ total_expenses }}</th>
-                </tr>
-            </tfoot>
-        </table>
-    </div>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>
+                    <abbr title="Position">Total</abbr>
+                </th>
+                <th colspan="3">{{ total_expenses }}</th>
+            </tr>
+        </tfoot>
+    </table>
 {% endblock spends_table %}

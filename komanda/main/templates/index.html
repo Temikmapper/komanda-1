@@ -11,15 +11,12 @@
             <h1 class="title">List of categories</h1>
         </center>
     </section>
-    <div class="container">
-        <div class="field is-grouped is-grouped-multiline">
+        <div class="tags are-large">
             {% for category in categories %}
-            <div class="control">
-                <div class="tags are-medium has-addons">
-                    <span class="tag">{{ category }}</span>
-                    <a class="tag is-delete" href="delete/{{ category.id }}"></a>
-                </div>
-            </div>    
+                    <form class="tag" method="get" action={% url 'delete_category' category.id %}>
+                        {{ category }}
+                        <button class="delete"></button>
+                    </form>
             {% endfor %}
         </div>
         <div class="block">
@@ -39,6 +36,4 @@
                 </div>
             </form>
         </div>
-    </div>
-</div>
-{% endblock content %}
+    {% endblock content %}

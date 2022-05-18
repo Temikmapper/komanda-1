@@ -34,21 +34,25 @@
                                     {% if user.is_authenticated %}
                                         <span class="navbar-item">Logged as {{ user }}</span>
                                         <span class="navbar-item">
-                                            <a href="{% url 'logout' %}" class="button is-primary">
-                                                <span class="icon">
-                                                    <i class="fa-solid fa-right-to-bracket"></i>
-                                                </span>
-                                                <span>Logout</span>
-                                            </a>
+                                            <form method="get" action={% url 'logout' %}>
+                                                <button class="button is-primary">
+                                                    <span class="icon">
+                                                        <i class="fa-solid fa-right-to-bracket"></i>
+                                                    </span>
+                                                    <span>Logout</span>
+                                                </button>
+                                            </form>
                                         </span>
                                     {% else %}
                                         <span class="navbar-item">
-                                            <a href="{% url 'login' %}" class="button">
-                                                <span class="icon">
-                                                    <i class="fa-solid fa-right-to-bracket"></i>
-                                                </span>
-                                                <span>Login</span>
-                                            </a>
+                                            <form method="get" action={% url 'login' %}>
+                                                <button class="button">
+                                                    <span class="icon">
+                                                        <i class="fa-solid fa-right-to-bracket"></i>
+                                                    </span>
+                                                    <span>Login</span>
+                                                </button>
+                                            </form>
                                         </span>
                                     {% endif %}
                                 </div>
@@ -72,30 +76,36 @@
             <div class="columns">
                 <div class="column"></div>
                 <div class="column is-one-third">
-                        <div class="buttons is-centered">
-                        <a href={% url 'add_spend' %}>
+                    <div class="buttons is-centered">
+                        <form method="get" action={% url 'add_spend' %}>
                             <button class="button is-primary is-light is-rounded">Add</button>
-                        </a>
-                        <a href={% url 'show_all' %}>
+                        </form>
+                        <form method="get" action={% url 'show_all' %}>
                             <button class="button is-link is-light is-rounded">All</button>
-                        </a>
-                        <a href={% url 'index' %}>
+                        </form>
+                        <form method="get" action={% url 'index' %}>
                             <button class="button is-warning is-light is-rounded">Main</button>
-                        </a>
-                        <a href={% url 'monthly' date.year date.month %}>
+                        </form>
+                        <form method="get" action={% url 'monthly' date.year date.month %}>
                             <button class="button is-danger is-light is-rounded">Montly</button>
-                        </a>
-                        <a href='../all'>
-                            <button class="button is-info is-light is-rounded" disabled>Stats</button>
-                            </a>
-                        </div>
+                        </form>
+                        <button class="button is-info is-light is-rounded" disabled>Stats</button>
+                    </div>
                 </div>
                 <div class="column"></div>
             </div>
         </div>
     {% endblock navigation %}
-    {% block content %}
-    {% endblock content %}
+    {% block month_tabs %}
+    {% endblock month_tabs %}
+    <div class="columns is-mobile">
+        <div class="column"></div>
+        <div class="column is-three-quarters-mobile is-half-desktop">
+            {% block content %}
+            {% endblock content %}
+        </div>
+        <div class="column"></div>
+    </div>
 </body>
 <footer>
     <section class="section">

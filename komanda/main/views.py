@@ -12,7 +12,9 @@ from main.forms import SpendForm, CategoryAddForm, IncomeEditForm, IncomeAddForm
 def get_current_date():
 
     date = {'year': datetime.today().year,
-            'month': datetime.today().month}
+            'month': datetime.today().month,
+            'month_': str(datetime.today().month),
+            'day_': str(datetime.today().day)}
     return date
 
 
