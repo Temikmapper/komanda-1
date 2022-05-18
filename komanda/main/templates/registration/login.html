@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block navigation %}
+{% endblock navigation %}
+{% block content %}
+    {% if form.errors %}
+        <p>
+            Your username and password didn't match. Please try again.
+        </p>
+    {% endif %}
+    <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        <div class="columns is-mobile">
+            <div class="column"></div>
+            <div class="column is-one-third-desktop is-three-fifths-mobile">
+                <div class="field">
+                    <p class="control has-icons-left has-icons-right">
+                        <input class="input"
+                               type="text"
+                               name="username"
+                               maxlength="150"
+                               required
+                               id="id_username"
+                               placeholder="Login">
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-envelope"></i>
+                        </span>
+                        <span class="icon is-small is-right">
+                            <i class="fas fa-check"></i>
+                        </span>
+                    </p>
+                </div>
+                <div class="field">
+                    <p class="control has-icons-left">
+                        <input class="input"
+                               type="password"
+                               name="password"
+                               required
+                               id="id_password"
+                               placeholder="Password">
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-lock"></i>
+                        </span>
+                    </p>
+                </div>
+                <center>
+                <button class="button is-primary is-outlined">Login</button>
+                {% comment %} <input type="submit" value="login" /> {% endcomment %}
+                </center>
+                <input type="hidden" name="next" value="{{ next }}" />
+            </div>
+            <div class="column"></div>
+        </div>
+    </form>
+{% endblock %}

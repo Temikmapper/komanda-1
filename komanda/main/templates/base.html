@@ -7,12 +7,11 @@
         <link rel="stylesheet"
               href="{% static 'css/bulma/bulma.css' %}"
               type="text/css">
-        <link rel="stylesheet"
-              href="{% static 'css/all.css' %}"
-              type="text/css">
+        <link rel="stylesheet" href="{% static 'css/all.css' %}" type="text/css">
         <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
         <script src="{% static 'js/dropdown.js' %}"></script>
         <script src="{% static 'js/awesome-font.js' %}"></script>
+        <script src="{% static 'js/burger.js' %}"></script>
         <title>
             {% block title %}Testing env{% endblock %}
         </title>
@@ -20,9 +19,46 @@
     <body>
         <div class="block">
             <section class="hero is-primary">
+                <div class="hero-head">
+                    <nav class="navbar">
+                        <div class="container">
+                            <div class="navbar-brand">
+                                <span class="navbar-burger" data-target="navbarMenuHeroA">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </span>
+                            </div>
+                            <div id="navbarMenuHeroA" class="navbar-menu">
+                                <div class="navbar-end">
+                                    {% if user.is_authenticated %}
+                                        <span class="navbar-item">Logged as {{ user }}</span>
+                                        <span class="navbar-item">
+                                            <a href="{% url 'logout' %}" class="button is-primary">
+                                                <span class="icon">
+                                                    <i class="fa-solid fa-right-to-bracket"></i>
+                                                </span>
+                                                <span>Logout</span>
+                                            </a>
+                                        </span>
+                                    {% else %}
+                                        <span class="navbar-item">
+                                            <a href="{% url 'login' %}" class="button">
+                                                <span class="icon">
+                                                    <i class="fa-solid fa-right-to-bracket"></i>
+                                                </span>
+                                                <span>Login</span>
+                                            </a>
+                                        </span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
                 <div class="hero-body">
                     <p class="title">
-                        Environmental tests
+                        Environmental test
                     </p>
                     <p class="subtitle">
                         {% block subtitle_hero %}
@@ -32,27 +68,37 @@
                 </div>
             </section>
         </div>
-        <center>
-            <a href={% url 'add_spend' %}>
-                <button class="button is-primary is-light is-rounded">Add</button>
-            </a>
-            <a href={% url 'show_all' %}>
-                <button class="button is-link is-light is-rounded">All</button>
-            </a>
-            <a href={% url 'index' %}>
-                <button class="button is-warning is-light is-rounded">Main</button>
-            </a>
-            <a href={% url 'monthly' date.year date.month %}>
-                <button class="button is-danger is-light is-rounded">Montly</button>
-            </a>
-            <a href='../all'>
-                <button class="button is-info is-light is-rounded" disabled>Stats</button>
-            </a>
-        </center>
-        {% block content %}
-        {% endblock content %}
-    </body>
-    <footer>
-        <section class="section"></section>
-    </footer>
+        {% block navigation %}
+            <div class="columns">
+                <div class="column"></div>
+                <div class="column is-one-third">
+                        <div class="buttons is-centered">
+                        <a href={% url 'add_spend' %}>
+                            <button class="button is-primary is-light is-rounded">Add</button>
+                        </a>
+                        <a href={% url 'show_all' %}>
+                            <button class="button is-link is-light is-rounded">All</button>
+                        </a>
+                        <a href={% url 'index' %}>
+                            <button class="button is-warning is-light is-rounded">Main</button>
+                        </a>
+                        <a href={% url 'monthly' date.year date.month %}>
+                            <button class="button is-danger is-light is-rounded">Montly</button>
+                        </a>
+                        <a href='../all'>
+                            <button class="button is-info is-light is-rounded" disabled>Stats</button>
+                            </a>
+                        </div>
+                </div>
+                <div class="column"></div>
+            </div>
+        </div>
+    {% endblock navigation %}
+    {% block content %}
+    {% endblock content %}
+</body>
+<footer>
+    <section class="section">
+    </section>
+</footer>
 </html>

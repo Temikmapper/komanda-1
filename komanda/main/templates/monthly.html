@@ -6,7 +6,7 @@
                 <div class="column">
                     <h1 class="title">Per day: {{ daily_income }}</h1>
                     <h2 class="subtitle">
-                        <span>Free: {{ monthly_income }} </span><a href={% url 'monthly_income' year month %}><span class="icon is-small"><i class="fa-regular fa-pen-to-square fa-xs"></i></span></a>
+                        <span>Free: {{ monthly_income }}</span><a href={% url 'monthly_income' year month %}><span class="icon is-small"><i class="fa-regular fa-pen-to-square fa-xs"></i></span></a>
                     </h2>
                 </div>
                 <div class="column"></div>
@@ -48,7 +48,9 @@
                         <th>{{ day.date }}</th>
                         <td>{{ day.amount }}</td>
                         <td>
-                            {% for category in day.category %}<span class="tag is-light is-normal">{{ category }}</span>{% endfor %}
+                            {% for category in day.category %}
+                                <span class="tag is-light {% if category == 'No spends' %}is-normal{% endif %}{% if category != 'No spends' %}is-warning{% endif %}"> {{ category }}</span>
+                            {% endfor %}
                         </td>
                         <td>
                             {% if day.accumulated_balance < 0 %}
@@ -61,6 +63,14 @@
                     </tr>
                 {% endfor %}
             </tbody>
+            <tfoot>
+                <tr>
+                    <th>
+                        <abbr title="Position">Total</abbr>
+                    </th>
+                    <th colspan="3">{{ total_expenses }}</th>
+                </tr>
+            </tfoot>
         </table>
     </div>
 {% endblock spends_table %}
