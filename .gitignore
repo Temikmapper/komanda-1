@@ -3,3 +3,4 @@ __init__.py
 *.pyc
 komanda/main/migrations
 komanda/db.sqlite3
+komanda/goals/migrations

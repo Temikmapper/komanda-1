@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="block">
+        <center>
+            <h1 class="title">Add goal</h1>
+        </center>
+    </div>
+    <div class="box">
+        <form method="POST" class="post-form">
+            {% csrf_token %}
+            <div class="block">
+                {{ form.name.errors }}
+                <div class="field">
+                    <p class="control">
+                        <input class="input is-primary"
+                               type="text"
+                               name="name"
+                               placeholder="Name"
+                               required
+                               id="{{ form.name.id_for_label }}">
+                    </p>
+                </div>
+            </div>
+            <div class="block">
+                {{ form.goal_date.errors }}
+                <div class="field">
+                    <p class="control has-icons-left">
+                        <input class="input is-primary"
+                               type="date"
+                               name="goal_date"
+                               placeholder="Deadline"
+                               required
+                               id="{{ form.goal_date.id_for_label }}">
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-calendar"></i>
+                        </span>
+                    </p>
+                </div>
+            </div>
+            <div class="block">
+                {{ form.goal_value.errors }}
+                <div class="field">
+                    <p class="control has-icons-left">
+                        <input class="input is-primary"
+                               type="number"
+                               name="goal_value"
+                               placeholder="Price"
+                               step="100"
+                               required
+                               id="{{ form.goal_value.id_for_label }}">
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-ruble-sign"></i>
+                        </span>
+                    </p>
+                </div>
+            </div>
+            <div class="block">
+                <button type="submit" class="button is-success">
+                    <span class="icon is-small">
+                        <i class="fas fa-check"></i>
+                    </span>
+                    <span>Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+{% endblock content %}

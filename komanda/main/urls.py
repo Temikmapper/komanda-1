@@ -1,8 +1,10 @@
-from django.urls import path
+from django.urls import path, include
 
 from . import views
 
 from django.contrib.auth import views as views_auth
+
+from goals import urls as goals_urls
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -17,5 +19,6 @@ urlpatterns = [
     path('monthly/<int:year>/<int:month>/income/<int:id>/edit', views.income_edit, name='income_edit'),
     path('income/delete/<int:id>', views.income_delete, name='income_delete'),
     path('accounts/login/', views_auth.LoginView.as_view(next_page='/'), name='login'),
-    path('accounts/logout/', views_auth.LogoutView.as_view(next_page='/'), name='logout')
+    path('accounts/logout/', views_auth.LogoutView.as_view(next_page='/'), name='logout'),
+    path('goals/', include(goals_urls), name='view_all_goals')
 ]

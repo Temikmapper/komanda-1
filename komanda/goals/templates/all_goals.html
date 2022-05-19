@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="columns">
+        <div class="column">
+            <form method="get" action={% url 'add_goal' %}>
+                <button class="button is-primary is-outlined">
+                    <span class="icon">
+                        <i class="fa-solid fa-plus"></i>
+                    </span>
+                    <span>Add goal</span>
+                </button>
+            </form>
+        </div>
+        <div class="column has-text-centered">
+            <h1 class="title">All goals</h1>
+        </div>
+        <div class="column">
+            
+        </div>
+    </div>
+    <div class="block">
+    </div>
+    {% for goal in goals %}
+        <div class="box">
+            <div class="columns">
+                <div class="column">
+                    <div class="field">
+                        <h1 class="title">
+                            {{ goal.name }}
+                        </h1>
+                    </div>
+                </div>
+                <div class="column" style="text-align:right;">
+                    <form method="get" action={% url 'delete_goal' goal.id %}>
+                        <button class="button is-danger is-outlined">Delete</button>
+                    </form>
+                </div>
+            </div>
+            <progress class="progress is-primary"
+                      value="{{ goal.current_percent|floatformat:"2u" }}"
+                      max="100"></progress>
+            <div class="columns">
+                <div class="column">
+                    <h2 class="subtitle">Ending {{ goal.goal_date }}</h2>
+                </div>
+                <div class="column has-text-centered">
+                    <h2 class="subtitle">{{ goal.current_percent }} %</h2>
+                </div>
+                <div class="column" style="text-align:right;">
+                    <h2 class="subtitle">
+                        Left <strong>{{ goal.left }}</strong> of {{ goal.goal_value }}
+                    </h2>
+                </div>
+            </div>
+            <form method="get" action={% url 'view_goal' goal.id %}>
+                <button class="button is-primary">Edit</button>
+            </form>
+        </div>
+    {% endfor %}
+{% endblock content %}
