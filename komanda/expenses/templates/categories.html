@@ -6,11 +6,11 @@
     Page for index
 {% endblock subtitle_hero %}
 {% block content %}
-    <section class="section">
+    <div class="block">
         <center>
             <h1 class="title">List of categories</h1>
         </center>
-    </section>
+    </div>
         <div class="tags are-large">
             {% for category in categories %}
                     <form class="tag" method="get" action={% url 'delete_category' category.id %}>

@@ -6,7 +6,7 @@
                 <h1 class="title">Per day: {{ daily_income }}</h1>
                 <h2 class="subtitle">
                     <span>Free: {{ monthly_income }}</span>
-                    <a href={% url 'monthly_income' year month %}>
+                    <a href={% url 'view_monthly_incomes' year month %}>
                         <span class="icon is-small">
                             <i class="fa-regular fa-pen-to-square fa-xs">
                             </i>
@@ -17,7 +17,7 @@
             <div class="column"></div>
             <div class="column" style="text-align:right;">
                 <left>
-                <a href={% url 'monthly_raw' year month %}>
+                <a href={% url 'view_month_raw' year month %}>
                     <button class="button">
                         <span class="icon is-small"><i class="fa-regular fa-pen-to-square"></i></span><span>Edit expenses</span>
                     </button>
