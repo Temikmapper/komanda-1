@@ -2,5 +2,8 @@ venv/
 __init__.py
 *.pyc
 komanda/main/migrations
-komanda/db.sqlite3
+*.sqlite3
 komanda/goals/migrations
+komanda/expenses/migrations
+komanda/SECRET_FILE.py
+komanda/incomes/migrations
