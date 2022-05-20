@@ -11,7 +11,7 @@ from expenses.models import Expenses
 from incomes.models import Incomes
 
 @login_required
-def view_month(request, year, month):  # TODO #1 рефакторить
+def view_month(request, year, month):
 
     last_day = monthrange(year, month)[1]
 

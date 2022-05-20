@@ -44,4 +44,4 @@ def add_expense(request):
 def delete_expense(request, id):
     expense = Expenses.objects.get(id=id)
     expense.delete()
-    return view_all_expenses(request) # TODO #2 редикрет обратно в raw
+    return view_all_expenses(request)

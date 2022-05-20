@@ -13,15 +13,6 @@ from main.views import CURRENT_DATE, MONTH_NAMES
 def view_monthly_incomes(request, year, month):
     date = datetime(year, month, 1)
 
-    if request.method == "POST":
-        form = IncomeAddForm(request.POST)
-        if form.is_valid():
-            income = form.save(commit=False)
-            income.date = date
-            income.save()
-    else:
-        form = IncomeAddForm()
-
     incomes = Incomes.objects.filter(date=date)
 
     if len(incomes) == 0:
@@ -34,7 +25,7 @@ def view_monthly_incomes(request, year, month):
                    'year': year,
                    'month': month,
                    'incomes': incomes,
-                   'form': form})
+                   })
 
 
 @login_required
@@ -61,5 +52,24 @@ def income_edit(request, id, year, month):
 def income_delete(request, id, year, month):
     income = Incomes.objects.get(id=id)
     income.delete()
-    # return redirect('index')
     return view_monthly_incomes(request, year, month)
+
+
+@login_required
+def income_add(request, year, month):
+
+    date = datetime(year, month, 1)
+
+    if request.method == "POST":
+        form = IncomeAddForm(request.POST)
+        if form.is_valid():
+            income = form.save(commit=False)
+            income.date = date
+            income.save()
+    else:
+        form = IncomeAddForm()
+
+    return render(request, 'add_income.html',
+                  {'date': CURRENT_DATE,
+                   'form': form,
+                   })
