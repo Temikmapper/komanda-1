@@ -19,12 +19,12 @@
                 </tr>
             </thead>
             <tbody>
-                {% for day in days %}
+                {% for expense in expenses %}
                     <tr>
-                        <th>{{ day.date }}</th>
-                        <td>{{ day.amount }}</td>
-                        <td>{{ day.category }}</td>
-                        <td><a href={% url 'delete_expense' year month day.id %}><button class="delete"></button></a></td>
+                        <th>{{ expense.date }}</th>
+                        <td>{{ expense.amount }}</td>
+                        <td>{{ expense.category }}</td>
+                        <td><a href={% url 'delete_expense' expense.id %}><button class="delete"></button></a></td>
                     </tr>
                 {% endfor %}
             </tbody>

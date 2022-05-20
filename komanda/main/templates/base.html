@@ -86,7 +86,7 @@
                         <form method="get" action={% url 'index' %}>
                             <button class="button is-warning is-light is-rounded">Main</button>
                         </form>
-                        <form method="get" action={% url 'monthly' date.year date.month %}>
+                        <form method="get" action={% url 'view_month' date.year date.month %}>
                             <button class="button is-danger is-light is-rounded">Montly</button>
                         </form>
                         <form method="get" action={% url 'view_all_goals' %}>

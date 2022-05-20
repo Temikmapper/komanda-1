@@ -6,3 +6,4 @@ komanda/db.sqlite3
 komanda/goals/migrations
 komanda/SECRET_FILE.py
 komanda/expenses/migrations
+komanda/incomes/migrations
