@@ -11,7 +11,7 @@
         <ul>
             {% for month in monthes %}
                 <li {% if month.name == cur_month %} class="is-active"{% endif %}>
-                    <a href={% url 'monthly' year month.id %}>{{ month.name }}</a>
+                    <a href={% url 'view_month' year month.id %}>{{ month.name }}</a>
                 </li>
             {% endfor %}
         </ul>

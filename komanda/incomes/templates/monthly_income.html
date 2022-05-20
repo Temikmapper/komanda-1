@@ -6,7 +6,9 @@
     Edit income
 {% endblock subtitle_hero %}
 {% block content %}
-    <section class="section">
+
+{% comment %} TODO: #5 сделать кнопку Add {% endcomment %}
+    <section class="section"> 
         <center>
             <h1 class="title">{{ cur_month }}</h1>
         </center>
@@ -26,7 +28,7 @@
                             </div>
                         </div>
                         <div class="column" style="text-align:right;">
-                            <a href={% url 'income_delete' income.id %}>
+                            <a href={% url 'income_delete' year month income.id %}>
                                 <button class="button is-danger is-outlined">Delete</button>
                             </a>
                         </div>
