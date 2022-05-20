@@ -41,7 +41,10 @@ MONTHES = [jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec]
 
 
 def index(request):
-    return redirect('/expenses/categories')
+    if request.user.is_authenticated:
+        return redirect('/expenses/categories')
+    else:
+        return render(request, 'index.html')
 
 
 def test_base(request):
