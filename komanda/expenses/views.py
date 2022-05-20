@@ -2,14 +2,17 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
 from main.views import CURRENT_DATE
+from monthly.views import monthly_raw_expenses
 
 from .models import Expenses, Categories
 from .forms import AddExpenseForm, CategoryAddForm
+
 
 @login_required
 def view_all_expenses(request):
     data = Expenses.objects.all()
     return render(request, 'all_expenses.html', {'days': data, 'date': CURRENT_DATE})
+
 
 @login_required
 def view_add_categories(request):
@@ -23,11 +26,13 @@ def view_add_categories(request):
         form = CategoryAddForm()
     return render(request, 'categories.html', {'form': form, 'categories': categories, 'date': CURRENT_DATE})
 
+
 @login_required
 def delete_category(request, id):
     category = Categories.objects.get(id=id)
     category.delete()
     return view_add_categories(request)
+
 
 @login_required
 def add_expense(request):
@@ -40,8 +45,9 @@ def add_expense(request):
         form = AddExpenseForm()
     return render(request, 'add_expense.html', {'form': form, 'date': CURRENT_DATE})
 
+
 @login_required
 def delete_expense(request, id):
     expense = Expenses.objects.get(id=id)
     expense.delete()
-    return view_all_expenses(request) # TODO #2 редикрет обратно в raw
+    return redirect(request.GET['next'])

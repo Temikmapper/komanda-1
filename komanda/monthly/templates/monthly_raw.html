@@ -24,7 +24,7 @@
                         <th>{{ expense.date }}</th>
                         <td>{{ expense.amount }}</td>
                         <td>{{ expense.category }}</td>
-                        <td><a href={% url 'delete_expense' expense.id %}><button class="delete"></button></a></td>
+                        <td><a href="{% url 'delete_expense' expense.id %}?next=/monthly/{{year}}/{{month}}/raw"><button class="delete"></button></a></td>
                     </tr>
                 {% endfor %}
             </tbody>
