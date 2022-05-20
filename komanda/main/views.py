@@ -1,12 +1,11 @@
-from audioop import reverse
 from calendar import monthrange
 from datetime import datetime, timedelta
-from decimal import ROUND_05UP, ROUND_CEILING, ROUND_FLOOR, ROUND_HALF_EVEN, Decimal
+from decimal import ROUND_FLOOR, Decimal
 from django.shortcuts import render, redirect
 from django.db.models import Sum
 from django.contrib.auth.decorators import login_required
-from main.models import Spendings, Categories, Incomes
-from main.forms import SpendForm, CategoryAddForm, IncomeEditForm, IncomeAddForm
+from main.models import Incomes
+from main.forms import IncomeEditForm, IncomeAddForm
 
 
 def get_current_date():
@@ -16,7 +15,6 @@ def get_current_date():
             'month_': str(datetime.today().month),
             'day_': str(datetime.today().day)}
     return date
-
 
 CURRENT_DATE = get_current_date()
 MONTH_NAMES = {1: 'January',
@@ -48,50 +46,13 @@ MONTHES = [jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec]
 
 
 def index(request):
-    categories = Categories.objects.all()
-    if request.method == "POST":
-        form = CategoryAddForm(request.POST)
-        if form.is_valid():
-            category = form.save(commit=False)
-            category.save()
-    else:
-        form = CategoryAddForm()
-    return render(request, 'index.html', {'form': form, 'categories': categories, 'date': CURRENT_DATE})
-
+    return redirect('/expenses/categories')
 
 def test_base(request):
     return render(request, 'base.html')
 
 @login_required
-def show_all(request):
-    data = Spendings.objects.all()
-    return render(request, 'all.html', {'days': data, 'date': CURRENT_DATE})
-
-@login_required
-def add_spend(request):
-    if request.method == "POST":
-        form = SpendForm(request.POST)
-        if form.is_valid():
-            spend = form.save(commit=False)
-            spend.save()
-    else:
-        form = SpendForm()
-    return render(request, 'add.html', {'form': form, 'date': CURRENT_DATE})
-
-@login_required
-def delete_category(request, id):
-    category = Categories.objects.get(id=id)
-    category.delete()
-    return redirect('index')
-
-@login_required
-def delete_expense(request, id, year, month):
-    expense = Spendings.objects.get(id=id)
-    expense.delete()
-    return redirect('index')  # TODO редикрет обратно в raw
-
-@login_required
-def monthly(request, year, month):  # TODO рефакторить
+def monthly(request, year, month):  # TODO #1 рефакторить
 
     last_day = monthrange(year, month)[1]
 
