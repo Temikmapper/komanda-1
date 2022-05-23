@@ -2,7 +2,7 @@
 {% block content %}
     <div class="block">
         <center>
-            <h1 class="title">Add income</h1>
+            <h1 class="title">Add Goal</h1>
         </center>
     </div>
     <div class="box">
@@ -22,15 +22,15 @@
                 </div>
             </div>
             <div class="block">
-                {{ form.goal_date.errors }}
+                {{ form.date.errors }}
                 <div class="field">
                     <p class="control has-icons-left">
                         <input class="input is-primary"
                                type="date"
-                               name="goal_date"
+                               name="date"
                                placeholder="Deadline"
                                required
-                               id="{{ form.goal_date.id_for_label }}">
+                               id="{{ form.date.id_for_label }}">
                         <span class="icon is-small is-left">
                             <i class="fas fa-calendar"></i>
                         </span>
@@ -38,16 +38,16 @@
                 </div>
             </div>
             <div class="block">
-                {{ form.goal_value.errors }}
+                {{ form.value.errors }}
                 <div class="field">
                     <p class="control has-icons-left">
                         <input class="input is-primary"
                                type="number"
-                               name="goal_value"
+                               name="value"
                                placeholder="Price"
                                step="100"
                                required
-                               id="{{ form.goal_value.id_for_label }}">
+                               id="{{ form.value.id_for_label }}">
                         <span class="icon is-small is-left">
                             <i class="fas fa-ruble-sign"></i>
                         </span>

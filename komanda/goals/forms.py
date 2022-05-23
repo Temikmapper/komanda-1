@@ -1,15 +1,15 @@
 from django import forms
 
-from goals.models import Goals
+from goals.models import Goals, GoalStatus
 
 class GoalAddForm(forms.ModelForm):
 
     class Meta:
         model = Goals
-        fields = ('name', 'goal_date', 'goal_value')
+        fields = ('name', 'date', 'value')
 
-class GoalEditForm(forms.ModelForm):
+class GoalStatusAddForm(forms.ModelForm):
 
     class Meta:
-        model = Goals
-        fields = ('current_date', 'current_value')
+        model = GoalStatus
+        fields = ('date', 'value')

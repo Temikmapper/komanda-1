@@ -14,20 +14,15 @@
         <div class="column has-text-centered">
             <h1 class="title">All goals</h1>
         </div>
-        <div class="column">
-            
-        </div>
+        <div class="column"></div>
     </div>
-    <div class="block">
-    </div>
-    {% for goal in goals %}
+    <div class="block"></div>
+    {% for goal, status in goals_statuses.items %}
         <div class="box">
             <div class="columns">
                 <div class="column">
                     <div class="field">
-                        <h1 class="title">
-                            {{ goal.name }}
-                        </h1>
+                        <h1 class="title">{{ goal.name }}</h1>
                     </div>
                 </div>
                 <div class="column" style="text-align:right;">
@@ -37,18 +32,18 @@
                 </div>
             </div>
             <progress class="progress is-primary"
-                      value="{{ goal.current_percent|floatformat:"2u" }}"
+                      value="{{ status.percent|floatformat:"2u" }}"
                       max="100"></progress>
             <div class="columns">
                 <div class="column">
-                    <h2 class="subtitle">Ending {{ goal.goal_date }}</h2>
+                    <h2 class="subtitle">Ending {{ goal.date }}</h2>
                 </div>
                 <div class="column has-text-centered">
-                    <h2 class="subtitle">{{ goal.current_percent }} %</h2>
+                    <h2 class="subtitle">{{ status.percent }} %</h2>
                 </div>
                 <div class="column" style="text-align:right;">
                     <h2 class="subtitle">
-                        Left <strong>{{ goal.left }}</strong> of {{ goal.goal_value }}
+                        Left <strong>{{ status.left }}</strong> of {{ goal.value }}
                     </h2>
                 </div>
             </div>
