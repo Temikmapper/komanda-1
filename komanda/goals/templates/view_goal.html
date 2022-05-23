@@ -6,11 +6,37 @@
         </center>
     </div>
     <div class="box">
-        <h2 class="subtitle">{{ goal.name }} {{ goal.current_percent|floatformat:"2u" }} {{ goal.current_value }} {{ goal.goal_value }}</h2>
-        <progress class="progress" value="{{ goal.current_percent|floatformat:"2u" }}" max="100">15%</progress>
+        <h2 class="subtitle">
+            {{ goal.name }}
+        </h2>
+        <progress class="progress"
+                  value="{{ goal.current_percent|floatformat:"2u" }}"
+                  max="100">15%</progress>
         <form method="POST" class="post-form">
             {% csrf_token %}
-            {{ form }}
+            {% comment %} {{ form }} {% endcomment %}
+            <div class="field">
+                <label class="label">Date</label>
+                <div class="control">
+                    <input class="input is-primary"
+                           type="date"
+                           name="current_date"
+                           value="{{ form.current_date.value }}"
+                           required
+                           id="{{ form.current_date.id_for_label }}"
+                           placeholder="Salary">
+                </div>
+                <label class="label">Current value: {{ form.current_value.value }}</label>
+                <div class="control">
+                    <input class="input is-primary"
+                           type="number"
+                           name="current_value"
+                           step="0.01"
+                           required
+                           id="{{ form.current_value.id_for_label }}"
+                           placeholder="5000">
+                </div>
+            </div>
             <div class="block">
                 <button type="submit" class="button is-success">
                     <span class="icon is-small">
