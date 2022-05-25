@@ -8,10 +8,10 @@
 {% block content %}
     <div class="block">
         <center>
-            <h1 class="title">All spends</h1>
-            <form method="get" action={% url 'view_all_constant_expenses' %}>
-                <button class="button is-small is-link is-outlined">
-                    <span>Constant</span>
+            <h1 class="title">All constant spends</h1>
+            <form method="get" action={% url 'view_all_expenses' %}>
+                <button class="button is-small is-success is-outlined">
+                    <span>Regular</span>
                 </button>
             </form>
         </center>
@@ -31,11 +31,12 @@
             </tr>
         </thead>
         <tbody>
-            {% for day in days %}
+            {% for expense in expenses %}
                 <tr>
-                    <th>{{ day.date }}</th>
-                    <td>{{ day.amount }}</td>
-                    <td>{{ day.category }}</td>
+                    <th><a href="{{ expense.get_absolute_url }}">{{ expense.name }}</a></th>
+                    <td>{{ expense.start_date }}</td>
+                    <td>{{ expense.finish_date }}</td>
+                    <td><a href={% url 'delete_constant_expense' expense.id %}><button class="delete"></button></a></td>
                 </tr>
             {% endfor %}
         </tbody>

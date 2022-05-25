@@ -54,7 +54,6 @@ def income_delete(request, id, year, month):
     income.delete()
     return view_monthly_incomes(request, year, month)
 
-
 @login_required
 def income_add(request, year, month):
 
