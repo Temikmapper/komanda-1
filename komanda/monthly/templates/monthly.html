@@ -25,6 +25,24 @@
                 </left>
             </div>
         </div>
+        <div class="tile is-vertical">
+            <div class="tile is-child notification is-primary">
+                <p class="title">
+                    Incomes
+                </p>
+                <p class="subtitle">
+                    Top tile
+                </p>
+            </div>
+            <div class="tile is-child notification is-warning">
+                <p class="title">
+                    Expenses
+                </p>
+                <p class="subtitle">
+                    {{ constant_expenses }}
+                </p>
+            </div>
+        </div>
     </div>
 {% endblock %}
 {% block spends_table %}
@@ -47,21 +65,13 @@
         </thead>
         <tbody>
             {% for day in days %}
-                <tr {% if day.date|date:"n" == date.month_ %}
-                        {% if day.date|date:"d" == date.day_ %}
-                            class="is-selected"
-                        {% endif %}
+                <tr {% if day.date|date:"n" == date.month_ %} {% if day.date|date:"d" == date.day_ %} class="is-selected" {% endif %}
                     {% endif %}>
-                    <th>{{ day.date|date:"d, D"}} </th>
+                    <th>{{ day.date|date:"d, D" }}</th>
                     <td>{{ day.amount }}</td>
                     <td>
                         {% for category in day.category %}
-                            <span class="tag is-light 
-                            {% if category == 'No spends' %}
-                                is-normal
-                            {% else %}
-                                is-warning
-                            {% endif %}"> {{ category }}</span>
+                            <span class="tag is-light {% if category == 'No spends' %} is-normal {% else %} is-warning {% endif %}"> {{ category }}</span>
                         {% endfor %}
                     </td>
                     <td>

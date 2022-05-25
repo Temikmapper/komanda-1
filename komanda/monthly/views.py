@@ -7,7 +7,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
 from main.views import CURRENT_DATE, MONTH_NAMES, MONTHES
-from expenses.models import Expenses
+from expenses.models import Expenses, ConstantExpenseHistory, ConstantExpenses
 from incomes.models import Incomes
 
 @login_required
@@ -26,6 +26,7 @@ def view_month(request, year, month):
         date__lte=end_of_month).aggregate(Sum("amount"))['amount__sum']
     data = get_balance_for_monthly_table(start_of_month, end_of_month)
 
+    constant_expenses = get_constant_expenses(start_of_month, end_of_month)
     return render(request, 'monthly.html',
                   {'date': CURRENT_DATE,
                    'days': data,
@@ -35,7 +36,8 @@ def view_month(request, year, month):
                    'year': year,
                    'month': month,
                    'monthes': MONTHES,
-                   'cur_month': MONTH_NAMES[month]})
+                   'cur_month': MONTH_NAMES[month],
+                   'constant_expenses': constant_expenses})
 
 @login_required
 def monthly_raw_expenses(request, year, month):
@@ -70,6 +72,13 @@ def get_daily_income(start, finish):
     daily_income = Decimal(monthly_income/num_of_days)
     return daily_income
 
+def get_constant_expenses(start_of_month, end_of_month):
+    actual_expenses = ConstantExpenses.objects.filter(start_date__lte=start_of_month).filter(finish_date__gte=end_of_month)
+    total_expenses = Decimal(0.0)
+    for expense in actual_expenses:
+        total_expenses += ConstantExpenseHistory.objects.filter(expense=expense).last().value
+
+    return total_expenses
 
 def get_balance_for_monthly_table(start_of_month, end_of_month):
     cur_day = start_of_month

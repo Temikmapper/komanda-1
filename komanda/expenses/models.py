@@ -26,3 +26,6 @@ class ConstantExpenseHistory(models.Model):
     date = models.DateField()
     value = models.DecimalField(max_digits=9, decimal_places=2, default=00.00)
     expense = models.ForeignKey(ConstantExpenses, on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ['date']
