@@ -54,6 +54,10 @@ def view_month(request, year, month):
 
 @login_required
 def monthly_raw_expenses(request, year, month):
+    
+    last_day = monthrange(year, month)[1]
+    START_OF_MONTH = datetime(year, month, 1)
+    END_OF_MONTH = datetime(year, month, last_day)
 
     data = Expenses.objects.filter(date__gte=START_OF_MONTH).filter(
         date__lte=END_OF_MONTH).order_by('date')
@@ -107,7 +111,7 @@ def get_constant_expenses():
     total_expenses = Decimal(0.0)
     for expense in actual_expenses:
         total_expenses += ConstantExpenseHistory.objects.filter(
-            expense=expense).last().value
+            expense=expense).latest('date').value
 
     return total_expenses
 

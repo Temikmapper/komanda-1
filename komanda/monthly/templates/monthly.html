@@ -6,12 +6,6 @@
                 <h1 class="title">Per day: {{ daily_income }}</h1>
                 <h2 class="subtitle">
                     <span>Free: {{ free_money }}</span>
-                    <a href={% url 'view_monthly_incomes' year month %}>
-                        <span class="icon is-small">
-                            <i class="fa-regular fa-pen-to-square fa-xs">
-                            </i>
-                        </span>
-                    </a>
                 </h2>
             </div>
             <div class="column"></div>
@@ -38,7 +32,7 @@
                 </p>
             </div>
             <div class="tile is-child notification is-warning">
-                <form method="get" action={% url 'view_monthly_incomes' year month %}>
+                <form method="get" action={% url 'view_monthly_expenses' year month %}>
                     <p class="title">
                         Expenses
                         <button class="button is-warning is-inverted">Edit</button>

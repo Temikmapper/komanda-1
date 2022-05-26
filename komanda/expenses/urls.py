@@ -3,7 +3,8 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.view_all_expenses, name='view_all_expenses'),
+    path('', views.view_monthly_expenses, name='view_monthly_expenses'),
+    path('all', views.view_all_expenses, name='view_all_expenses'),
     path('add', views.add_expense, name='add_expense'),
     path('add_constant', views.add_constant_expense, name='add_constant_expense'),
     path('delete/<int:id>', views.delete_expense, name='delete_expense'),

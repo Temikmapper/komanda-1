@@ -8,6 +8,5 @@ urlpatterns = [
     path('<int:year>/<int:month>', views.view_month, name='view_month'),
     path('<int:year>/<int:month>/raw', views.monthly_raw_expenses, name='view_month_raw'),
     path('<int:year>/<int:month>/incomes/', include(income_urls), name='view_monthly_incomes'),
-    path('', include(expense_urls), name='delete_expense')
-
+    path('<int:year>/<int:month>/expenses/', include(expense_urls), name='view_monthly_expenses')
 ]

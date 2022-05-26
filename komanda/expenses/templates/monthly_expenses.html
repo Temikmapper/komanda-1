@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}
+    Index page
+{% endblock title %}
+{% block subtitle_hero %}
+    Edit expense
+{% endblock subtitle_hero %}
+{% block content %}
+    <div class="columns">
+        <div class="column">
+        </div>
+        <div class="column has-text-centered">
+            <h1 class="title">Expenses of {{ cur_month }}</h1>
+        </div>
+        <div class="column"></div>
+    </div>
+    <div class="block">
+        <div class="tile is-vertical">
+            <div class="tile is-child notification is-warning">
+                <div class="columns">
+                    <div class="column">
+                        <div class="field">
+                            <h1 class="title">Constant expenses</h1>
+                        </div>
+                    </div>
+                    <div class="column" style="text-align:right;">
+                        <a href={% url 'view_all_constant_expenses' %}>
+                            <button class="button is-warning is-inverted">Edit</button>
+                        </a>
+                    </div>
+                </div>
+                {% for expense, value in constant_expenses.items %}
+                    <div class="box">{{ expense.name }} <strong>{{ value }}</strong></div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock content %}

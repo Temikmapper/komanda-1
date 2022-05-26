@@ -1,8 +1,9 @@
+from calendar import monthrange
 from datetime import datetime, timedelta
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
-from main.views import CURRENT_DATE
+from main.views import CURRENT_DATE, MONTH_NAMES
 
 from .models import ConstantExpenses, ConstantExpenseHistory, Expenses, Categories
 from .forms import AddExpenseForm, CategoryAddForm, ConstantExpenseAddForm, ConstantExpenseFinishForm, ExpenseEditForm
@@ -122,9 +123,37 @@ def delete_constant_expense(request, id):
 
     return view_all_constant_expenses(request)
 
+def view_monthly_expenses(request, year, month):
+    last_day = monthrange(year, month)[1]
+
+    start_of_month = datetime(year, month, 1)
+    end_of_month = datetime(year, month, last_day)
+    
+    constant_expenses = get_constant_expenses(start_of_month, end_of_month)
+
+    return render(request, 'monthly_expenses.html',
+                  {'date': CURRENT_DATE,
+                   'cur_month': MONTH_NAMES[month],
+                   'year': year,
+                   'month': month,
+                   'constant_expenses': constant_expenses
+                   })
+
 
 @login_required
 def delete_expense(request, id):
     expense = Expenses.objects.get(id=id)
     expense.delete()
-    return view_all_expenses(request)
+    return redirect('/')
+
+def get_constant_expenses(start_of_month, end_of_month):
+
+    actual_expenses = ConstantExpenses.objects.filter(
+        start_date__lte=start_of_month).filter(finish_date__gte=end_of_month)
+
+    expense_value = {}
+    for expense in actual_expenses:
+        value = ConstantExpenseHistory.objects.filter(expense=expense).last().value
+        expense_value[expense] = value
+
+    return expense_value
