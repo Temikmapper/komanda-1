@@ -13,7 +13,7 @@
                     <span class="icon">
                         <i class="fa-solid fa-plus"></i>
                     </span>
-                    <span>Add income</span>
+                    <span>Additional income</span>
                 </button>
             </form>
         </div>
@@ -25,20 +25,27 @@
     <div class="block">
         <div class="tile is-vertical">
             <div class="tile is-child notification is-primary">
-                <p class="title">
-                    Constant Incomes
-                </p>
+                <div class="columns">
+                    <div class="column">
+                        <div class="field">
+                            <h1 class="title">Constant incomes</h1>
+                        </div>
+                    </div>
+                    <div class="column" style="text-align:right;">
+                        <a href={% url 'view_all_constant_incomes' %}>
+                            <button class="button is-primary is-inverted">Edit</button>
+                        </a>
+                    </div>
+                </div>
                 {% for income, value in constant_incomes.items %}
-                    <p class="subtitle">
-                        {{ income.name }}
-                        {{ value }}
-                    </p>
+                    <div class="box">{{ income.name }} <strong>{{ value }}</strong></div>
                 {% endfor %}
             </div>
         </div>
     </div>
     <div class="container">
         <div class="block">
+            {% if incomes|length > 0 %}<h1 class="title">Additional incomes</h1>{% endif %}
             {% for income in incomes %}
                 <div class="box">
                     <div class="columns">
@@ -48,9 +55,9 @@
                                 <h2 class="subtitle">
                                     Current value: <strong>{{ income.value }}</strong>
                                 </h2>
-                                <a href={% url 'income_edit' year month income.id %}>
+                                <form method="get" action={% url 'income_edit' year month income.id %}>
                                     <button class="button is-primary">Edit</button>
-                                </a>
+                                </form>
                             </div>
                         </div>
                         <div class="column" style="text-align:right;">

@@ -23,10 +23,6 @@ def view_monthly_incomes(request, year, month):
 
     constant_incomes = get_constant_incomes(start_of_month, end_of_month)
 
-    if len(incomes) == 0:
-        Incomes.objects.create(date=start_of_month, name='Salary')
-        incomes = [Incomes.objects.get(date=start_of_month)]
-
     return render(request, 'monthly_income.html',
                   {'date': CURRENT_DATE,
                    'cur_month': MONTH_NAMES[month],
