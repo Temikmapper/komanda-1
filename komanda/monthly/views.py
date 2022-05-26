@@ -9,24 +9,33 @@ from django.contrib.auth.decorators import login_required
 from main.views import CURRENT_DATE, MONTH_NAMES, MONTHES
 from expenses.models import Expenses, ConstantExpenseHistory, ConstantExpenses
 from incomes.models import Incomes
+from incomes.views import get_sum_constant_incomes
+
 
 @login_required
 def view_month(request, year, month):
+    """Представление страницы месяца с актуальной для него информацией
+    """
 
     last_day = monthrange(year, month)[1]
 
-    start_of_month = datetime(year, month, 1)
-    end_of_month = datetime(year, month, last_day)
+    global START_OF_MONTH
+    global END_OF_MONTH
 
-    monthly_income = get_monthly_income(
-        start_of_month).quantize(Decimal("1.00"), ROUND_FLOOR)
-    daily_income = get_daily_income(start_of_month, end_of_month).quantize(
-        Decimal("1.00"), ROUND_FLOOR)
-    total_expenses = Expenses.objects.filter(date__gte=start_of_month).filter(
-        date__lte=end_of_month).aggregate(Sum("amount"))['amount__sum']
-    data = get_balance_for_monthly_table(start_of_month, end_of_month)
+    START_OF_MONTH = datetime(year, month, 1)
+    END_OF_MONTH = datetime(year, month, last_day)
 
-    constant_expenses = get_constant_expenses(start_of_month, end_of_month)
+    monthly_income = get_sum_special_income().quantize(Decimal("1.00"), ROUND_FLOOR)
+    daily_income = get_daily_income().quantize(Decimal("1.00"), ROUND_FLOOR)
+    total_expenses = Expenses.objects.filter(date__gte=START_OF_MONTH).filter(
+        date__lte=END_OF_MONTH).aggregate(Sum("amount"))['amount__sum']
+    data = get_balance_for_monthly_table()
+
+    constant_expenses = get_constant_expenses()
+    constant_incomes = get_sum_total_incomes()
+
+    free_money = get_free_money_in_month()
+
     return render(request, 'monthly.html',
                   {'date': CURRENT_DATE,
                    'days': data,
@@ -37,18 +46,17 @@ def view_month(request, year, month):
                    'month': month,
                    'monthes': MONTHES,
                    'cur_month': MONTH_NAMES[month],
-                   'constant_expenses': constant_expenses})
+                   'constant_expenses': constant_expenses,
+                   'constant_incomes': constant_incomes,
+                   'free_money': free_money,
+                   })
+
 
 @login_required
 def monthly_raw_expenses(request, year, month):
 
-    last_day = monthrange(year, month)[1]
-
-    start_of_month = datetime(year, month, 1)
-    end_of_month = datetime(year, month, last_day)
-
-    data = Expenses.objects.filter(date__gte=start_of_month).filter(
-        date__lte=end_of_month).order_by('date')
+    data = Expenses.objects.filter(date__gte=START_OF_MONTH).filter(
+        date__lte=END_OF_MONTH).order_by('date')
 
     return render(request, 'monthly_raw.html',
                   {'date': CURRENT_DATE,
@@ -58,37 +66,62 @@ def monthly_raw_expenses(request, year, month):
                    'monthes': MONTHES,
                    'cur_month': MONTH_NAMES[month]})
 
-def get_monthly_income(date):
+
+def get_sum_special_income():
+
     total_monthly_income = Incomes.objects.filter(
-        date=date).aggregate(Sum("value"))
+        date=START_OF_MONTH).aggregate(Sum("value"))
     if total_monthly_income['value__sum'] == None:
+
         return Decimal(0.00)
+
     return total_monthly_income['value__sum']
 
 
-def get_daily_income(start, finish):
-    monthly_income = get_monthly_income(start)
-    num_of_days = abs((finish-start).days+1)
+def get_sum_total_incomes():
+
+    special_incomes = get_sum_special_income()
+    monthly_incomes = get_sum_constant_incomes(START_OF_MONTH, END_OF_MONTH)
+
+    return special_incomes + monthly_incomes
+
+
+def get_daily_income():
+
+    monthly_income = get_free_money_in_month()
+    num_of_days = abs((END_OF_MONTH-START_OF_MONTH).days+1)
     daily_income = Decimal(monthly_income/num_of_days)
+
     return daily_income
 
-def get_constant_expenses(start_of_month, end_of_month):
-    actual_expenses = ConstantExpenses.objects.filter(start_date__lte=start_of_month).filter(finish_date__gte=end_of_month)
+
+def get_free_money_in_month():
+
+    return get_sum_total_incomes() - get_constant_expenses()
+
+
+def get_constant_expenses():
+
+    actual_expenses = ConstantExpenses.objects.filter(
+        start_date__lte=START_OF_MONTH).filter(finish_date__gte=END_OF_MONTH)
     total_expenses = Decimal(0.0)
     for expense in actual_expenses:
-        total_expenses += ConstantExpenseHistory.objects.filter(expense=expense).last().value
+        total_expenses += ConstantExpenseHistory.objects.filter(
+            expense=expense).last().value
 
     return total_expenses
 
-def get_balance_for_monthly_table(start_of_month, end_of_month):
-    cur_day = start_of_month
+
+def get_balance_for_monthly_table():
+
+    cur_day = START_OF_MONTH
     data = []
     accumulated = Decimal(0)
-    daily_income = get_daily_income(start_of_month, end_of_month)
+    daily_income = get_daily_income()
     accumulated_income = Decimal(0)
     accumulated_balance = Decimal(0)
 
-    while (cur_day != end_of_month+timedelta(1)):
+    while (cur_day != END_OF_MONTH+timedelta(1)):
         spends_in_day = Expenses.objects.filter(date=cur_day)
         accumulated_income += daily_income
         accumulated_balance += daily_income

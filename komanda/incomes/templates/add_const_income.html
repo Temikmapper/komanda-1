@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block title %}
+    Index page
+{% endblock title %}
+{% block subtitle_hero %}
+    Add spends
+{% endblock subtitle_hero %}
+{% block content %}
+    <div class="block">
+        <center>
+            <h1 class="title">Add constant expence</h1>
+            <form method="get" action={% url 'add_constant_income' %}>
+                <button class="button is-small is-success is-outlined">
+                    <span>Regular</span>
+                </button>
+            </form>
+        </center>
+    </div>
+    <div class="block">
+        <form method="POST" class="post-form">
+            {% csrf_token %}
+            {{ income_form.name.errors }}
+            <div class="block">
+                <div class="field">
+                    <p class="control">
+                        <input class="input is-primary"
+                        type="text"
+                        name="name"
+                        placeholder="Name of income"
+                        required
+                        maxlength="50"
+                        id="{{ income_form.name.id_for_label }}">
+                    </p>
+                </div>
+            </div>
+            <div class="block">
+                {{ income_form.date.errors }}
+                <div class="field">
+                    <p class="control has-icons-left">
+                        <input class="input is-primary"
+                               type="date"
+                               name="start_date"
+                               placeholder="Start date"
+                               required
+                               id="{{ income_form.start_date.id_for_label }}">
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-calendar"></i>
+                        </span>
+                    </p>
+                </div>
+            </div>
+            <div class="block">
+                {{ value_form.value.errors }}
+                <div class="field">
+                    <p class="control has-icons-left">
+                        <input class="input is-primary"
+                               type="number"
+                               name="value"
+                               placeholder="Amount"
+                               step="0.01"
+                               required
+                               id="{{ value_form.value.id_for_label }}">
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-ruble-sign"></i>
+                        </span>
+                    </p>
+                </div>
+            </div>
+            <div class="block">
+                <button type="submit" class="button is-success">
+                    <span class="icon is-small">
+                        <i class="fas fa-check"></i>
+                    </span>
+                    <span>Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+{% endblock content %}

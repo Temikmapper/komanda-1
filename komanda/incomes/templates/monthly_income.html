@@ -22,6 +22,21 @@
         </div>
         <div class="column"></div>
     </div>
+    <div class="block">
+        <div class="tile is-vertical">
+            <div class="tile is-child notification is-primary">
+                <p class="title">
+                    Constant Incomes
+                </p>
+                {% for income, value in constant_incomes.items %}
+                    <p class="subtitle">
+                        {{ income.name }}
+                        {{ value }}
+                    </p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
     <div class="container">
         <div class="block">
             {% for income in incomes %}
@@ -30,7 +45,9 @@
                         <div class="column">
                             <div class="field">
                                 <h4 class="title is-4">{{ income.name }}</h4>
-                                <h2 class="subtitle">Current value: <strong>{{ income.value }}</strong></h2>
+                                <h2 class="subtitle">
+                                    Current value: <strong>{{ income.value }}</strong>
+                                </h2>
                                 <a href={% url 'income_edit' year month income.id %}>
                                     <button class="button is-primary">Edit</button>
                                 </a>

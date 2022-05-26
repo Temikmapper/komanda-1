@@ -5,7 +5,7 @@
             <div class="column">
                 <h1 class="title">Per day: {{ daily_income }}</h1>
                 <h2 class="subtitle">
-                    <span>Free: {{ monthly_income }}</span>
+                    <span>Free: {{ free_money }}</span>
                     <a href={% url 'view_monthly_incomes' year month %}>
                         <span class="icon is-small">
                             <i class="fa-regular fa-pen-to-square fa-xs">
@@ -17,27 +17,33 @@
             <div class="column"></div>
             <div class="column" style="text-align:right;">
                 <left>
-                <a href={% url 'view_month_raw' year month %}>
+                <form method="get" action={% url 'view_month_raw' year month %}>
                     <button class="button">
                         <span class="icon is-small"><i class="fa-regular fa-pen-to-square"></i></span><span>Edit expenses</span>
                     </button>
-                </a>
+                </form>
                 </left>
             </div>
         </div>
         <div class="tile is-vertical">
             <div class="tile is-child notification is-primary">
-                <p class="title">
-                    Incomes
-                </p>
+                <form method="get" action={% url 'view_monthly_incomes' year month %}>
+                    <p class="title">
+                        Incomes
+                        <button class="button is-primary is-inverted">Edit</button>
+                    </p>
+                </form>
                 <p class="subtitle">
-                    Top tile
+                    {{ constant_incomes }}
                 </p>
             </div>
             <div class="tile is-child notification is-warning">
-                <p class="title">
-                    Expenses
-                </p>
+                <form method="get" action={% url 'view_monthly_incomes' year month %}>
+                    <p class="title">
+                        Expenses
+                        <button class="button is-warning is-inverted">Edit</button>
+                    </p>
+                </form>
                 <p class="subtitle">
                     {{ constant_expenses }}
                 </p>

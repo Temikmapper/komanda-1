@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}
+    Index page
+{% endblock title %}
+{% block subtitle_hero %}
+    All spends
+{% endblock subtitle_hero %}
+{% block content %}
+    <div class="block">
+        <center>
+            <h1 class="title">All constant incomes</h1>
+            <form method="get" action={% url 'add_constant_income' %}>
+                <button class="button is-small is-success is-outlined">
+                    <span>Add income</span>
+                </button>
+            </form>
+        </center>
+    </div>
+    <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+        <thead>
+            <tr>
+                <th>
+                    <abbr title="Position">Date</abbr>
+                </th>
+                <th>
+                    <abbr title="Played">Trat</abbr>
+                </th>
+                <th>
+                    <abbr title="Won">Skok</abbr>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for income in incomes %}
+                <tr>
+                    <th><a href="{{ income.get_absolute_url }}">{{ income.name }}</a></th>
+                    <td>{{ income.start_date }}</td>
+                    <td>{{ income.finish_date }}</td>
+                    <td><a href={% url 'delete_constant_income' income.id %}><button class="delete"></button></a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock content %}
