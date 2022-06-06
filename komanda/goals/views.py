@@ -1,3 +1,4 @@
+from calendar import monthrange
 from datetime import datetime
 from decimal import ROUND_FLOOR, Decimal
 from django.shortcuts import render, redirect
@@ -13,16 +14,28 @@ from goals.forms import GoalAddForm, GoalStatusAddForm
 def view_all_goals(request):
     all_goals = Goals.objects.all()
 
-    goals_statuses = {}
+    year, month = datetime.today().year, datetime.today().month
+    last_day = monthrange(year, month)[1]
+    start_of_month = datetime(year, month, 1)
+    end_of_month = datetime(year, month, last_day)
 
-    for goal in all_goals:
-        goal_statuses = GoalStatus.objects.filter(goal=goal)
-        latest_status = goal_statuses.latest('date')
-        goals_statuses[goal] = latest_status
+    goals_statuses = get_last_goals_statuses(start_of_month, end_of_month)
 
     return render(request, 'all_goals.html', {'date': CURRENT_DATE,
                                               'goals': all_goals,
                                               'goals_statuses': goals_statuses})
+
+def get_last_goals_statuses(start_of_month, end_of_month):
+    
+    all_goals = Goals.objects.all()
+
+    goals_statuses = {}
+
+    for goal in all_goals:
+        goal_status = GoalStatus.objects.filter(goal=goal).filter(date__lte=end_of_month).last()
+        goals_statuses[goal] = goal_status
+    
+    return goals_statuses
 
 
 @login_required

@@ -104,7 +104,7 @@ def add_constant_income(request):
             income.save()
             value = value_form.save(commit=False)
             income = ConstantIncomes.objects.get(id=income.id)
-            value.date = datetime.today()
+            value.date = income.start_date
             value.income = income
             value.save()
     else:
@@ -152,8 +152,8 @@ def get_constant_incomes(start_of_month, end_of_month):
 
     income_value = {}
     for income in actual_incomes:
-        value = ConstantIncomeHistory.objects.filter(income=income).last().value
-        income_value[income] = value
+        current_value = ConstantIncomeHistory.objects.filter(income=income).filter(date__lte=end_of_month).last().value
+        income_value[income] = current_value
 
     return income_value
 
@@ -161,3 +161,13 @@ def get_sum_constant_incomes(start_of_month, end_of_month):
     incomes = get_constant_incomes(start_of_month, end_of_month)
 
     return sum(incomes.values())
+
+def get_additional_incomes(start_of_month):
+
+    incomes = Incomes.objects.filter(date=start_of_month)
+
+    income_value = {}
+    for income in incomes:
+        income_value[income] = income.value
+
+    return income_value

@@ -8,6 +8,7 @@ from django.contrib.auth import views as views_auth
 from goals import urls as goals_urls
 from expenses import urls as expenses_urls
 from monthly import urls as monthly_urls
+from resume import urls as resume_urls
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -22,4 +23,5 @@ urlpatterns = [
     path('incomes/constant/add', income_views.add_constant_income, name='add_constant_income'),
     path('incomes/constant/delete/<int:id>', income_views.delete_constant_income, name='delete_constant_income'),
     path('incomes/constant/<int:id>', income_views.view_constant_income, name='view_constant_income'),
+    path('resume/', include(resume_urls), name='view_resume'),
 ]

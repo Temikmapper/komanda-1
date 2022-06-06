@@ -69,7 +69,7 @@ def add_constant_expense(request):
             expense.save()
             value = value_form.save(commit=False)
             expense = ConstantExpenses.objects.get(id=expense.id)
-            value.date = datetime.today()
+            value.date = expense.start_date
             value.expense = expense
             value.save()
     else:
@@ -153,7 +153,15 @@ def get_constant_expenses(start_of_month, end_of_month):
 
     expense_value = {}
     for expense in actual_expenses:
-        value = ConstantExpenseHistory.objects.filter(expense=expense).last().value
+        value = ConstantExpenseHistory.objects.filter(expense=expense).filter(date__lte=end_of_month).last().value
         expense_value[expense] = value
 
     return expense_value
+
+def get_sum_constant_expenses(start_of_month, end_of_month):
+
+    expenses = get_constant_expenses(start_of_month, end_of_month)
+
+    total_expenses = sum(expenses.values())
+
+    return total_expenses

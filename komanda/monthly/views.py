@@ -7,8 +7,9 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
 from main.views import CURRENT_DATE, MONTH_NAMES, MONTHES
-from expenses.models import Expenses, ConstantExpenseHistory, ConstantExpenses
+from expenses.models import Expenses
 from incomes.models import Incomes
+from expenses.views import get_sum_constant_expenses
 from incomes.views import get_sum_constant_incomes
 
 
@@ -31,7 +32,7 @@ def view_month(request, year, month):
         date__lte=END_OF_MONTH).aggregate(Sum("amount"))['amount__sum']
     data = get_balance_for_monthly_table()
 
-    constant_expenses = get_constant_expenses()
+    constant_expenses = get_sum_constant_expenses(START_OF_MONTH, END_OF_MONTH)
     constant_incomes = get_sum_total_incomes()
 
     free_money = get_free_money_in_month()
@@ -101,19 +102,7 @@ def get_daily_income():
 
 def get_free_money_in_month():
 
-    return get_sum_total_incomes() - get_constant_expenses()
-
-
-def get_constant_expenses():
-
-    actual_expenses = ConstantExpenses.objects.filter(
-        start_date__lte=START_OF_MONTH).filter(finish_date__gte=END_OF_MONTH)
-    total_expenses = Decimal(0.0)
-    for expense in actual_expenses:
-        total_expenses += ConstantExpenseHistory.objects.filter(
-            expense=expense).latest('date').value
-
-    return total_expenses
+    return get_sum_total_incomes() - get_sum_constant_expenses(START_OF_MONTH, END_OF_MONTH)
 
 
 def get_balance_for_monthly_table():

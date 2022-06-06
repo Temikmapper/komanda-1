@@ -1,0 +1,116 @@
+{% extends 'yearly_resume.html' %}
+{% block content %}
+    <div class="tile is-ancestor">
+        <div class="tile is-vertical">
+            <div class="tile">
+                <div class="tile is-parent">
+                    <div class="tile is-child notification is-primary box">
+                        <div class="block">
+                            <form method="get" action={% url 'view_monthly_incomes' year month %}>
+                                <p class="title">
+                                    Incomes
+                                    <button class="button is-primary is-inverted">Edit</button>
+                                </p>
+                            </form>
+                        </div>
+                        <div class="block">
+                            {% for income, value in incomes.items %}
+                                <div class="is-flex mb-2 is-justify-content-space-between is-align-items-center py-1"
+                                     style="border-bottom: 1px dotted #fff;">
+                                    <span>{{ income.name }}</span>
+                                    <span class="tag">{{ value }}</span>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="is-flex mb-2 is-justify-content-space-between is-align-items-center">
+                            <span>
+                                <p class="subtitle">
+                                    Total
+                                </p>
+                            </span>
+                            <span class="tag is-medium has-text-weight-bold">{{ total_income }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="tile is-parent">
+                    <div class="tile is-child notification is-danger box">
+                        <p class="title">
+                            Piggy
+                            <button class="button is-danger is-inverted">Edit</button>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tile is-parent">
+                <div class="tile is-child notification is-warning box">
+                    <div class="block">
+                        <form method="get" action={% url 'view_monthly_expenses' year month %}>
+                            <p class="title">
+                                Expenses
+                                <button class="button is-warning is-inverted">Edit</button>
+                            </p>
+                        </form>
+                    </div>
+                    <div class="block">
+                        {% for name, value in expenses.items %}
+                            <div class="is-flex mb-2 is-justify-content-space-between is-align-items-center py-1"
+                                 style="border-bottom: 1px dotted #363636;">
+                                <span>{{ name.name }}</span>
+                                <span class="tag">{{ value }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="is-flex mb-2 is-justify-content-space-between is-align-items-center">
+                        <span>
+                            <p class="subtitle">
+                                Total
+                            </p>
+                        </span>
+                        <span class="tag is-medium has-text-weight-bold">{{ total_expense }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="tile is-parent">
+                <div class="tile is-child notification is-link box">
+                    <div class="block">
+                        <form method="get" action={% url 'view_all_goals' %}>
+                            <p class="title">
+                                Goals
+                                <button class="button is-link is-inverted">Edit</button>
+                            </p>
+                        </form>
+                    </div>
+                    {% for goal, status in goals.items %}
+                        <div class="block">
+                            <form method="get" action={% url 'add_goal' %}>
+                                <p class="subtitle mb-3">
+                                    {{ goal.name }}
+                                    <button class="button is-link is-inverted is-small is-pulled-right">
+                                        <span class="icon">
+                                            <i class="fa-solid fa-plus"></i>
+                                        </span>
+                                        <span>Bump!</span>
+                                    </button>
+                                </p>
+                            </form>
+                            <progress class="progress is-small is-warning mb-1"
+                                      value="{{ status.percent|floatformat:"2u" }}"
+                                      max="100"></progress>
+                            <div class="is-flex mb-2 is-justify-content-space-between is-align-items-center py-1">
+                                <span>
+                                    <h2 class="subtitle">Ending {{ goal.date }}</h2>
+                                </span>
+                                <span>
+                                    <h2 class="subtitle">{{ status.percent }} %</h2>
+                                </span>
+                                <span>
+                                    <h2 class="subtitle">Left {{ status.left }} of {{ goal.value }}</h2>
+                                </span>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
