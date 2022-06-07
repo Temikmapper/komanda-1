@@ -5,8 +5,8 @@ from django.contrib.auth.decorators import login_required
 
 from main.views import CURRENT_DATE, MONTH_NAMES
 
-from .models import ConstantExpenses, ConstantExpenseHistory, Expenses, Categories
-from .forms import AddExpenseForm, CategoryAddForm, ConstantExpenseAddForm, ConstantExpenseFinishForm, ExpenseEditForm
+from expenses.models import ConstantExpenses, ConstantExpenseHistory, Expenses, Categories
+from expenses.forms import AddExpenseForm, CategoryAddForm, ConstantExpenseAddForm, ConstantExpenseFinishForm, ExpenseEditForm
 
 
 @login_required
@@ -32,7 +32,7 @@ def view_add_categories(request):
 def delete_category(request, id):
     category = Categories.objects.get(id=id)
     category.delete()
-    return view_add_categories(request)
+    return redirect('view_add_categories')
 
 
 @login_required
@@ -45,18 +45,6 @@ def add_expense(request):
     else:
         form = AddExpenseForm()
     return render(request, 'add_expense.html', {'form': form, 'date': CURRENT_DATE})
-
-
-def view_expense(request, id):
-
-    expense = ConstantExpenses.objects.get(id=id)
-
-    latest_price = expense.amount
-
-    return render(request, 'view_expense.html', {'date': CURRENT_DATE,
-                                                 'expense': expense,
-                                                 'latest_price': latest_price})
-
 
 def add_constant_expense(request):
 
@@ -84,9 +72,6 @@ def add_constant_expense(request):
 def view_constant_expense(request, id):
 
     expense = ConstantExpenses.objects.get(id=id)
-    expense_history = ConstantExpenseHistory.objects.filter(expense=expense)
-
-    form = None
 
     if request.method == "POST":
         form = ExpenseEditForm(request.POST)
@@ -104,7 +89,6 @@ def view_constant_expense(request, id):
 
     return render(request, 'view_constant_expense.html', {'date': CURRENT_DATE,
                                                           'expense': expense,
-                                                          'history': expense_history,
                                                           'form': form,
                                                           'finish_form': finish_form,
                                                           })

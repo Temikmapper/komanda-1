@@ -20,6 +20,9 @@ class ConstantExpenses(models.Model):
     def get_absolute_url(self):
         return f'/expenses/constant/{self.id}'
     
+    def get_history(self):
+        
+        return ConstantExpenseHistory.objects.filter(expense=self)
 
 
 class ConstantExpenseHistory(models.Model):
