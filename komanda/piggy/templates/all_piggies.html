@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="block">
+        <center>
+            <h1 class="title">All piggies</h1>
+        </center>
+    </div>
+    <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+        <tbody>
+            {% for piggy in piggies %}
+                <tr>
+                    <th>{{ piggy.name }}</th>
+                    <th><a href={% url 'piggy_bump' piggy.id %}>ff</a></th>
+                    <th>{{ piggy.get_current_value }}</th>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock content %}

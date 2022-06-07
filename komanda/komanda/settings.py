@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'monthly',
     'incomes',
     'resume',
+    'piggy',
 ]
 
 MIDDLEWARE = [
