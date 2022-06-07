@@ -1,19 +1,26 @@
-from datetime import datetime
-from decimal import Decimal
 from django.shortcuts import render, redirect
 
 from main.views import CURRENT_DATE
-from piggy.forms import PiggyAddForm, PiggyBumpForm
+from piggy.forms import PiggyAddForm, PiggyBumpForm, PiggyEditForm
 from piggy.models import Piggies
 
 # Create your views here.
 
 
 def view_all_piggies(request):
+
     piggies = Piggies.objects.all()
 
     return render(request, 'all_piggies.html', {'date': CURRENT_DATE,
                                                 'piggies': piggies})
+
+
+def view_piggy(request, id):
+
+    piggy = Piggies.objects.get(id=id)
+
+    return render(request, 'view_piggy.html', {'date': CURRENT_DATE,
+                                               'piggy': piggy})
 
 
 def piggy_add(request):
@@ -36,12 +43,27 @@ def piggy_delete(request, id):
     piggy = Piggies.objects.get(id=id)
     piggy.delete()
 
-    return view_all_piggies(request)
+    return redirect('view_all_piggies')
 
 
 def piggy_edit(request, id):
 
-    return render(request, 'edit_piggy.html', {'date': CURRENT_DATE})
+    piggy = Piggies.objects.get(id=id)
+
+    if request.method == "POST":
+        form = PiggyEditForm(request.POST)
+        if form.is_valid():
+            bump = form.save(commit=False)
+            bump.value = piggy.get_current_value()
+            bump.piggy = piggy
+            bump.save()
+            return redirect('view_all_piggies')
+    else:
+        form = PiggyEditForm()
+
+    return render(request, 'edit_piggy.html', {'date': CURRENT_DATE,
+                                               'form': form,
+                                               'piggy': piggy})
 
 
 def piggy_bump(request, id):
@@ -52,8 +74,9 @@ def piggy_bump(request, id):
         if form.is_valid():
             bump = form.save(commit=False)
             bump.piggy = piggy
+            bump.percent = piggy.get_current_percent()
             bump.save()
-            return view_all_piggies(request)
+            return redirect('view_all_piggies')
     else:
         form = PiggyBumpForm()
 

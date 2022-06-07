@@ -34,10 +34,12 @@
                 </div>
                 <div class="tile is-parent">
                     <div class="tile is-child notification is-danger box">
-                        <p class="title">
-                            Piggy
-                            <button class="button is-danger is-inverted">Edit</button>
-                        </p>
+                        <form method="get" action={% url 'view_all_piggies'%}>
+                            <p class="title">
+                                Piggy
+                                <button class="button is-danger is-inverted">Edit</button>
+                            </p>
+                        </form>
                     </div>
                 </div>
             </div>

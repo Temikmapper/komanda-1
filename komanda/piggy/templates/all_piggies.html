@@ -1,19 +1,56 @@
 {% extends 'base.html' %}
 {% block content %}
-    <div class="block">
-        <center>
+    <div class="columns">
+        <div class="column">
+            <form method="get" action={% url 'piggy_add' %}>
+                <button class="button is-primary is-outlined">
+                    <span class="icon">
+                        <i class="fa-solid fa-plus"></i>
+                    </span>
+                    <span>Add piggy</span>
+                </button>
+            </form>
+        </div>
+        <div class="column has-text-centered">
             <h1 class="title">All piggies</h1>
-        </center>
+        </div>
+        <div class="column"></div>
     </div>
-    <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-        <tbody>
-            {% for piggy in piggies %}
-                <tr>
-                    <th>{{ piggy.name }}</th>
-                    <th><a href={% url 'piggy_bump' piggy.id %}>ff</a></th>
-                    <th>{{ piggy.get_current_value }}</th>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="block">
+        <div class="tile is-vertical">
+            <div class="tile is-child notification is-danger box">
+                <div class="columns">
+                    <div class="column">
+                        <div class="field">
+                            <h1 class="title">All piggies</h1>
+                        </div>
+                    </div>
+                </div>
+                {% for piggy in piggies %}
+                    <div class="box is-flex my-5 is-justify-content-space-between is-align-items-center py-5">
+                        <span>
+                                <a class="is-size-1" href={{ piggy.get_absolute_url }}>{{ piggy.name }}</a>
+                            <p>
+                                Accumulated <strong>{{ piggy.get_capital }}</strong>
+                            </p>
+                            <div class="field is-grouped pt-3">
+                                <form method="get" action={% url 'piggy_edit' piggy.id %}>
+                                    <button class="button is-primary mr-1">Edit %</button>
+                                </form>
+                                <form method="get" action={% url 'piggy_bump' piggy.id %}>
+                                    <button class="button is-link">Bump!</button>
+                                </form>
+                            </div>
+                        </span>
+                        <span >
+                            <form method="get" action={% url 'piggy_delete' piggy.id %}>
+                                <button class="button is-danger is-outlined is-hidden-touch">Delete</button>
+                                <button class="button is-danger is-small is-outlined is-hidden-desktop">X</button>
+                            </form>
+                        </span>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 {% endblock content %}

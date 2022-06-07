@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="block">
+        <center>
+            <h1 class="title">Piggy</h1>
+        </center>
+    </div>
+    <div class="box">
+        <h2 class="subtitle">{{ piggy.name }}</h2>
+        <form method="get" action={% url 'piggy_bump' piggy.id %}>
+            <button class="button is-link">Bump!</button>
+        </form>
+        <p>Accumulated {{ piggy.get_capital }}</p>
+    </div>
+    {% if piggy.get_history|length > 0 %}
+        <div class="box">
+            <div class="timeline">
+                <header class="timeline-header">
+                    <span class="tag is-medium is-primary">Start</span>
+                </header>
+                {% for item in piggy.get_history %}
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <p class="heading">
+                                {{ item.date }}
+                            </p>
+                            <p>
+                                {{ item.value }}
+                            </p>
+                        </div>
+                    </div>
+                {% endfor %}
+                <div class="timeline-header">
+                    <span class="tag is-medium is-primary">End</span>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock content %}

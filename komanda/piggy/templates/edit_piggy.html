@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="block">
+        <center>
+            <h1 class="title">Edit piggypercent</h1>
+        </center>
+    </div>
+    <form method="POST" class="post-form">
+        {% csrf_token %}
+        <div class="block">
+            {{ form.date.errors }}
+            <div class="field">
+                <p class="control has-icons-left">
+                    <input class="input is-primary"
+                           type="date"
+                           name="date"
+                           placeholder="Date"
+                           required
+                           id="{{ form.date.id_for_label }}">
+                    <span class="icon is-small is-left">
+                        <i class="fas fa-calendar"></i>
+                    </span>
+                </p>
+            </div>
+        </div>
+        <div class="block">
+            {{ form.percent.errors }}
+            <div class="field">
+                <p class="control has-icons-left">
+                    <input class="input is-primary"
+                           type="number"
+                           name="percent"
+                           placeholder="Percent"
+                           step="0.01"
+                           required
+                           id="{{ form.percent.id_for_label }}">
+                    <span class="icon is-small is-left">
+                        <i class="fas fa-percent"></i>
+                    </span>
+                </p>
+            </div>
+        </div>
+        <div class="block">
+            <button type="submit" class="button is-success">
+                <span class="icon is-small">
+                    <i class="fas fa-check"></i>
+                </span>
+                <span>Save</span>
+            </button>
+        </div>
+    </form>
+{% endblock content %}

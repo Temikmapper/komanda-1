@@ -1,3 +1,4 @@
+from decimal import Decimal
 from django.db import models
 
 class Piggies(models.Model):
@@ -10,7 +11,23 @@ class Piggies(models.Model):
         try: 
             value = PiggyHistory.objects.filter(piggy=self).last().value
         except:
-            value = 'Not stated'
+            value = Decimal(0.0)
+        return value
+
+    def get_history(self):
+        
+        return PiggyHistory.objects.filter(piggy=self)
+
+    def get_capital(self):
+
+        return PiggyHistory.objects.filter(piggy=self).aggregate(models.Sum('value'))['value__sum']
+
+    def get_current_percent(self):
+
+        try: 
+            value = PiggyHistory.objects.filter(piggy=self).last().percent
+        except:
+            value = Decimal(0.0)
         return value
 
 class PiggyHistory(models.Model):

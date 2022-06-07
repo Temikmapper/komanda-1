@@ -18,4 +18,4 @@ class PiggyEditForm(forms.ModelForm):
 
     class Meta:
         model = PiggyHistory
-        fields = ('percent',)
+        fields = ('date', 'percent',)

@@ -7,6 +7,26 @@
     </div>
     <form method="POST" class="post-form">
         {% csrf_token %}
-        {{form}}
+        <div class="block">
+            {{ form.name.errors }}
+            <div class="field">
+                <p class="control">
+                    <input class="input is-primary"
+                           type="text"
+                           name="name"
+                           placeholder="Name"
+                           required
+                           id="{{ form.name.id_for_label }}">
+                </p>
+            </div>
+        </div>
+        <div class="block">
+            <button type="submit" class="button is-success">
+                <span class="icon is-small">
+                    <i class="fas fa-check"></i>
+                </span>
+                <span>Save</span>
+            </button>
+        </div>
     </form>
 {% endblock content %}
