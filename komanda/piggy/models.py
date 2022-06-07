@@ -1,4 +1,4 @@
-from decimal import Decimal
+from decimal import Decimal, ROUND_FLOOR
 from django.db import models
 
 class Piggies(models.Model):
@@ -20,7 +20,10 @@ class Piggies(models.Model):
 
     def get_capital(self):
 
-        return PiggyHistory.objects.filter(piggy=self).aggregate(models.Sum('value'))['value__sum']
+        sum_of_bumps = PiggyHistory.objects.filter(piggy=self).aggregate(models.Sum('value'))['value__sum']
+        result = sum_of_bumps.quantize(Decimal("1.00"), ROUND_FLOOR)
+
+        return result
 
     def get_current_percent(self):
 
@@ -28,6 +31,15 @@ class Piggies(models.Model):
             value = PiggyHistory.objects.filter(piggy=self).last().percent
         except:
             value = Decimal(0.0)
+        return value
+
+    def get_capital_till_date(self, date):
+
+        try: 
+            sum_of_bumps = PiggyHistory.objects.filter(piggy=self).filter(date__lte=date)
+            value = sum_of_bumps.aggregate(models.Sum('value'))['value__sum'].quantize(Decimal("1.00"), ROUND_FLOOR)
+        except:
+            value = Decimal(0.0).quantize(Decimal("1.00"), ROUND_FLOOR)
         return value
 
 class PiggyHistory(models.Model):

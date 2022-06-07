@@ -34,12 +34,23 @@
                 </div>
                 <div class="tile is-parent">
                     <div class="tile is-child notification is-danger box">
-                        <form method="get" action={% url 'view_all_piggies'%}>
-                            <p class="title">
-                                Piggy
-                                <button class="button is-danger is-inverted">Edit</button>
-                            </p>
-                        </form>
+                        <div class="block">
+                            <form method="get" action={% url 'view_all_piggies' %}>
+                                <p class="title">
+                                    Piggy
+                                    <button class="button is-danger is-inverted">Edit</button>
+                                </p>
+                            </form>
+                        </div>
+                        <div class="block">
+                            {% for piggy, capital in piggies.items %}
+                                <div class="is-flex mb-2 is-justify-content-space-between is-align-items-center py-1"
+                                     style="border-bottom: 1px dotted #fff;">
+                                    <span>{{ piggy.name }}</span>
+                                    <span class="tag">{{ capital }}</span>
+                                </div>
+                            {% endfor %}
+                        </div>
                     </div>
                 </div>
             </div>
