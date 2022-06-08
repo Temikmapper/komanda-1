@@ -95,3 +95,38 @@
         </tfoot>
     </table>
 {% endblock spends_table %}
+{% block graphs %}
+    {% load static %}
+    <script src="{% static 'js/charts.min.js' %}"></script>
+    <canvas id="expenses-chart" width="400" height="200"></canvas>
+    <script>
+        $(document).ready(function () {
+            var $expensesChart = $("#expenses-chart");
+            $.ajax({
+                data: $(this).serialize(),
+                url: "{% url 'expenses_chart' year month %}",
+                success: function (data) {
+                    ctx = $expensesChart[0].getContext('2d');
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                                labels: data.labels,
+                                datasets: [{
+                                        label: 'Траты',
+                                        data: data.data,
+                                        borderColor: 'rgb(255, 99, 132)',
+                                        fill: false,
+                                        }]
+                            },
+                        options: {
+                            responsive: true,
+                        }
+                    });
+                },
+                error: function (data, jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus, errorThrown);
+                }
+            })
+        })
+    </script>
+{% endblock graphs %}

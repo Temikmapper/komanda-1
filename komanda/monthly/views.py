@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from decimal import ROUND_FLOOR, Decimal
 
 from django.db.models import Sum
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
@@ -138,3 +139,27 @@ def get_balance_for_monthly_table():
         cur_day += timedelta(1)
 
     return data
+
+def expenses_chart(request, year, month):
+
+    last_day = monthrange(year, month)[1]
+
+    START_OF_MONTH = datetime(year, month, 1)
+    END_OF_MONTH = datetime(year, month, last_day)
+
+    labels = []
+    data = []
+
+    for i in range(START_OF_MONTH.day, END_OF_MONTH.day+1):
+        labels.append(i)
+        day = START_OF_MONTH+timedelta(i-1)
+        try:
+            value = Expenses.objects.filter(date=day).aggregate(Sum("amount"))['amount__sum'].quantize(Decimal("1.00"), ROUND_FLOOR)
+            data.append(float(value))
+        except AttributeError:
+            data.append(None)
+    
+    return JsonResponse(data={
+        'labels': labels,
+        'data': data,
+    }, status=200)

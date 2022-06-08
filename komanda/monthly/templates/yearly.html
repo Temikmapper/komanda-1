@@ -6,24 +6,26 @@
     Monthly page
 {% endblock subtitle_hero %}
 {% block month_tabs %}
-<section class="section">
-    <div class="tabs is-centered is-toggle">
-        <ul>
-            {% for month in monthes %}
-                <li {% if month.name == cur_month %} class="is-active"{% endif %}>
-                    <a href={% url 'view_month' year month.id %}>{{ month.name }}</a>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
-    <center>
-        <h1 class="title">{{ cur_month }}</h1>
-    </center>
-</section>
+    <section class="section">
+        <div class="tabs is-centered is-toggle">
+            <ul>
+                {% for month in monthes %}
+                    <li {% if month.name == cur_month %} class="is-active"{% endif %}>
+                        <a href={% url 'view_month' year month.id %}>{{ month.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <center>
+            <h1 class="title">{{ cur_month }}</h1>
+        </center>
+    </section>
 {% endblock month_tabs %}
 {% block content %}
     {% block settings %}
     {% endblock settings %}
     {% block spends_table %}
     {% endblock spends_table %}
+    {% block graphs %}
+    {% endblock graphs %}
 {% endblock content %}
