@@ -99,6 +99,7 @@
     {% load static %}
     <script src="{% static 'js/charts.min.js' %}"></script>
     <canvas id="expenses-chart" width="400" height="200"></canvas>
+    <canvas id="bar-chart" width="800" height="450"></canvas>
     <script>
         $(document).ready(function () {
             var $expensesChart = $("#expenses-chart");
@@ -106,20 +107,41 @@
                 data: $(this).serialize(),
                 url: "{% url 'expenses_chart' year month %}",
                 success: function (data) {
+                    const skipped = (ctx, value) => ctx.p0.skip || ctx.p1.skip ? value : undefined;
                     ctx = $expensesChart[0].getContext('2d');
                     new Chart(ctx, {
                         type: 'line',
                         data: {
-                                labels: data.labels,
-                                datasets: [{
-                                        label: 'Траты',
-                                        data: data.data,
-                                        borderColor: 'rgb(255, 99, 132)',
-                                        fill: false,
-                                        }]
-                            },
+                            labels: data.labels,
+                            datasets: [{
+                                    label: 'Траты',
+                                    data: data.data,
+                                    borderColor: 'rgb(255, 99, 132)',
+                                    cubicInterpolationMode: 'monotone',
+                                    segment: {
+                                        borderColor: ctx => skipped(ctx, 'rgb(0,0,0,0.2)'),
+                                        borderDash: ctx => skipped(ctx, [6, 6]),
+                                    },
+                                    fill: false,
+                                    spanGaps: true
+                                    }]},
                         options: {
-                            responsive: true,
+                            scales: { 
+                                y: {
+                                    min: 0,
+                                    ticks: {
+                                        // Include a dollar sign in the ticks
+                                        callback: function(value, index, ticks) {
+                                            return value + '₽';
+                                        }
+                                    }
+                                }
+                            },
+                            legend: { display: false },
+                            title: {
+                                display: true,
+                                text: 'Predicted world population (millions) in 2050'
+                                }
                         }
                     });
                 },
@@ -128,5 +150,18 @@
                 }
             })
         })
+        {% comment %} new Chart(document.getElementById("bar-chart"), {
+            type: 'bar',
+            data: {
+              labels: ["Africa", "Asia", "Europe", "Latin America", "North America"],
+              datasets: [
+                {
+                  label: "Population (millions)",
+                  backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
+                  data: [2478,5267,734,784,433]
+                }
+              ]
+            }
+        }); {% endcomment %}
     </script>
 {% endblock graphs %}
