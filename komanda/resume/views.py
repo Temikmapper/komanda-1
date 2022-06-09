@@ -15,8 +15,7 @@ from main.views import CURRENT_DATE, MONTH_NAMES, MONTHES
 
 @login_required
 def view_resume(request, year, month):
-    """Представление сводки месяца
-    """
+    """Представление сводки месяца"""
 
     last_day = monthrange(year, month)[1]
 
@@ -36,22 +35,25 @@ def view_resume(request, year, month):
 
     goals = get_last_goals_statuses(START_OF_MONTH, END_OF_MONTH)
 
-    piggy_capital ={}
+    piggy_capital = {}
     piggies = Piggies.objects.all()
     for piggy in piggies:
         piggy_capital[piggy] = piggy.get_capital_till_date(END_OF_MONTH)
 
-
-    return render(request, 'resume.html',
-                  {'date': CURRENT_DATE,
-                   'year': year,
-                   'month': month,
-                   'monthes': MONTHES,
-                   'cur_month': MONTH_NAMES[month],
-                   'incomes': all_incomes,
-                   'total_income': total_income,
-                   'expenses': constant_expenses,
-                   'total_expense': total_expense,
-                   'goals': goals,
-                   'piggies': piggy_capital
-                   })
+    return render(
+        request,
+        "resume.html",
+        {
+            "date": CURRENT_DATE,
+            "year": year,
+            "month": month,
+            "monthes": MONTHES,
+            "cur_month": MONTH_NAMES[month],
+            "incomes": all_incomes,
+            "total_income": total_income,
+            "expenses": constant_expenses,
+            "total_expense": total_expense,
+            "goals": goals,
+            "piggies": piggy_capital,
+        },
+    )

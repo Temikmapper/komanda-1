@@ -6,8 +6,13 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
 from .models import ConstantIncomeHistory, ConstantIncomes, Incomes
-from .forms import (IncomeEditForm, IncomeAddForm,
-                    ConstantIncomeAddForm, ConstantIncomeFinishForm, IncomeEditForm)
+from .forms import (
+    IncomeEditForm,
+    IncomeAddForm,
+    ConstantIncomeAddForm,
+    ConstantIncomeFinishForm,
+    IncomeEditForm,
+)
 
 from main.views import CURRENT_DATE, MONTH_NAMES
 
@@ -23,14 +28,18 @@ def view_monthly_incomes(request, year, month):
 
     constant_incomes = get_constant_incomes(start_of_month, end_of_month)
 
-    return render(request, 'monthly_income.html',
-                  {'date': CURRENT_DATE,
-                   'cur_month': MONTH_NAMES[month],
-                   'year': year,
-                   'month': month,
-                   'incomes': incomes,
-                   'constant_incomes': constant_incomes
-                   })
+    return render(
+        request,
+        "monthly_income.html",
+        {
+            "date": CURRENT_DATE,
+            "cur_month": MONTH_NAMES[month],
+            "year": year,
+            "month": month,
+            "incomes": incomes,
+            "constant_incomes": constant_incomes,
+        },
+    )
 
 
 @login_required
@@ -46,11 +55,15 @@ def income_edit(request, id, year, month):
     else:
         form = IncomeEditForm(instance=income)
 
-    return render(request, 'income_edit.html',
-                  {'date': CURRENT_DATE,
-                   'income': income,
-                   'form': form,
-                   })
+    return render(
+        request,
+        "income_edit.html",
+        {
+            "date": CURRENT_DATE,
+            "income": income,
+            "form": form,
+        },
+    )
 
 
 @login_required
@@ -74,16 +87,23 @@ def income_add(request, year, month):
     else:
         form = IncomeAddForm()
 
-    return render(request, 'add_income.html',
-                  {'date': CURRENT_DATE,
-                   'form': form,
-                   })
+    return render(
+        request,
+        "add_income.html",
+        {
+            "date": CURRENT_DATE,
+            "form": form,
+        },
+    )
 
 
 def view_all_constant_incomes(request):
     all_incomes = ConstantIncomes.objects.all()
-    return render(request, 'view_all_constant_incomes.html', {'date': CURRENT_DATE,
-                                                              'incomes': all_incomes})
+    return render(
+        request,
+        "view_all_constant_incomes.html",
+        {"date": CURRENT_DATE, "incomes": all_incomes},
+    )
 
 
 def delete_constant_income(request, id):
@@ -111,9 +131,11 @@ def add_constant_income(request):
         income_form = ConstantIncomeAddForm()
         value_form = IncomeEditForm()
 
-    return render(request, 'add_const_income.html', {'date': CURRENT_DATE,
-                                                     'income_form': income_form,
-                                                     'value_form': value_form})
+    return render(
+        request,
+        "add_const_income.html",
+        {"date": CURRENT_DATE, "income_form": income_form, "value_form": value_form},
+    )
 
 
 def view_constant_income(request, id):
@@ -137,30 +159,43 @@ def view_constant_income(request, id):
         form = IncomeEditForm()
         finish_form = ConstantIncomeFinishForm(instance=income)
 
-    return render(request, 'view_constant_income.html', {'date': CURRENT_DATE,
-                                                         'income': income,
-                                                         'history': income_history,
-                                                         'form': form,
-                                                         'finish_form': finish_form,
-                                                         })
+    return render(
+        request,
+        "view_constant_income.html",
+        {
+            "date": CURRENT_DATE,
+            "income": income,
+            "history": income_history,
+            "form": form,
+            "finish_form": finish_form,
+        },
+    )
 
 
 def get_constant_incomes(start_of_month, end_of_month):
 
     actual_incomes = ConstantIncomes.objects.filter(
-        start_date__lte=start_of_month).filter(finish_date__gte=end_of_month)
+        start_date__lte=start_of_month
+    ).filter(finish_date__gte=end_of_month)
 
     income_value = {}
     for income in actual_incomes:
-        current_value = ConstantIncomeHistory.objects.filter(income=income).filter(date__lte=end_of_month).last().value
+        current_value = (
+            ConstantIncomeHistory.objects.filter(income=income)
+            .filter(date__lte=end_of_month)
+            .last()
+            .value
+        )
         income_value[income] = current_value
 
     return income_value
+
 
 def get_sum_constant_incomes(start_of_month, end_of_month):
     incomes = get_constant_incomes(start_of_month, end_of_month)
 
     return sum(incomes.values())
+
 
 def get_additional_incomes(start_of_month):
 

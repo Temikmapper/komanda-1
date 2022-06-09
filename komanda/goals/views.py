@@ -7,6 +7,7 @@ from main.views import CURRENT_DATE
 
 from goals.models import Goals, GoalStatus
 from goals.forms import GoalAddForm, GoalStatusAddForm
+
 # Create your views here.
 
 
@@ -21,20 +22,25 @@ def view_all_goals(request):
 
     goals_statuses = get_last_goals_statuses(start_of_month, end_of_month)
 
-    return render(request, 'all_goals.html', {'date': CURRENT_DATE,
-                                              'goals': all_goals,
-                                              'goals_statuses': goals_statuses})
+    return render(
+        request,
+        "all_goals.html",
+        {"date": CURRENT_DATE, "goals": all_goals, "goals_statuses": goals_statuses},
+    )
+
 
 def get_last_goals_statuses(start_of_month, end_of_month):
-    
+
     all_goals = Goals.objects.all()
 
     goals_statuses = {}
 
     for goal in all_goals:
-        goal_status = GoalStatus.objects.filter(goal=goal).filter(date__lte=end_of_month).last()
+        goal_status = (
+            GoalStatus.objects.filter(goal=goal).filter(date__lte=end_of_month).last()
+        )
         goals_statuses[goal] = goal_status
-    
+
     return goals_statuses
 
 
@@ -50,7 +56,7 @@ def view_goal(request, id):
         if form.is_valid():
             status = form.save(commit=False)
             status.goal = goal
-            if (status.value != 0 ):
+            if status.value != 0:
                 percent = (status.value / goal.value) * 100
                 percent = percent.quantize(Decimal("1.00"), ROUND_FLOOR)
             status.percent = percent
@@ -59,13 +65,19 @@ def view_goal(request, id):
         form = GoalStatusAddForm()
 
     goal_statuses = GoalStatus.objects.filter(goal=goal)
-    latest_status = goal_statuses.latest('date')
+    latest_status = goal_statuses.latest("date")
 
-    return render(request, 'view_goal.html', {'date': CURRENT_DATE,
-                                              'form': form,
-                                              'goal': goal,
-                                              'goal_statuses': goal_statuses,
-                                              'latest_status': latest_status})
+    return render(
+        request,
+        "view_goal.html",
+        {
+            "date": CURRENT_DATE,
+            "form": form,
+            "goal": goal,
+            "goal_statuses": goal_statuses,
+            "latest_status": latest_status,
+        },
+    )
 
 
 @login_required
@@ -75,13 +87,14 @@ def add_goal(request):
         if form.is_valid():
             goal = form.save(commit=False)
             goal.save()
-            GoalStatus.objects.create(date = datetime.today(), value = Decimal(0.0), goal = goal)
+            GoalStatus.objects.create(
+                date=datetime.today(), value=Decimal(0.0), goal=goal
+            )
             return view_all_goals(request)
     else:
         form = GoalAddForm()
 
-
-    return render(request, 'add_goal.html', {'form': form, 'date': CURRENT_DATE})
+    return render(request, "add_goal.html", {"form": form, "date": CURRENT_DATE})
 
 
 @login_required

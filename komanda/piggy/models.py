@@ -1,33 +1,36 @@
 from decimal import Decimal, ROUND_FLOOR
 from django.db import models
 
+
 class Piggies(models.Model):
     name = models.CharField(max_length=50)
 
     def get_absolute_url(self):
-        return f'/piggies/{self.id}'
+        return f"/piggies/{self.id}"
 
     def get_current_value(self):
-        try: 
+        try:
             value = PiggyHistory.objects.filter(piggy=self).last().value
         except:
             value = Decimal(0.0)
         return value
 
     def get_history(self):
-        
+
         return PiggyHistory.objects.filter(piggy=self)
 
     def get_capital(self):
 
-        sum_of_bumps = PiggyHistory.objects.filter(piggy=self).aggregate(models.Sum('value'))['value__sum']
+        sum_of_bumps = PiggyHistory.objects.filter(piggy=self).aggregate(
+            models.Sum("value")
+        )["value__sum"]
         result = sum_of_bumps.quantize(Decimal("1.00"), ROUND_FLOOR)
 
         return result
 
     def get_current_percent(self):
 
-        try: 
+        try:
             value = PiggyHistory.objects.filter(piggy=self).last().percent
         except:
             value = Decimal(0.0)
@@ -35,12 +38,17 @@ class Piggies(models.Model):
 
     def get_capital_till_date(self, date):
 
-        try: 
-            sum_of_bumps = PiggyHistory.objects.filter(piggy=self).filter(date__lte=date)
-            value = sum_of_bumps.aggregate(models.Sum('value'))['value__sum'].quantize(Decimal("1.00"), ROUND_FLOOR)
+        try:
+            sum_of_bumps = PiggyHistory.objects.filter(piggy=self).filter(
+                date__lte=date
+            )
+            value = sum_of_bumps.aggregate(models.Sum("value"))["value__sum"].quantize(
+                Decimal("1.00"), ROUND_FLOOR
+            )
         except:
             value = Decimal(0.0).quantize(Decimal("1.00"), ROUND_FLOOR)
         return value
+
 
 class PiggyHistory(models.Model):
     date = models.DateField()
@@ -49,4 +57,4 @@ class PiggyHistory(models.Model):
     piggy = models.ForeignKey(Piggies, on_delete=models.CASCADE)
 
     class Meta:
-        ordering = ['date']
+        ordering = ["date"]

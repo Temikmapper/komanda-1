@@ -2,20 +2,23 @@ from django import forms
 
 from piggy.models import Piggies, PiggyHistory
 
-class PiggyAddForm(forms.ModelForm):
 
+class PiggyAddForm(forms.ModelForm):
     class Meta:
         model = Piggies
-        fields = ('name',)
+        fields = ("name",)
+
 
 class PiggyBumpForm(forms.ModelForm):
-
     class Meta:
         model = PiggyHistory
-        fields = ('date', 'value')
+        fields = ("date", "value")
+
 
 class PiggyEditForm(forms.ModelForm):
-
     class Meta:
         model = PiggyHistory
-        fields = ('date', 'percent',)
+        fields = (
+            "date",
+            "percent",
+        )

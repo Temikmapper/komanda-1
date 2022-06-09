@@ -11,16 +11,16 @@ def view_all_piggies(request):
 
     piggies = Piggies.objects.all()
 
-    return render(request, 'all_piggies.html', {'date': CURRENT_DATE,
-                                                'piggies': piggies})
+    return render(
+        request, "all_piggies.html", {"date": CURRENT_DATE, "piggies": piggies}
+    )
 
 
 def view_piggy(request, id):
 
     piggy = Piggies.objects.get(id=id)
 
-    return render(request, 'view_piggy.html', {'date': CURRENT_DATE,
-                                               'piggy': piggy})
+    return render(request, "view_piggy.html", {"date": CURRENT_DATE, "piggy": piggy})
 
 
 def piggy_add(request):
@@ -30,20 +30,25 @@ def piggy_add(request):
         if form.is_valid():
             piggy = form.save(commit=False)
             piggy.save()
-            return redirect('view_all_piggies')
+            return redirect("view_all_piggies")
     else:
         form = PiggyAddForm()
 
-    return render(request, 'add_piggy.html', {'date': CURRENT_DATE,
-                                              'form': form,
-                                              })
+    return render(
+        request,
+        "add_piggy.html",
+        {
+            "date": CURRENT_DATE,
+            "form": form,
+        },
+    )
 
 
 def piggy_delete(request, id):
     piggy = Piggies.objects.get(id=id)
     piggy.delete()
 
-    return redirect('view_all_piggies')
+    return redirect("view_all_piggies")
 
 
 def piggy_edit(request, id):
@@ -57,13 +62,13 @@ def piggy_edit(request, id):
             bump.value = piggy.get_current_value()
             bump.piggy = piggy
             bump.save()
-            return redirect('view_all_piggies')
+            return redirect("view_all_piggies")
     else:
         form = PiggyEditForm()
 
-    return render(request, 'edit_piggy.html', {'date': CURRENT_DATE,
-                                               'form': form,
-                                               'piggy': piggy})
+    return render(
+        request, "edit_piggy.html", {"date": CURRENT_DATE, "form": form, "piggy": piggy}
+    )
 
 
 def piggy_bump(request, id):
@@ -76,9 +81,8 @@ def piggy_bump(request, id):
             bump.piggy = piggy
             bump.percent = piggy.get_current_percent()
             bump.save()
-            return redirect('view_all_piggies')
+            return redirect("view_all_piggies")
     else:
         form = PiggyBumpForm()
 
-    return render(request, 'bump_piggy.html', {'date': CURRENT_DATE,
-                                               'form': form})
+    return render(request, "bump_piggy.html", {"date": CURRENT_DATE, "form": form})
