@@ -1,0 +1,102 @@
+from datetime import date
+from decimal import Decimal
+from django.test import TestCase
+from django.contrib.auth import get_user_model
+
+from goals.models import Goals
+
+User = get_user_model()
+
+
+class AllGoalsPageTest(TestCase):
+    """тесты для странички, где отображаются все цели"""
+
+    def setUp(self) -> None:
+        user = User.objects.create(username="tester")
+        self.client.force_login(user)
+
+    def tearDown(self) -> None:
+        self.client.logout()
+
+    def test_access_denied_to_unauthenticated_user(self):
+        """тест: нельзя посмотреть список целей неавторизованным"""
+        self.client.logout()
+        response = self.client.get(f"/goals/")
+        self.assertRedirects(
+            response,
+            f"/accounts/login/?next=/goals/",
+            status_code=302,
+            target_status_code=200,
+            fetch_redirect_response=True,
+        )
+
+    def test_uses_all_goals_template(self):
+        """тест: используется правильный шаблон"""
+        response = self.client.get(f"/goals/")
+        self.assertTemplateUsed(response, "all_goals.html")
+
+    def test_contains_goals(self):
+        """тест: страничка содержит все созданные цели"""
+        goal1 = Goals.objects.create(
+            name="car", date=date(2021, 12, 31), value=Decimal(10.0)
+        )
+        goal2 = Goals.objects.create(
+            name="house", date=date(2023, 12, 31), value=Decimal(30.0)
+        )
+
+        response = self.client.get(f"/goals/")
+
+        self.assertContains(response, "car")
+        self.assertContains(response, "house")
+
+    def test_page_contain_data_from_goal(self):
+        """тест: на страничке с целями отображается инфа сколько процентов осталось, сколько осталось, сколько всего"""
+        goal = Goals.objects.create(
+            name="car", date=date(2023, 12, 31), value=Decimal(10.0)
+        )
+        goal.bump(date=date(2022, 12, 31), value=Decimal(5.0))
+        goal.save()
+
+        response = self.client.get(f"/goals/")
+
+        self.assertContains(response, "Left <strong>5,00</strong> of 10,00")
+        self.assertContains(response, "50,00 %")
+
+
+class GoalPageTest(TestCase):
+    """тест странички с целью"""
+
+    def setUp(self) -> None:
+        Goals.objects.create(name="car", date=date(2023, 12, 31), value=Decimal(10.0))
+        user = User.objects.create(username="tester")
+        self.client.force_login(user)
+
+    def tearDown(self) -> None:
+        Goals.objects.get(name="car").delete()
+        self.client.logout()
+
+    def test_access_denied_to_unauthenticated_user(self):
+        """тест: нельзя посмотреть цель неавторизованным"""
+        goal = Goals.objects.get(name="car")
+        self.client.logout()
+        response = self.client.get(f"/goals/{goal.id}/")
+        self.assertRedirects(
+            response,
+            f"/accounts/login/?next=/goals/{goal.id}/",
+            status_code=302,
+            target_status_code=200,
+            fetch_redirect_response=True,
+        )
+
+    def test_history_is_shown(self):
+
+        goal = Goals.objects.get(name="car")
+
+        goal.bump(date=date(2022, 6, 30), value=Decimal(2.0))
+        goal.bump(date=date(2022, 7, 31), value=Decimal(2.0))
+        goal.save()
+
+        response = self.client.get(goal.get_absolute_url())
+
+        self.assertContains(response, "31 июля 2022 г.")
+        self.assertContains(response, "30 июня 2022 г.")

@@ -11,7 +11,7 @@ class GoalsModelTest(TestCase):
     def setUp(self):
         global goal
         goal = Goals.objects.create(
-            name="car", date=date(2021,12,31), value=Decimal(10.0)
+            name="car", date=date(2023, 12, 31), value=Decimal(10.0)
         )
 
     def tearDown(self):
@@ -54,8 +54,7 @@ class GoalsModelTest(TestCase):
         self.assertEqual(left, "5.00")
 
     def test_goal_returns_its_history_in_right_order(self):
-        """тест: цель возвращает свою историю в правильном порядке
-        """
+        """тест: цель возвращает свою историю в правильном порядке"""
         bump1 = goal.bump(Decimal(1.0), date=date(2023, 1, 1))
         bump2 = goal.bump(Decimal(2.0), date=date(2023, 1, 1))
         bump4 = goal.bump(Decimal(5.0), date=date(2023, 1, 5))

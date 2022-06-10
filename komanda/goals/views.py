@@ -15,17 +15,10 @@ from goals.forms import GoalAddForm, GoalStatusAddForm
 def view_all_goals(request):
     all_goals = Goals.objects.all()
 
-    year, month = datetime.today().year, datetime.today().month
-    last_day = monthrange(year, month)[1]
-    start_of_month = datetime(year, month, 1)
-    end_of_month = datetime(year, month, last_day)
-
-    goals_statuses = get_last_goals_statuses(start_of_month, end_of_month)
-
     return render(
         request,
         "all_goals.html",
-        {"date": CURRENT_DATE, "goals": all_goals, "goals_statuses": goals_statuses},
+        {"date": CURRENT_DATE, "goals": all_goals},
     )
 
 

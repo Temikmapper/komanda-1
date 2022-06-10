@@ -15,6 +15,9 @@ class Goals(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return f"/goals/{self.id}/"
+
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         GoalStatus.objects.create(
@@ -50,7 +53,7 @@ class GoalStatus(models.Model):
         ordering = ["date", "id"]
 
     def __str__(self) -> str:
-        string = f'id: {self.id}, date: {self.date}'
+        string = f"id: {self.id}, date: {self.date}"
         return string
 
     def left(self):
