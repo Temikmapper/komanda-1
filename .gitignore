@@ -7,3 +7,4 @@ komanda/goals/migrations
 komanda/expenses/migrations
 komanda/SECRET_FILE.py
 komanda/incomes/migrations
+komanda/.coverage
