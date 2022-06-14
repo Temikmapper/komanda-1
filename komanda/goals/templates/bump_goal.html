@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="block">
+        <center>
+            <h1 class="title">Goal's bump</h1>
+        </center>
+    </div>
+    <div class="box">
+        <h2 class="subtitle">{{ goal.name }}</h2>
+        <progress class="progress"
+                  value="{{ latest_status.percent|floatformat:"2u" }}"
+                  max="100">15%</progress>
+        <form method="POST" class="post-form">
+            {% csrf_token %}
+            <div class="field">
+                <label class="label">Date</label>
+                <div class="control">
+                    <input class="input is-primary"
+                           type="date"
+                           name="date"
+                           value="{{ form.date.value }}"
+                           id="{{ form.date.id_for_label }}"
+                           placeholder="Salary">
+                </div>
+                <label class="label">Current value: {{ form.value.value }}</label>
+                <div class="control">
+                    <input class="input is-primary"
+                           type="number"
+                           name="value"
+                           step="0.01"
+                           required
+                           id="{{ form.value.id_for_label }}"
+                           placeholder="5000">
+                </div>
+            </div>
+            <div class="block">
+                <button type="submit" class="button is-success" id="goal_save_btn">
+                    <span class="icon is-small">
+                        <i class="fas fa-check"></i>
+                    </span>
+                    <span>Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+{% endblock content %}

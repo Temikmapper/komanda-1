@@ -1,9 +1,10 @@
-from datetime import date
+from datetime import date, datetime
 from decimal import Decimal
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 
-from goals.models import Goals
+from goals.models import Goals, GoalStatus
+from goals.forms import GoalBumpForm
 
 User = get_user_model()
 
@@ -37,10 +38,10 @@ class AllGoalsPageTest(TestCase):
 
     def test_contains_goals(self):
         """тест: страничка содержит все созданные цели"""
-        goal1 = Goals.objects.create(
+        Goals.objects.create(
             name="car", date=date(2021, 12, 31), value=Decimal(10.0)
         )
-        goal2 = Goals.objects.create(
+        Goals.objects.create(
             name="house", date=date(2023, 12, 31), value=Decimal(30.0)
         )
 
@@ -55,7 +56,6 @@ class AllGoalsPageTest(TestCase):
             name="car", date=date(2023, 12, 31), value=Decimal(10.0)
         )
         goal.bump(date=date(2022, 12, 31), value=Decimal(5.0))
-        goal.save()
 
         response = self.client.get(f"/goals/")
 
@@ -67,7 +67,8 @@ class GoalPageTest(TestCase):
     """тест странички с целью"""
 
     def setUp(self) -> None:
-        Goals.objects.create(name="car", date=date(2023, 12, 31), value=Decimal(10.0))
+        Goals.objects.create(name="car", date=date(
+            2023, 12, 31), value=Decimal(10.0))
         user = User.objects.create(username="tester")
         self.client.force_login(user)
 
@@ -94,9 +95,122 @@ class GoalPageTest(TestCase):
 
         goal.bump(date=date(2022, 6, 30), value=Decimal(2.0))
         goal.bump(date=date(2022, 7, 31), value=Decimal(2.0))
-        goal.save()
 
         response = self.client.get(goal.get_absolute_url())
 
         self.assertContains(response, "31 июля 2022 г.")
         self.assertContains(response, "30 июня 2022 г.")
+
+
+class GoalEditPageTest(TestCase):
+
+    def setUp(self) -> None:
+        Goals.objects.create(name="car", date=date(
+            2023, 12, 31), value=Decimal(10.0))
+        user = User.objects.create(username="tester")
+        self.client.force_login(user)
+
+    def tearDown(self) -> None:
+        Goals.objects.get(name="car").delete()
+        self.client.logout()
+
+    def test_access_denied_to_unauthenticated_user(self):
+        """тест: нельзя посмотреть цель неавторизованным"""
+        goal = Goals.objects.get(name="car")
+        self.client.logout()
+        response = self.client.get(f"/goals/{goal.id}/")
+        self.assertRedirects(
+            response,
+            f"/accounts/login/?next=/goals/{goal.id}/",
+            status_code=302,
+            target_status_code=200,
+            fetch_redirect_response=True,
+        )
+
+    def test_passes_correct_list_to_template(self):
+        """тест: вызывается правильный шаблон
+        """
+        goal = Goals.objects.get(name="car")
+        response = self.client.get(f'/goals/edit/{goal.id}')
+        self.assertTemplateUsed(response, "edit_goal.html")
+
+    def test_using_bump_goal_form(self):
+        goal = Goals.objects.get(name="car")
+        response = self.client.get(f'/goals/edit/{goal.id}')
+        self.assertIsInstance(response.context['form'], GoalEditForm)
+
+    def test_saves_post_request(self):
+        goal = Goals.objects.get(name="car")
+        self.client.post(
+            f'/goals/edit/{goal.id}',
+            data={'date': f'{date(2021, 1, 1)}',
+                  'value': '1000.00'}
+        )
+        new_date = Goals.objects.first().date
+        self.assertEqual(new_date, '2021-01-01')
+
+    def test_POST_redirects_to_list_view(self):
+        '''тест: переадресуется в представление списка'''
+        goal = Goals.objects.get(name="car")
+        response = self.client.post(
+            f'/goals/bump/{goal.id}',
+            data={'date': f'{date(2021, 1, 1)}',
+                  'value': '100'}
+        )
+        self.assertRedirects(response, '/goals/')
+
+class GoalBumpPageTest(TestCase):
+
+    def setUp(self) -> None:
+        Goals.objects.create(name="car", date=date(
+            2023, 12, 31), value=Decimal(10.0))
+        user = User.objects.create(username="tester")
+        self.client.force_login(user)
+
+    def tearDown(self) -> None:
+        Goals.objects.get(name="car").delete()
+        self.client.logout()
+
+    def test_access_denied_to_unauthenticated_user(self):
+        """тест: нельзя посмотреть цель неавторизованным"""
+        goal = Goals.objects.get(name="car")
+        self.client.logout()
+        response = self.client.get(f"/goals/{goal.id}/")
+        self.assertRedirects(
+            response,
+            f"/accounts/login/?next=/goals/{goal.id}/",
+            status_code=302,
+            target_status_code=200,
+            fetch_redirect_response=True,
+        )
+
+    def test_passes_correct_list_to_template(self):
+        """тест: вызывается правильный шаблон
+        """
+        goal = Goals.objects.get(name="car")
+        response = self.client.get(f'/goals/bump/{goal.id}')
+        self.assertTemplateUsed(response, "bump_goal.html")
+
+    def test_using_bump_goal_form(self):
+        goal = Goals.objects.get(name="car")
+        response = self.client.get(f'/goals/bump/{goal.id}')
+        self.assertIsInstance(response.context['form'], GoalBumpForm)
+
+    def test_saves_post_request(self):
+        goal = Goals.objects.get(name="car")
+        self.client.post(
+            f'/goals/bump/{goal.id}',
+            data={'date': f'{date(2021, 1, 1)}',
+                  'value': '100'}
+        )
+        self.assertEqual(GoalStatus.objects.count(), 2)
+
+    def test_POST_redirects_to_list_view(self):
+        '''тест: переадресуется во все цели'''
+        goal = Goals.objects.get(name="car")
+        response = self.client.post(
+            f'/goals/bump/{goal.id}',
+            data={'date': f'{date(2021, 1, 1)}',
+                  'value': '100'}
+        )
+        self.assertRedirects(response, '/goals/')

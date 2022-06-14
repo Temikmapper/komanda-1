@@ -6,42 +6,10 @@
         </center>
     </div>
     <div class="box">
-        <h2 class="subtitle">{{ goal.name }}</h2>
+        <h2 class="subtitle" id="goal_name_title">{{ goal.name }}</h2>
         <progress class="progress"
                   value="{{ latest_status.percent|floatformat:"2u" }}"
                   max="100">15%</progress>
-        <form method="POST" class="post-form">
-            {% csrf_token %}
-            <div class="field">
-                <label class="label">Date</label>
-                <div class="control">
-                    <input class="input is-primary"
-                           type="date"
-                           name="date"
-                           value="{{ form.date.value }}"
-                           id="{{ form.date.id_for_label }}"
-                           placeholder="Salary">
-                </div>
-                <label class="label">Current value: {{ form.value.value }}</label>
-                <div class="control">
-                    <input class="input is-primary"
-                           type="number"
-                           name="value"
-                           step="0.01"
-                           required
-                           id="{{ form.value.id_for_label }}"
-                           placeholder="5000">
-                </div>
-            </div>
-            <div class="block">
-                <button type="submit" class="button is-success">
-                    <span class="icon is-small">
-                        <i class="fas fa-check"></i>
-                    </span>
-                    <span>Save</span>
-                </button>
-            </div>
-        </form>
     </div>
     <div class="box">
         <div class="timeline">
@@ -52,10 +20,10 @@
                 <div class="timeline-item">
                     <div class="timeline-marker"></div>
                     <div class="timeline-content">
-                        <p class="heading">
+                        <p class="heading" id="event_date">
                             {{ item.date }}
                         </p>
-                        <p>
+                        <p id="event_value">
                             {{ item.value }}
                         </p>
                     </div>

@@ -13,7 +13,7 @@
         <script src="{% static 'js/dropdown.js' %}"></script>
         <script src="{% static 'js/burger.js' %}"></script>
         <title>
-            {% block title %}Testing env{% endblock %}
+            {% block title %}Env test{% endblock %}
         </title>
     </head>
     <body>
@@ -90,7 +90,7 @@
                             <button class="button is-danger is-light is-rounded">Montly</button>
                         </form>
                         <form method="get" action={% url 'view_all_goals' %}>
-                            <button class="button is-info is-light is-rounded">Goals</button>
+                            <button class="button is-info is-light is-rounded" id="main_menu_goals_btn">Goals</button>
                         </form>
                     </div>
                 </div>

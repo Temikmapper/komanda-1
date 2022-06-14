@@ -20,19 +20,21 @@ class Goals(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        GoalStatus.objects.create(
-            date=datetime.today(), value=Decimal(0), percent=Decimal(0), goal=self
-        )
+        if len(GoalStatus.objects.filter(goal=self)) == 0:
+            GoalStatus.objects.create(
+                date=datetime.today(), value=Decimal(0), percent=Decimal(0), goal=self
+            )
 
     def bump(self, value, date):
         self.accumulated += value
+        self.save()
         return GoalStatus.objects.create(date=date, value=value, goal=self)
 
     def get_left(self):
         return (self.value - self.accumulated).quantize(Decimal("1.00"), ROUND_FLOOR)
 
     def get_percent(self):
-        percent = (self.get_left() / self.value) * 100
+        percent = (self.accumulated / self.value) * 100
         return percent.quantize(Decimal("1.00"), ROUND_FLOOR)
 
     def get_accumulated(self):

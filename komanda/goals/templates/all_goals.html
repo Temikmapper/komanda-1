@@ -3,7 +3,7 @@
     <div class="columns">
         <div class="column">
             <form method="get" action={% url 'add_goal' %}>
-                <button class="button is-primary is-outlined">
+                <button class="button is-primary is-outlined" id="add_goal_btn">
                     <span class="icon">
                         <i class="fa-solid fa-plus"></i>
                     </span>
@@ -12,13 +12,13 @@
             </form>
         </div>
         <div class="column has-text-centered">
-            <h1 class="title">All goals</h1>
+            <h1 class="title" id="goals_title">All goals</h1>
         </div>
         <div class="column"></div>
     </div>
     <div class="block"></div>
-    {% for goal in goals%}
-        <div class="box">
+    {% for goal in goals %}
+        <div class="box" id="goal_container">
             <div class="columns">
                 <div class="column">
                     <div class="field">
@@ -47,9 +47,22 @@
                     </h2>
                 </div>
             </div>
-            <form method="get" action={% url 'view_goal' goal.id %}>
-                <button class="button is-primary">Edit</button>
-            </form>
+            <div class="field is-grouped pt-3">
+                <form method="get" action={% url 'view_goal' goal.id %} id="goal_view_btn">
+                    <button class="button is-primary mr-1">View</button>
+                </form>
+                <form method="get" action={% url 'edit_goal' goal.id %} id="goal_edit_btn">
+                    <button class="button is-primary mr-1">Edit</button>
+                </form>
+                <form method="get" id="goal_bump_btn" action={% url 'bump_goal' goal.id %}>
+                    <button class="button is-link" id="goal_bump_btn">
+                        <span class="icon">
+                            <i class="fa-solid fa-circle-arrow-up"></i>
+                        </span>
+                        <span>Bump!</span>
+                    </button>
+                </form>
+            </div>
         </div>
     {% endfor %}
 {% endblock content %}

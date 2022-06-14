@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from main.views import CURRENT_DATE
 
 from goals.models import Goals, GoalStatus
-from goals.forms import GoalAddForm, GoalStatusAddForm
+from goals.forms import GoalAddForm, GoalStatusAddForm, GoalBumpForm
 
 # Create your views here.
 
@@ -21,6 +21,63 @@ def view_all_goals(request):
         {"date": CURRENT_DATE, "goals": all_goals},
     )
 
+@login_required
+def bump_goal(request, id):
+    goal = Goals.objects.get(id=id)
+
+    if request.method == "POST":
+        form = GoalBumpForm(request.POST)
+        if form.is_valid():
+            data = form.save(commit=False)
+            goal.bump(date=data.date, value=data.value)
+            return redirect('view_all_goals')
+    else:
+        form = GoalBumpForm()
+    
+    return render(
+        request,
+        "bump_goal.html",
+        {
+            "date": CURRENT_DATE,
+            "form": form,
+            "goal": goal,
+        },
+    )
+
+@login_required
+def edit_goal(request, id):
+    
+    goal = Goals.objects.get(id=id)
+
+    percent = Decimal(00.00)
+
+    if request.method == "POST":
+        form = GoalStatusAddForm(request.POST)
+        if form.is_valid():
+            status = form.save(commit=False)
+            status.goal = goal
+            if status.value != 0:
+                percent = (status.value / goal.value) * 100
+                percent = percent.quantize(Decimal("1.00"), ROUND_FLOOR)
+            status.percent = percent
+            status.save()
+    else:
+        form = GoalStatusAddForm()
+
+    goal_statuses = GoalStatus.objects.filter(goal=goal)
+    latest_status = goal_statuses.latest("date")
+
+    return render(
+        request,
+        "edit_goal.html",
+        {
+            "date": CURRENT_DATE,
+            "form": form,
+            "goal": goal,
+            "goal_statuses": goal_statuses,
+            "latest_status": latest_status,
+        },
+    )
 
 def get_last_goals_statuses(start_of_month, end_of_month):
 
@@ -80,10 +137,7 @@ def add_goal(request):
         if form.is_valid():
             goal = form.save(commit=False)
             goal.save()
-            GoalStatus.objects.create(
-                date=datetime.today(), value=Decimal(0.0), goal=goal
-            )
-            return view_all_goals(request)
+            return redirect('view_all_goals')
     else:
         form = GoalAddForm()
 
