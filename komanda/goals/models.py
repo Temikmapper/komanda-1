@@ -16,7 +16,7 @@ class Goals(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return f"/goals/{self.id}/"
+        return f"/goals/{self.id}"
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)

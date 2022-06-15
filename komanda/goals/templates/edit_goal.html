@@ -2,35 +2,51 @@
 {% block content %}
     <div class="block">
         <center>
-            <h1 class="title">Goal</h1>
+            <h1 class="title">Editing Goal</h1>
         </center>
     </div>
-<div class="box">
-    <h2 class="subtitle" id="goal_name_title">{{ goal.name }}</h2>
-    <progress class="progress"
-              value="{{ latest_status.percent|floatformat:"2u" }}"
-              max="100">15%</progress>
+<div class="box is-notification is-info">
+    <h1 class="title" id="goal_name_title">{{ goal.name }}</h1>
+    <progress class="progress is-info"
+              value="{{ goal.get_percent|floatformat:"2u" }}"
+              max="100"></progress>
     <form method="POST" class="post-form">
         {% csrf_token %}
         <div class="field">
-            <label class="label">Date</label>
+            <label class="label">New name</label>
             <div class="control">
-                <input class="input is-primary"
+                <input class="input is-info"
+                       type="text"
+                       name="name"
+                       value="{{ form.name.value }}"
+                       placeholder="{{ form.name.value }}"
+                       id="{{ form.name.id_for_label }}">
+            </div>
+            <label class="label">New deadline</label>
+            <div class="control has-icons-left">
+                <input class="input is-info"
                        type="date"
                        name="date"
-                       value="{{ form.date.value }}"
+                       value="{{ goal.date|date:"Y-m-d" }}"
                        id="{{ form.date.id_for_label }}"
-                       placeholder="Salary">
+                       placeholder="{{ form.date.value }}">
+                    <span class="icon is-small is-left">
+                        <i class="fas fa-calendar"></i>
+                    </span>
             </div>
-            <label class="label">Current value: {{ form.value.value }}</label>
-            <div class="control">
-                <input class="input is-primary"
+            <label class="label">New value</label>
+            <div class="control has-icons-left">
+                <input class="input is-info"
                        type="number"
                        name="value"
                        step="0.01"
                        required
+                       value="{{ goal.value|floatformat:"2u" }}"
                        id="{{ form.value.id_for_label }}"
-                       placeholder="5000">
+                       placeholder="{{ form.value.value }}">
+                    <span class="icon is-small is-left">
+                        <i class="fas fa-ruble-sign"></i>
+                    </span>
             </div>
         </div>
         <div class="block">

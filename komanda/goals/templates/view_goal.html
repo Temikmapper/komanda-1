@@ -6,15 +6,28 @@
         </center>
     </div>
     <div class="box">
-        <h2 class="subtitle" id="goal_name_title">{{ goal.name }}</h2>
-        <progress class="progress"
-                  value="{{ latest_status.percent|floatformat:"2u" }}"
-                  max="100">15%</progress>
+        <h1 class="title" id="goal_name_title">{{ goal.name }}</h2>
+        <progress class="progress is-info"
+                  value="{{ goal.get_percent|floatformat:"2u" }}"
+                  max="100"></progress>
+        <div class="columns">
+            <div class="column">
+                <h2 class="subtitle">Ending {{ goal.date }}</h2>
+            </div>
+            <div class="column has-text-centered">
+                <h2 class="subtitle">{{ goal.get_percent }} %</h2>
+            </div>
+            <div class="column" style="text-align:right;">
+                <h2 class="subtitle" id="goal_value">
+                    Left <strong>{{ goal.get_left }}</strong> of {{ goal.value }}
+                </h2>
+            </div>
+        </div>
     </div>
     <div class="box">
         <div class="timeline">
             <header class="timeline-header">
-                <span class="tag is-medium is-primary">Start</span>
+                <span class="tag is-medium is-info">Start</span>
             </header>
             {% for item in goal_statuses %}
                 <div class="timeline-item">
@@ -30,7 +43,7 @@
                 </div>
             {% endfor %}
             <div class="timeline-header">
-                <span class="tag is-medium is-primary">End</span>
+                <span class="tag is-medium is-info">End</span>
             </div>
         </div>
     </div>

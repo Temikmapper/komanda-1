@@ -10,9 +10,7 @@ class GoalsModelTest(TestCase):
 
     def setUp(self):
         global goal
-        Goals.objects.create(
-            name="car", date=date(2023, 12, 31), value=Decimal(10.0)
-        )
+        Goals.objects.create(name="car", date=date(2023, 12, 31), value=Decimal(10.0))
 
     def tearDown(self):
         goal = Goals.objects.get(name="car")

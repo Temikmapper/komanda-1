@@ -14,7 +14,14 @@ class GoalStatusAddForm(forms.ModelForm):
         model = GoalStatus
         fields = ("date", "value")
 
+
 class GoalBumpForm(forms.ModelForm):
     class Meta:
         model = Goals
         fields = ("date", "value")
+
+
+class GoalEditForm(forms.ModelForm):
+    class Meta:
+        model = Goals
+        fields = ("name", "date", "value")
