@@ -197,8 +197,10 @@ class GoalBumpPageTest(TestCase):
             f"/goals/{goal.id}/edit",
             data={"name": "test1", "date": date(2021, 1, 1), "value": "100"},
         )
-        self.assertRedirects(response,
+        self.assertRedirects(
+            response,
             goal.get_absolute_url(),
             status_code=302,
             target_status_code=200,
-            fetch_redirect_response=True,)
+            fetch_redirect_response=True,
+        )
