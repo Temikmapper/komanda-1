@@ -9,10 +9,16 @@ class Categories(models.Model):
         return self.name
 
 
-class Expenses(models.Model):
+class UsualExpenses(models.Model):
     date = models.DateField()
     amount = models.DecimalField(max_digits=9, decimal_places=2, default=00.00)
     category = models.ForeignKey(Categories, on_delete=models.CASCADE)
+    
+    class Meta:
+        ordering = ["-date"]
+
+    def __str__(self) -> str:
+        return f'Usual: {self.date} category \"{self.category.name}\" value {self.amount:.2f}'
 
 
 class ConstantExpenses(models.Model):

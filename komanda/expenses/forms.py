@@ -1,10 +1,10 @@
 from django import forms
-from .models import ConstantExpenses, ConstantExpenseHistory, Expenses, Categories
+from .models import ConstantExpenses, ConstantExpenseHistory, UsualExpenses, Categories
 
 
-class AddExpenseForm(forms.ModelForm):
+class UsualExpenseAddForm(forms.ModelForm):
     class Meta:
-        model = Expenses
+        model = UsualExpenses
         fields = (
             "date",
             "amount",
@@ -18,7 +18,7 @@ class CategoryAddForm(forms.ModelForm):
         fields = ("name",)
 
 
-class ExpenseEditForm(forms.ModelForm):
+class ConstantExpenseEditForm(forms.ModelForm):
     class Meta:
         model = ConstantExpenseHistory
         fields = ("value",)

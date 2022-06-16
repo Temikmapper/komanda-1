@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% block title %}
+    Index page
+{% endblock title %}
+{% block subtitle_hero %}
+    Add spends
+{% endblock subtitle_hero %}
+{% block content %}
+    <div class="block">
+        <center>
+            <h1 class="title">Add expence</h1>
+            <form method="get" action={% url 'add_constant_expense' %}>
+                <button class="button is-small is-link is-outlined">
+                    <span>Constant</span>
+                </button>
+            </form>
+        </center>
+    </div>
+    <div class="block">
+        <form method="POST" class="post-form">
+            {% csrf_token %}
+            <div class="block">
+                {{ expense_form.date.errors }}
+                <div class="field">
+                    <p class="control has-icons-left">
+                        <input class="input is-primary"
+                               type="date"
+                               name="date"
+                               placeholder="Date"
+                               required
+                               value="{{ today|date:"Y-m-d" }}"
+                               id="{{ expense_form.date.id_for_label }}">
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-calendar"></i>
+                        </span>
+                    </p>
+                </div>
+            </div>
+            <div class="block">
+                {{ expense_form.amount.errors }}
+                <div class="field">
+                    <p class="control has-icons-left">
+                        <input class="input is-primary"
+                               type="number"
+                               name="amount"
+                               placeholder="Amount"
+                               step="0.01"
+                               required
+                               id="{{ expense_form.amount.id_for_label }}">
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-ruble-sign"></i>
+                        </span>
+                    </p>
+                </div>
+            </div>
+            <div class="block">
+                {{ expense_form.category.errors }}
+                <div class="select is-primary">
+                    <select name="category" required id="id_category">
+                        {% for id, name in expense_form.category.field.choices %}
+                            <option value="{{ id }}">
+                                {{ name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="block">
+                <button type="submit" class="button is-success" id="expense_save_btn">
+                    <span class="icon is-small">
+                        <i class="fas fa-check"></i>
+                    </span>
+                    <span>Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+    <div class="block">
+        <div class="tile is-child notification is-primary is-light box" id="recent_expenses_box">
+            <div class="columns">
+                <div class="column">
+                    <div class="field">
+                        <h1 class="title">Last added</h1>
+                    </div>
+                </div>
+            </div>
+            {% for expense in recent_expenses %}
+                <div class="box" id="expense_item">
+                    <div class="columns">
+                        <div class="column">
+                            <p>
+                                <strong id="expense_item_date">{{ expense.date|date:"d.m.Y" }}</strong> <i class="fa-solid fa-arrow-right-long"></i> <span id="expense_item_category">{{ expense.category }}</span>
+                            </p>
+                        </div>
+                        <div class="column" style="text-align:right;">
+                            <div class="tag" id="expense_item_value">{{ expense.amount }} ₽</div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="block">
+        <center>
+            <h1 class="title">Categories list</h1>
+        </center>
+    </div>
+    <div class="block">
+        <form method="POST" class="post-form">
+            {% csrf_token %}
+            <div class="block">
+                <div class="field">
+                    <p class="control">
+                        <input class="input is-primary"
+                               type="text"
+                               name="name"
+                               placeholder="Enter category"
+                               required
+                               id="category_add_field">
+                    </p>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="tags are-large">
+        {% for category in categories %}
+            <form id="categories-list-item"
+                  class="tag"
+                  method="get"
+                  action=
+                  {% url 'delete_category' category.id %}>
+                {{ category }}
+                <button class="delete"></button>
+            </form>
+        {% endfor %}
+    </div>
+{% endblock content %}

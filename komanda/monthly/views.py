@@ -8,7 +8,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
 from main.views import CURRENT_DATE, MONTH_NAMES, MONTHES
-from expenses.models import Expenses
+from expenses.models import UsualExpenses
 from incomes.models import Incomes
 from expenses.views import get_sum_constant_expenses
 from incomes.views import get_sum_constant_incomes
@@ -29,7 +29,7 @@ def view_month(request, year, month):
     monthly_income = get_sum_special_income().quantize(Decimal("1.00"), ROUND_FLOOR)
     daily_income = get_daily_income().quantize(Decimal("1.00"), ROUND_FLOOR)
     total_expenses = (
-        Expenses.objects.filter(date__gte=START_OF_MONTH)
+        UsualExpenses.objects.filter(date__gte=START_OF_MONTH)
         .filter(date__lte=END_OF_MONTH)
         .aggregate(Sum("amount"))["amount__sum"]
     )
@@ -68,7 +68,7 @@ def monthly_raw_expenses(request, year, month):
     END_OF_MONTH = datetime(year, month, last_day)
 
     data = (
-        Expenses.objects.filter(date__gte=START_OF_MONTH)
+        UsualExpenses.objects.filter(date__gte=START_OF_MONTH)
         .filter(date__lte=END_OF_MONTH)
         .order_by("date")
     )
@@ -133,7 +133,7 @@ def get_balance_for_monthly_table():
     accumulated_balance = Decimal(0)
 
     while cur_day != END_OF_MONTH + timedelta(1):
-        spends_in_day = Expenses.objects.filter(date=cur_day)
+        spends_in_day = UsualExpenses.objects.filter(date=cur_day)
         accumulated_income += daily_income
         accumulated_balance += daily_income
         if len(spends_in_day) != 0:
@@ -185,7 +185,7 @@ def expenses_chart(request, year, month):
         day = START_OF_MONTH + timedelta(i - 1)
         try:
             value = (
-                Expenses.objects.filter(date=day)
+                UsualExpenses.objects.filter(date=day)
                 .aggregate(Sum("amount"))["amount__sum"]
                 .quantize(Decimal("1.00"), ROUND_FLOOR)
             )

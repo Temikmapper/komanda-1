@@ -1,5 +1,5 @@
 from calendar import monthrange
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
@@ -8,21 +8,21 @@ from main.views import CURRENT_DATE, MONTH_NAMES
 from expenses.models import (
     ConstantExpenses,
     ConstantExpenseHistory,
-    Expenses,
+    UsualExpenses,
     Categories,
 )
 from expenses.forms import (
-    AddExpenseForm,
+    UsualExpenseAddForm,
     CategoryAddForm,
     ConstantExpenseAddForm,
     ConstantExpenseFinishForm,
-    ExpenseEditForm,
+    ConstantExpenseEditForm,
 )
 
 
 @login_required
 def view_all_expenses(request):
-    data = Expenses.objects.all()
+    data = UsualExpenses.objects.all()
     return render(request, "all_expenses.html", {"days": data, "date": CURRENT_DATE})
 
 
@@ -36,6 +36,7 @@ def view_add_categories(request):
             category.save()
     else:
         form = CategoryAddForm()
+
     return render(
         request,
         "categories.html",
@@ -51,22 +52,43 @@ def delete_category(request, id):
 
 
 @login_required
-def add_expense(request):
+def add_usual_expense(request):
     if request.method == "POST":
-        form = AddExpenseForm(request.POST)
-        if form.is_valid():
-            spend = form.save(commit=False)
-            spend.save()
+        expense_form = UsualExpenseAddForm(request.POST)
+        category_form = CategoryAddForm(request.POST)
+        if expense_form.is_valid():
+            expense = expense_form.save(commit=False)
+            expense.save()
+        if category_form.is_valid():
+            category = category_form.save(commit=False)
+            category.save()
     else:
-        form = AddExpenseForm()
-    return render(request, "add_expense.html", {"form": form, "date": CURRENT_DATE})
+        expense_form = UsualExpenseAddForm()
+        category_form = CategoryAddForm()
+
+    today = date.today()
+    categories = Categories.objects.all()
+    recent_expenses = UsualExpenses.objects.all()[:10]
+
+    return render(
+        request,
+        "add_usual_expense.html",
+        {
+            "expense_form": expense_form,
+            "category_form": category_form,
+            "date": CURRENT_DATE,
+            "today": today,
+            "categories": categories,
+            "recent_expenses": recent_expenses
+        },
+    )
 
 
 def add_constant_expense(request):
 
     if request.method == "POST":
         expense_form = ConstantExpenseAddForm(request.POST)
-        value_form = ExpenseEditForm(request.POST)
+        value_form = ConstantExpenseEditForm(request.POST)
         if expense_form.is_valid() and value_form.is_valid():
             expense = expense_form.save(commit=False)
             expense.finish_date = expense.start_date + timedelta(760)
@@ -78,7 +100,7 @@ def add_constant_expense(request):
             value.save()
     else:
         expense_form = ConstantExpenseAddForm()
-        value_form = ExpenseEditForm()
+        value_form = ConstantExpenseEditForm()
 
     return render(
         request,
@@ -92,7 +114,7 @@ def view_constant_expense(request, id):
     expense = ConstantExpenses.objects.get(id=id)
 
     if request.method == "POST":
-        form = ExpenseEditForm(request.POST)
+        form = ConstantExpenseEditForm(request.POST)
         finish_form = ConstantExpenseFinishForm(request.POST, instance=expense)
         if form.is_valid() and finish_form.is_valid():
             finish = finish_form.save(commit=False)
@@ -102,7 +124,7 @@ def view_constant_expense(request, id):
             value.expense = expense
             value.save()
     else:
-        form = ExpenseEditForm()
+        form = ConstantExpenseEditForm()
         finish_form = ConstantExpenseFinishForm(instance=expense)
 
     return render(
@@ -158,7 +180,7 @@ def view_monthly_expenses(request, year, month):
 
 @login_required
 def delete_expense(request, id):
-    expense = Expenses.objects.get(id=id)
+    expense = UsualExpenses.objects.get(id=id)
     expense.delete()
     return redirect("/")
 
