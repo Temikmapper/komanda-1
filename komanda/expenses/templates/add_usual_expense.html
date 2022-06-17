@@ -6,11 +6,12 @@
     Add spends
 {% endblock subtitle_hero %}
 {% block content %}
+
     <div class="block">
         <center>
             <h1 class="title">Add expence</h1>
             <form method="get" action={% url 'add_constant_expense' %}>
-                <button class="button is-small is-link is-outlined">
+                <button class="button is-small is-link is-outlined" id="constant_expense_toggle_btn">
                     <span>Constant</span>
                 </button>
             </form>
@@ -124,13 +125,19 @@
     </div>
     <div class="tags are-large">
         {% for category in categories %}
+        <script type="text/javascript">
+            function confirmation() {
+                var answer = confirm("Delete {{ category.name }}?")
+                if (answer){
+                    window.location = "{% url 'delete_category' category.id %}";
+                }
+            }
+        </script>
             <form id="categories-list-item"
                   class="tag"
-                  method="get"
-                  action=
-                  {% url 'delete_category' category.id %}>
+                  method="get">
                 {{ category }}
-                <button class="delete"></button>
+                <button class="delete" id="category_del_btn" onclick="confirmation()"></button>
             </form>
         {% endfor %}
     </div>

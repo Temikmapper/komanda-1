@@ -10,8 +10,8 @@
         <center>
             <h1 class="title">Add constant expence</h1>
             <form method="get" action={% url 'add_expense' %}>
-                <button class="button is-small is-success is-outlined">
-                    <span>Regular</span>
+                <button class="button is-small is-success is-outlined" id="constant_expense_toggle_btn">
+                    <span>Usual</span>
                 </button>
             </form>
         </center>
@@ -50,7 +50,7 @@
                 </div>
             </div>
             <div class="block">
-                {{ value_form.value.errors }}
+                {{ expense_value_form.value.errors }}
                 <div class="field">
                     <p class="control has-icons-left">
                         <input class="input is-primary"
@@ -59,7 +59,7 @@
                                placeholder="Amount"
                                step="0.01"
                                required
-                               id="{{ value_form.value.id_for_label }}">
+                               id="{{ expense_value_form.value.id_for_label }}">
                         <span class="icon is-small is-left">
                             <i class="fas fa-ruble-sign"></i>
                         </span>
@@ -67,7 +67,7 @@
                 </div>
             </div>
             <div class="block">
-                <button type="submit" class="button is-success">
+                <button type="submit" class="button is-success" id="expense_save_btn">
                     <span class="icon is-small">
                         <i class="fas fa-check"></i>
                     </span>

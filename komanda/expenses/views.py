@@ -7,16 +7,17 @@ from main.views import CURRENT_DATE, MONTH_NAMES
 
 from expenses.models import (
     ConstantExpenses,
-    ConstantExpenseHistory,
+    ConstantExpenseHistoryItem,
     UsualExpenses,
     Categories,
 )
 from expenses.forms import (
     UsualExpenseAddForm,
     CategoryAddForm,
-    ConstantExpenseAddForm,
-    ConstantExpenseFinishForm,
+    ConstExpenseAddForm,
+    ConstExpenseFinishForm,
     ConstantExpenseEditForm,
+    ConstExpenseHistoryAddForm
 )
 
 
@@ -79,33 +80,29 @@ def add_usual_expense(request):
             "date": CURRENT_DATE,
             "today": today,
             "categories": categories,
-            "recent_expenses": recent_expenses
+            "recent_expenses": recent_expenses,
         },
     )
 
 
+@login_required
 def add_constant_expense(request):
 
     if request.method == "POST":
-        expense_form = ConstantExpenseAddForm(request.POST)
-        value_form = ConstantExpenseEditForm(request.POST)
+        expense_form = ConstExpenseAddForm(request.POST)
+        value_form = ConstExpenseHistoryAddForm(request.POST)
         if expense_form.is_valid() and value_form.is_valid():
             expense = expense_form.save(commit=False)
-            expense.finish_date = expense.start_date + timedelta(760)
-            expense.save()
             value = value_form.save(commit=False)
-            expense = ConstantExpenses.objects.get(id=expense.id)
-            value.date = expense.start_date
-            value.expense = expense
-            value.save()
+            ConstantExpenses.objects.create(start_date=expense.start_date, name=expense.name, value=value.value)
     else:
-        expense_form = ConstantExpenseAddForm()
-        value_form = ConstantExpenseEditForm()
+        expense_form = ConstExpenseAddForm()
+        value_form = ConstExpenseHistoryAddForm()
 
     return render(
         request,
         "add_const_expense.html",
-        {"date": CURRENT_DATE, "expense_form": expense_form, "value_form": value_form},
+        {"date": CURRENT_DATE, "expense_form": expense_form, "expense_value_form": value_form},
     )
 
 
@@ -115,7 +112,7 @@ def view_constant_expense(request, id):
 
     if request.method == "POST":
         form = ConstantExpenseEditForm(request.POST)
-        finish_form = ConstantExpenseFinishForm(request.POST, instance=expense)
+        finish_form = ConstExpenseFinishForm(request.POST, instance=expense)
         if form.is_valid() and finish_form.is_valid():
             finish = finish_form.save(commit=False)
             finish.save()
@@ -125,7 +122,7 @@ def view_constant_expense(request, id):
             value.save()
     else:
         form = ConstantExpenseEditForm()
-        finish_form = ConstantExpenseFinishForm(instance=expense)
+        finish_form = ConstExpenseFinishForm(instance=expense)
 
     return render(
         request,
@@ -194,7 +191,7 @@ def get_constant_expenses(start_of_month, end_of_month):
     expense_value = {}
     for expense in actual_expenses:
         value = (
-            ConstantExpenseHistory.objects.filter(expense=expense)
+            ConstantExpenseHistoryItem.objects.filter(expense=expense)
             .filter(date__lte=end_of_month)
             .last()
             .value
