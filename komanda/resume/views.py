@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from incomes.views import get_constant_incomes, get_additional_incomes
 from expenses.views import get_constant_expenses
 from piggy.models import Piggies
-from main.views import CURRENT_DATE, MONTH_NAMES, MONTHES
+from main.views import MONTH_NAMES, MONTHES
 
 # Create your views here.
 
@@ -43,7 +43,6 @@ def view_resume(request, year, month):
         request,
         "resume.html",
         {
-            "date": CURRENT_DATE,
             "year": year,
             "month": month,
             "monthes": MONTHES,

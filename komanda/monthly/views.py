@@ -7,7 +7,7 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
-from main.views import CURRENT_DATE, MONTH_NAMES, MONTHES
+from main.views import MONTH_NAMES, MONTHES
 from expenses.models import UsualExpenses
 from incomes.models import Incomes
 from expenses.views import get_sum_constant_expenses
@@ -44,7 +44,6 @@ def view_month(request, year, month):
         request,
         "monthly.html",
         {
-            "date": CURRENT_DATE,
             "days": data,
             "daily_income": daily_income,
             "monthly_income": monthly_income,
@@ -77,7 +76,6 @@ def monthly_raw_expenses(request, year, month):
         request,
         "monthly_raw.html",
         {
-            "date": CURRENT_DATE,
             "expenses": data,
             "year": year,
             "month": month,

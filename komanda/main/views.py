@@ -2,45 +2,34 @@ from datetime import datetime, timedelta
 from django.shortcuts import render, redirect
 
 
-def get_current_date():
-
-    date = {
-        "year": datetime.today().year,
-        "month": datetime.today().month,
-        "month_": str(datetime.today().month),
-        "day_": str(datetime.today().day),
-    }
-    return date
-
-
-CURRENT_DATE = get_current_date()
 MONTH_NAMES = {
-    1: "January",
-    2: "February",
-    3: "March",
-    4: "April",
-    5: "May",
-    6: "June",
-    7: "July",
-    8: "August",
-    9: "September",
-    10: "October",
-    11: "November",
-    12: "December",
+    1: "Январь",
+    2: "Февраль",
+    3: "Март",
+    4: "Апрель",
+    5: "Май",
+    6: "Июнь",
+    7: "Июль",
+    8: "Август",
+    9: "Сентябрь",
+    10: "Октябрь",
+    11: "Ноябрь",
+    12: "Декабрь",
 }
 
-jan = {"id": 1, "name": "January"}
-feb = {"id": 2, "name": "February"}
-mar = {"id": 3, "name": "March"}
-apr = {"id": 4, "name": "April"}
-may = {"id": 5, "name": "May"}
-jun = {"id": 6, "name": "June"}
-jul = {"id": 7, "name": "July"}
-aug = {"id": 8, "name": "August"}
-sep = {"id": 9, "name": "September"}
-oct = {"id": 10, "name": "October"}
-nov = {"id": 11, "name": "November"}
-dec = {"id": 12, "name": "Decemeber"}
+jan = {"id": 1, "name": "Январь"}
+feb = {"id": 2, "name": "Февраль"}
+mar = {"id": 3, "name": "Март"}
+apr = {"id": 4, "name": "Апрель"}
+may = {"id": 5, "name": "Май"}
+jun = {"id": 6, "name": "Июнь"}
+jul = {"id": 7, "name": "Июль"}
+aug = {"id": 8, "name": "Август"}
+sep = {"id": 9, "name": "Сентябрь"}
+oct = {"id": 10, "name": "Октябрь"}
+nov = {"id": 11, "name": "Ноябрь"}
+dec = {"id": 12, "name": "Декабрь"}
+
 MONTHES = [jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec]
 
 

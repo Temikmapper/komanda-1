@@ -1,4 +1,7 @@
 {% load static %}
+{% now "Y" as current_year %}
+{% now "m" as current_month %}
+{% now "d" as current_day %}
 <!DOCTYPE html>
 <html>
     <head>
@@ -86,7 +89,7 @@
                         <form method="get" action={% url 'index' %}>
                             <button class="button is-warning is-light is-rounded">Main</button>
                         </form>
-                        <form method="get" action={% url 'view_month' date.year date.month %}>
+                        <form method="get" action={% url 'view_month' current_year current_month %}>
                             <button class="button is-danger is-light is-rounded">Montly</button>
                         </form>
                         <form method="get" action={% url 'view_all_goals' %}>

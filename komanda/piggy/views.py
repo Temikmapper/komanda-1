@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 
-from main.views import CURRENT_DATE
 from piggy.forms import PiggyAddForm, PiggyBumpForm, PiggyEditForm
 from piggy.models import Piggies
 
@@ -12,7 +11,7 @@ def view_all_piggies(request):
     piggies = Piggies.objects.all()
 
     return render(
-        request, "all_piggies.html", {"date": CURRENT_DATE, "piggies": piggies}
+        request, "all_piggies.html", {"piggies": piggies}
     )
 
 
@@ -20,7 +19,7 @@ def view_piggy(request, id):
 
     piggy = Piggies.objects.get(id=id)
 
-    return render(request, "view_piggy.html", {"date": CURRENT_DATE, "piggy": piggy})
+    return render(request, "view_piggy.html", {"piggy": piggy})
 
 
 def piggy_add(request):
@@ -38,7 +37,6 @@ def piggy_add(request):
         request,
         "add_piggy.html",
         {
-            "date": CURRENT_DATE,
             "form": form,
         },
     )
@@ -67,7 +65,7 @@ def piggy_edit(request, id):
         form = PiggyEditForm()
 
     return render(
-        request, "edit_piggy.html", {"date": CURRENT_DATE, "form": form, "piggy": piggy}
+        request, "edit_piggy.html", {"form": form, "piggy": piggy}
     )
 
 
@@ -85,4 +83,4 @@ def piggy_bump(request, id):
     else:
         form = PiggyBumpForm()
 
-    return render(request, "bump_piggy.html", {"date": CURRENT_DATE, "form": form})
+    return render(request, "bump_piggy.html", {"form": form})

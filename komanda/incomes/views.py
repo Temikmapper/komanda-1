@@ -14,7 +14,7 @@ from .forms import (
     IncomeEditForm,
 )
 
-from main.views import CURRENT_DATE, MONTH_NAMES
+from main.views import MONTH_NAMES
 
 
 @login_required
@@ -32,7 +32,6 @@ def view_monthly_incomes(request, year, month):
         request,
         "monthly_income.html",
         {
-            "date": CURRENT_DATE,
             "cur_month": MONTH_NAMES[month],
             "year": year,
             "month": month,
@@ -59,7 +58,6 @@ def income_edit(request, id, year, month):
         request,
         "income_edit.html",
         {
-            "date": CURRENT_DATE,
             "income": income,
             "form": form,
         },
@@ -91,7 +89,6 @@ def income_add(request, year, month):
         request,
         "add_income.html",
         {
-            "date": CURRENT_DATE,
             "form": form,
         },
     )
@@ -102,7 +99,7 @@ def view_all_constant_incomes(request):
     return render(
         request,
         "view_all_constant_incomes.html",
-        {"date": CURRENT_DATE, "incomes": all_incomes},
+        {"incomes": all_incomes},
     )
 
 
@@ -134,7 +131,7 @@ def add_constant_income(request):
     return render(
         request,
         "add_const_income.html",
-        {"date": CURRENT_DATE, "income_form": income_form, "value_form": value_form},
+        {"income_form": income_form, "value_form": value_form},
     )
 
 
@@ -163,7 +160,6 @@ def view_constant_income(request, id):
         request,
         "view_constant_income.html",
         {
-            "date": CURRENT_DATE,
             "income": income,
             "history": income_history,
             "form": form,

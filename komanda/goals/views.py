@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from main.views import CURRENT_DATE
 
 from goals.models import Goals
 from goals.forms import GoalAddForm, GoalBumpForm, GoalEditForm
@@ -15,7 +14,7 @@ def view_all_goals(request):
     return render(
         request,
         "all_goals.html",
-        {"date": CURRENT_DATE, "goals": all_goals},
+        {"goals": all_goals},
     )
 
 
@@ -36,7 +35,6 @@ def bump_goal(request, id):
         request,
         "bump_goal.html",
         {
-            "date": CURRENT_DATE,
             "form": form,
             "goal": goal,
         },
@@ -60,7 +58,6 @@ def edit_goal(request, id):
         request,
         "edit_goal.html",
         {
-            "date": CURRENT_DATE,
             "form": form,
             "goal": goal,
         },
@@ -75,7 +72,6 @@ def view_goal(request, id):
         request,
         "view_goal.html",
         {
-            "date": CURRENT_DATE,
             "goal": goal,
         },
     )
@@ -92,7 +88,7 @@ def add_goal(request):
     else:
         form = GoalAddForm()
 
-    return render(request, "add_goal.html", {"form": form, "date": CURRENT_DATE})
+    return render(request, "add_goal.html", {"form": form})
 
 
 @login_required

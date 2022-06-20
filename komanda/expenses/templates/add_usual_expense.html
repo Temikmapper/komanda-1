@@ -29,7 +29,7 @@
                                name="date"
                                placeholder="Date"
                                required
-                               value="{{ today|date:"Y-m-d" }}"
+                               value="{{ current_year }}-{{ current_month }}-{{ current_day }}"
                                id="{{ expense_form.date.id_for_label }}">
                         <span class="icon is-small is-left">
                             <i class="fas fa-calendar"></i>

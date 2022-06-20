@@ -3,7 +3,7 @@ from datetime import date, datetime, timedelta
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
-from main.views import CURRENT_DATE, MONTH_NAMES
+from main.views import MONTH_NAMES
 
 from expenses.models import (
     ConstantExpenses,
@@ -24,7 +24,7 @@ from expenses.forms import (
 @login_required
 def view_all_expenses(request):
     data = UsualExpenses.objects.all()
-    return render(request, "all_expenses.html", {"days": data, "date": CURRENT_DATE})
+    return render(request, "all_expenses.html", {"days": data})
 
 
 @login_required
@@ -41,7 +41,7 @@ def view_add_categories(request):
     return render(
         request,
         "categories.html",
-        {"form": form, "categories": categories, "date": CURRENT_DATE},
+        {"form": form, "categories": categories},
     )
 
 
@@ -77,8 +77,6 @@ def add_usual_expense(request):
         {
             "expense_form": expense_form,
             "category_form": category_form,
-            "date": CURRENT_DATE,
-            "today": today,
             "categories": categories,
             "recent_expenses": recent_expenses,
         },
@@ -102,7 +100,7 @@ def add_constant_expense(request):
     return render(
         request,
         "add_const_expense.html",
-        {"date": CURRENT_DATE, "expense_form": expense_form, "expense_value_form": value_form},
+        {"expense_form": expense_form, "expense_value_form": value_form},
     )
 
 
@@ -128,7 +126,6 @@ def view_constant_expense(request, id):
         request,
         "view_constant_expense.html",
         {
-            "date": CURRENT_DATE,
             "expense": expense,
             "form": form,
             "finish_form": finish_form,
@@ -143,7 +140,7 @@ def view_all_constant_expenses(request):
     return render(
         request,
         "view_all_constant_expenses.html",
-        {"date": CURRENT_DATE, "expenses": all_expenses},
+        {"expenses": all_expenses},
     )
 
 
@@ -166,7 +163,6 @@ def view_monthly_expenses(request, year, month):
         request,
         "monthly_expenses.html",
         {
-            "date": CURRENT_DATE,
             "cur_month": MONTH_NAMES[month],
             "year": year,
             "month": month,

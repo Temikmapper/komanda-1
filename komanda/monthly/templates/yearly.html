@@ -6,18 +6,19 @@
     Monthly page
 {% endblock subtitle_hero %}
 {% block month_tabs %}
+{% now "F" as current_month_str %}
     <section class="section">
         <div class="tabs is-centered is-toggle">
             <ul>
                 {% for month in monthes %}
                     <li {% if month.name == cur_month %} class="is-active"{% endif %}>
-                        <a href={% url 'view_month' year month.id %}>{{ month.name }}</a>
+                        <a href={% url 'view_month' current_year month.id %}>{{ month.name }}</a>
                     </li>
                 {% endfor %}
             </ul>
         </div>
         <center>
-            <h1 class="title">{{ cur_month }}</h1>
+            <h1 class="title">{{ cur_month }} {{ current_year }}</h1>
         </center>
     </section>
 {% endblock month_tabs %}
