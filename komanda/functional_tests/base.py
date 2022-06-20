@@ -6,13 +6,12 @@ from selenium.webdriver.common.keys import Keys
 import time
 import os
 
-MAX_WAIT = 10
+MAX_WAIT = 20
 USERNAME = "test_user"
 PASSWORD = "12345"
 
 from django.contrib.auth import get_user_model
 
-from goals.models import Goals
 
 User = get_user_model()
 
@@ -21,17 +20,18 @@ class FunctionalTest(StaticLiveServerTestCase):
     """functional test"""
 
     def wait(fn):
-        def modified_fn(*args, **kwargs):
-            start_time = time.time()
-            while True:
-                try:
-                    return fn(*args, **kwargs)
-                except (AssertionError, WebDriverException) as e:
-                    if time.time() - start_time > MAX_WAIT:
-                        raise e
-                    time.sleep(0.5)
+        print('*'*50)
+        start_time = time.time()
+        print('+'*50)
+        while True:
+            try:
+                return fn
+            except (AssertionError, WebDriverException) as e:
+                if time.time() - start_time > MAX_WAIT:
+                    raise e
+                print('waiting...')
+                time.sleep(0.5)
 
-        return modified_fn
 
     def setUp(self):
         s = Service("C:/Users/7NR_Operator_21/Desktop/msedgedriver.exe")

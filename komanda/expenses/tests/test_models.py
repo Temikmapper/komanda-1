@@ -54,3 +54,10 @@ class ConstExpensesModelTest(TestCase):
         expense = ConstantExpenses.objects.get(name="phone")
         history_object = ConstantExpenseHistoryItem.objects.filter(expense=expense)
         self.assertEqual(len(history_object), 1)
+
+    def test_returns_current_value(self):
+        expense = ConstantExpenses.objects.get(name="phone")
+        expense.bump(value=Decimal(200), date=date(2022, 1, 1))
+
+        value = expense.get_current_value()
+        self.assertEqual(value, Decimal(200))

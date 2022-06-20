@@ -1,61 +1,38 @@
 {% extends 'base.html' %}
 {% block content %}
-    <div class="block">
-        <center>
-            <h1 class="title">Expense</h1>
-        </center>
+    <div class="columns">
+        <div class="column">
+            <form method="get" action={% url 'view_all_constant_expenses' %}>
+                <button class="button is-warning" id="view_all_constant_expenses_btn">
+                    <span>View all</span>
+                </button>
+            </form>
+        </div>
+        <div class="column has-text-centered">
+            <h1 class="title">Constant expence</h1>
+        </div>
+        <div class="column"></div>
     </div>
     <div class="box">
-        <h2 class="subtitle">{{ expense.name }}</h2>
-        <form method="POST" class="post-form">
-            {% csrf_token %}
-            <div class="block">
-                {{ form.value.errors }}
-                <div class="field">
-                    <p class="control has-icons-left">
-                        <input class="input is-primary"
-                               type="number"
-                               name="value"
-                               placeholder="Value"
-                               step="0.01"
-                               required
-                               id="{{ form.value.id_for_label }}">
-                        <span class="icon is-small is-left">
-                            <i class="fas fa-ruble-sign"></i>
-                        </span>
-                    </p>
-                </div>
+        <h1 class="title" id="expense_name_title">{{ expense.name }}</h2>
+        <div class="columns">
+            <div class="column">
+                <h2 class="subtitle">Started: <span id="start_date"><strong>{{ expense.start_date|date:"d.m.Y" }}</strong></span></h2>
             </div>
-            <div class="block">
-                {{ finish_form.finish_date.errors }}
-                <div class="field">
-                    <p class="control has-icons-left">
-                        <input class="input is-primary"
-                               type="date"
-                               name="finish_date"
-                               placeholder="Finish date"
-                               value="{{ finish_form.finish_date.value|date:"Y-m-d" }}"
-                               id="{{ finish_form.finish_date.id_for_label }}">
-                        <span class="icon is-small is-left">
-                            <i class="fas fa-calendar"></i>
-                        </span>
-                    </p>
-                </div>
+            <div class="column has-text-centered">
+                <h2 class="subtitle">Ending: <span id="finish_date"><strong>{{ expense.finish_date|date:"d.m.Y" }}</strong></span></h2>
             </div>
-            <div class="block">
-                <button type="submit" class="button is-success">
-                    <span class="icon is-small">
-                        <i class="fas fa-check"></i>
-                    </span>
-                    <span>Save</span>
-                </button>
+            <div class="column" style="text-align:right;" id="goal_left">
+                <h2 class="subtitle">
+                    <span id="expense_value">{{ expense.get_current_value }}</span> ₽
+                </h2>
             </div>
-        </form>
+        </div>
     </div>
     <div class="box">
         <div class="timeline">
             <header class="timeline-header">
-                <span class="tag is-medium is-primary">Start</span>
+                <span class="tag is-medium is-warning">Start</span>
             </header>
             {% for item in expense.get_history %}
                 <div class="timeline-item">
@@ -71,7 +48,7 @@
                 </div>
             {% endfor %}
             <div class="timeline-header">
-                <span class="tag is-medium is-primary">End</span>
+                <span class="tag is-medium is-warning">End</span>
             </div>
         </div>
     </div>

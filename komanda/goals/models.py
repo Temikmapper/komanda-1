@@ -57,7 +57,3 @@ class GoalStatus(models.Model):
     def __str__(self) -> str:
         string = f"id: {self.id}, date: {self.date}"
         return string
-
-    def left(self):
-
-        return self.goal.value - self.value

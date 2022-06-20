@@ -1,4 +1,4 @@
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 from tracemalloc import start
 from django.db import models
 from django.utils import timezone
@@ -44,6 +44,12 @@ class ConstantExpenses(models.Model):
 
     def get_history(self):
         return ConstantExpenseHistoryItem.objects.filter(expense=self)
+
+    def bump(self, value, date):
+        return ConstantExpenseHistoryItem.objects.create(date=date, value=value, expense=self)
+
+    def get_current_value(self):
+        return ConstantExpenseHistoryItem.objects.filter(expense=self).last().value
 
 
 class ConstantExpenseHistoryItem(models.Model):

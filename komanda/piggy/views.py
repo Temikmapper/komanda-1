@@ -10,9 +10,7 @@ def view_all_piggies(request):
 
     piggies = Piggies.objects.all()
 
-    return render(
-        request, "all_piggies.html", {"piggies": piggies}
-    )
+    return render(request, "all_piggies.html", {"piggies": piggies})
 
 
 def view_piggy(request, id):
@@ -64,9 +62,7 @@ def piggy_edit(request, id):
     else:
         form = PiggyEditForm()
 
-    return render(
-        request, "edit_piggy.html", {"form": form, "piggy": piggy}
-    )
+    return render(request, "edit_piggy.html", {"form": form, "piggy": piggy})
 
 
 def piggy_bump(request, id):

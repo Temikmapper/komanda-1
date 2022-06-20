@@ -23,10 +23,10 @@ class CategoryAddForm(forms.ModelForm):
         fields = ("name",)
 
 
-class ConstantExpenseEditForm(forms.ModelForm):
+class ConstExpenseEditForm(forms.ModelForm):
     class Meta:
-        model = ConstantExpenseHistoryItem
-        fields = ("value",)
+        model = ConstantExpenses
+        fields = ("name", "start_date", "finish_date")
 
 
 class ConstExpenseAddForm(forms.ModelForm):
@@ -41,6 +41,13 @@ class ConstExpenseHistoryAddForm(forms.ModelForm):
     class Meta:
         model = ConstantExpenseHistoryItem
         fields = ("value",)
+    
+
+class BumpExpenseForm(forms.ModelForm):
+
+    class Meta:
+        model = ConstantExpenseHistoryItem
+        fields = ("date", "value")
 
 
 class ConstExpenseFinishForm(forms.ModelForm):

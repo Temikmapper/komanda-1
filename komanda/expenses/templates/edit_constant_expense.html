@@ -1,34 +1,21 @@
 {% extends 'base.html' %}
-{% block title %}
-    Index page
-{% endblock title %}
-{% block subtitle_hero %}
-    Add spends
-{% endblock subtitle_hero %}
 {% block content %}
-    <div class="columns">
-        <div class="column">
-            <form method="get" action={% url 'view_all_constant_expenses' %}>
-                <button class="button is-warning" id="view_all_constant_expenses_btn">
-                    <span>View all</span>
-                </button>
-            </form>
-        </div>
-        <div class="column has-text-centered">
-            <h1 class="title">Constant expence</h1>
-            <form method="get" action={% url 'add_expense' %}>
-                <button class="button is-small is-success is-outlined"
-                        id="constant_expense_toggle_btn">
-                    <span>Usual</span>
-                </button>
-            </form>
-        </div>
-        <div class="column"></div>
-    </div>
     <div class="block">
+        <center>
+            <h1 class="title">Editing expense</h1>
+        </center>
+    </div>
+    <div class="box is-notification is-warning">
+        <div class="field is-horizontal">
+            <div class="field-label">
+                <!-- Left empty for spacing -->
+            </div>
+            <div class="field-body">
+                <h1 class="title" id="expense_name_title">{{ expense.name }}</h1>
+            </div>
+        </div>
         <form method="POST" class="post-form">
             {% csrf_token %}
-            {{ expense_form.name.errors }}
             <div class="field is-horizontal">
                 <div class="field-label is-normal">
                     <label class="label">New name</label>
@@ -39,10 +26,9 @@
                             <input class="input is-warning"
                                    type="text"
                                    name="name"
-                                   placeholder="Name of expense"
-                                   required
-                                   maxlength="50"
-                                   id="{{ expense_form.name.id_for_label }}">
+                                   value="{{ form.name.value }}"
+                                   placeholder="{{ form.name.value }}"
+                                   id="{{ form.name.id_for_label }}">
                         </div>
                     </div>
                 </div>
@@ -57,9 +43,8 @@
                             <input class="input is-warning"
                                    type="date"
                                    name="start_date"
-                                   placeholder="Start date"
-                                   required
-                                   id="{{ expense_form.start_date.id_for_label }}">
+                                   value="{{ expense.start_date|date:"Y-m-d" }}"
+                                   id="{{ form.start_date.id_for_label }}">
                             <span class="icon is-small is-left">
                                 <i class="fas fa-calendar"></i>
                             </span>
@@ -69,20 +54,18 @@
             </div>
             <div class="field is-horizontal">
                 <div class="field-label is-normal">
-                    <label class="label">New start date</label>
+                    <label class="label">New finish date</label>
                 </div>
                 <div class="field-body">
                     <div class="field is-expanded">
                         <div class="control has-icons-left">
                             <input class="input is-warning"
-                                   type="number"
-                                   name="value"
-                                   placeholder="Amount"
-                                   step="0.01"
-                                   required
-                                   id="{{ expense_value_form.value.id_for_label }}">
+                                   type="date"
+                                   name="finish_date"
+                                   value="{{ expense.finish_date|date:"Y-m-d" }}"
+                                   id="{{ form.finish_date.id_for_label }}">
                             <span class="icon is-small is-left">
-                                <i class="fas fa-ruble-sign"></i>
+                                <i class="fas fa-calendar"></i>
                             </span>
                         </div>
                     </div>
@@ -103,4 +86,4 @@
             </div>
         </form>
     </div>
-{% endblock content %}
+{% endblock %}
