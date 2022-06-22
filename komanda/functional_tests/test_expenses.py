@@ -4,6 +4,7 @@ from selenium.webdriver.common.alert import Alert
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.select import Select
+from selenium.common.exceptions import NoSuchElementException
 from functional_tests.base import FunctionalTest, PASSWORD, USERNAME
 
 MAX_WAIT = 10
@@ -222,3 +223,7 @@ class ConstantExpenseTest(FunctionalTest):
         updated_expence = expenses[1].find_element(By.ID, "expense_value").text
         self.assertEqual(updated_expence, "1500,00")
 
+        #удаляем трату
+        expenses[1].find_element(By.ID, "delete_btn").click()
+        expenses = self.browser.find_elements(By.ID, "expense_item")
+        self.assertEqual(len(expenses), 1)

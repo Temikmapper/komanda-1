@@ -15,10 +15,9 @@ from expenses.forms import (
     UsualExpenseAddForm,
     CategoryAddForm,
     ConstExpenseAddForm,
-    ConstExpenseFinishForm,
     ConstExpenseEditForm,
     ConstExpenseHistoryAddForm,
-    BumpExpenseForm
+    BumpExpenseForm,
 )
 
 
@@ -68,7 +67,6 @@ def add_usual_expense(request):
         expense_form = UsualExpenseAddForm()
         category_form = CategoryAddForm()
 
-    today = date.today()
     categories = Categories.objects.all()
     recent_expenses = UsualExpenses.objects.all()[:10]
 
@@ -96,7 +94,7 @@ def add_constant_expense(request):
             ConstantExpenses.objects.create(
                 start_date=expense.start_date, name=expense.name, value=value.value
             )
-            return redirect('view_all_constant_expenses')
+            return redirect("view_all_constant_expenses")
     else:
         expense_form = ConstExpenseAddForm()
         value_form = ConstExpenseHistoryAddForm()
@@ -116,33 +114,28 @@ def view_constant_expense(request, id):
     return render(
         request,
         "view_constant_expense.html",
-        {
-            "expense": expense
-        },
+        {"expense": expense},
     )
 
 
 @login_required
 def view_all_constant_expenses(request):
 
-    current_expenses = ConstantExpenses.objects.filter(
-        finish_date__gte=date.today())
-    outdated_expenses = ConstantExpenses.objects.filter(
-        finish_date__lte=date.today())
+    current_expenses = ConstantExpenses.objects.filter(finish_date__gte=date.today())
+    outdated_expenses = ConstantExpenses.objects.filter(finish_date__lte=date.today())
 
     return render(
         request,
         "view_all_constant_expenses.html",
-        {"expenses": current_expenses,
-         "outdated_expenses": outdated_expenses},
+        {"expenses": current_expenses, "outdated_expenses": outdated_expenses},
     )
 
-
+@login_required
 def delete_constant_expense(request, id):
     expense = ConstantExpenses.objects.get(id=id)
     expense.delete()
 
-    return view_all_constant_expenses(request)
+    return redirect("view_all_constant_expenses")
 
 
 @login_required
@@ -154,23 +147,23 @@ def edit_constant_expense(request, id):
         if form.is_valid():
             expense = form.save(commit=False)
             expense.save()
-            return redirect('view_all_constant_expenses')
+            return redirect("view_all_constant_expenses")
     else:
         form = ConstExpenseEditForm(instance=expense)
 
     return render(
         request,
         "edit_constant_expense.html",
-        {"form": form,
-         "expense": expense},
+        {"form": form, "expense": expense},
     )
+
 
 @login_required
 def bump_constant_expense(request, id):
     expense = ConstantExpenses.objects.get(id=id)
 
     if expense.finish_date < date.today():
-        return redirect('view_all_constant_expenses')
+        return redirect("view_all_constant_expenses")
 
     if request.method == "POST":
         form = BumpExpenseForm(request.POST)
@@ -178,16 +171,16 @@ def bump_constant_expense(request, id):
             bump = form.save(commit=False)
             bump.expense = expense
             bump.save()
-            return redirect('view_all_constant_expenses')
+            return redirect("view_all_constant_expenses")
     else:
         form = BumpExpenseForm()
 
     return render(
         request,
         "bump_constant_expense.html",
-        {"form": form,
-         "expense": expense},
+        {"form": form, "expense": expense},
     )
+
 
 def view_monthly_expenses(request, year, month):
     last_day = monthrange(year, month)[1]

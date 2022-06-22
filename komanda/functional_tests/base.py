@@ -20,18 +20,17 @@ class FunctionalTest(StaticLiveServerTestCase):
     """functional test"""
 
     def wait(fn):
-        print('*'*50)
+        print("*" * 50)
         start_time = time.time()
-        print('+'*50)
+        print("+" * 50)
         while True:
             try:
                 return fn
             except (AssertionError, WebDriverException) as e:
                 if time.time() - start_time > MAX_WAIT:
                     raise e
-                print('waiting...')
+                print("waiting...")
                 time.sleep(0.5)
-
 
     def setUp(self):
         s = Service("C:/Users/7NR_Operator_21/Desktop/msedgedriver.exe")

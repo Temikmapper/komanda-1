@@ -14,10 +14,14 @@ urlpatterns = [
         "constant/<int:id>", views.view_constant_expense, name="view_constant_expense"
     ),
     path(
-        "constant/<int:id>/edit", views.edit_constant_expense, name="edit_constant_expense"
+        "constant/<int:id>/edit",
+        views.edit_constant_expense,
+        name="edit_constant_expense",
     ),
     path(
-        "constant/<int:id>/bump", views.bump_constant_expense, name="bump_constant_expense"
+        "constant/<int:id>/bump",
+        views.bump_constant_expense,
+        name="bump_constant_expense",
     ),
     path(
         "constant/all",
@@ -25,9 +29,8 @@ urlpatterns = [
         name="view_all_constant_expenses",
     ),
     path(
-        "constant/delete/<int:id>",
+        "constant/<int:id>/delete",
         views.delete_constant_expense,
         name="delete_constant_expense",
     ),
-    
 ]

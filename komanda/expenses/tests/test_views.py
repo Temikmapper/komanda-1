@@ -10,7 +10,7 @@ from expenses.forms import (
     ConstExpenseAddForm,
     ConstExpenseHistoryAddForm,
 )
-from expenses.models import Categories, ConstantExpenseHistoryItem, ConstantExpenses
+from expenses.models import Categories, ConstantExpenseHistoryItem, ConstantExpenses, UsualExpenses
 from expenses.forms import ConstExpenseEditForm, BumpExpenseForm
 
 User = get_user_model()
@@ -53,6 +53,15 @@ class AddUsualExpensePageTest(TestCase):
         Categories.objects.create(name="apple")
         response = self.client.get("/expenses/add")
         self.assertContains(response, "apple", 3)
+
+    def test_saves_post_request(self):
+        Categories.objects.create(name="apple")
+        category = Categories.objects.get(name="apple")
+        response = self.client.post(
+            "/expenses/add",
+            data={"category": f"{category.id}", "date": "2021-01-01", "amount": "10"},
+        )
+        self.assertEqual(UsualExpenses.objects.count(), 1)
 
 
 class AddConstExpensePageTest(TestCase):
@@ -108,8 +117,8 @@ class AddConstExpensePageTest(TestCase):
             fetch_redirect_response=True,
         )
 
-class ViewAllConstExpensesTest(TestCase):
 
+class ViewAllConstExpensesTest(TestCase):
     def setUp(self) -> None:
         user = User.objects.create(username="tester")
         self.client.force_login(user)
@@ -135,12 +144,14 @@ class ViewAllConstExpensesTest(TestCase):
         self.assertTemplateUsed(response, "view_all_constant_expenses.html")
 
     def test_shows_outdated_expenses(self):
-        ConstantExpenses.objects.create(name = "oldman", start_date=date(2010, 1, 1), value=Decimal(100))
+        ConstantExpenses.objects.create(
+            name="oldman", start_date=date(2010, 1, 1), value=Decimal(100)
+        )
         response = self.client.get("/expenses/constant/all")
         self.assertContains(response, "outdated_expense_item")
 
-class ViewConstExpenseTest(TestCase):
 
+class ViewConstExpenseTest(TestCase):
     def setUp(self) -> None:
         user = User.objects.create(username="tester")
         ConstantExpenses.objects.create(
@@ -183,8 +194,8 @@ class ViewConstExpenseTest(TestCase):
         self.assertContains(response, "31 июля 2022 г.")
         self.assertContains(response, "30 июня 2022 г.")
 
-class EditConstExpenseTest(TestCase):
 
+class EditConstExpenseTest(TestCase):
     def setUp(self) -> None:
         user = User.objects.create(username="tester")
         ConstantExpenses.objects.create(
@@ -199,7 +210,7 @@ class EditConstExpenseTest(TestCase):
         """тест: нельзя посмотреть список целей неавторизованным"""
         expense = ConstantExpenses.objects.get(name="phone")
         self.client.logout()
-        response = self.client.get(expense.get_absolute_url() + '/edit')
+        response = self.client.get(expense.get_absolute_url() + "/edit")
         self.assertRedirects(
             response,
             f"/accounts/login/?next=/expenses/constant/{expense.id}/edit",
@@ -211,7 +222,7 @@ class EditConstExpenseTest(TestCase):
     def test_uses_add_usual_expense_template(self):
         """тест: используется правильный шаблон"""
         expense = ConstantExpenses.objects.get(name="phone")
-        response = self.client.get(expense.get_absolute_url() + '/edit')
+        response = self.client.get(expense.get_absolute_url() + "/edit")
         self.assertTemplateUsed(response, "edit_constant_expense.html")
 
     def test_using_edit_expense_form(self):
@@ -223,7 +234,11 @@ class EditConstExpenseTest(TestCase):
         expense = ConstantExpenses.objects.get(name="phone")
         self.client.post(
             expense.get_absolute_url() + "/edit",
-            data={"name": "phone1", "start_date": date(2022, 1, 1), "finish_date": date(2023, 1, 1)},
+            data={
+                "name": "phone1",
+                "start_date": date(2022, 1, 1),
+                "finish_date": date(2023, 1, 1),
+            },
         )
         new_start_date = ConstantExpenses.objects.first().start_date
         new_finish_date = ConstantExpenses.objects.first().finish_date
@@ -235,12 +250,18 @@ class EditConstExpenseTest(TestCase):
         expense = ConstantExpenses.objects.get(name="phone")
         response = self.client.post(
             expense.get_absolute_url() + "/edit",
-            data={"name": "phone1", "start_date": date(2022, 1, 1), "finish_date": date(2023, 1, 1)},
+            data={
+                "name": "phone1",
+                "start_date": date(2022, 1, 1),
+                "finish_date": date(2023, 1, 1),
+            },
         )
         self.assertRedirects(response, "/expenses/constant/all")
 
-class BumpConstExpenseTest(TestCase):
+    
 
+
+class BumpConstExpenseTest(TestCase):
     def setUp(self) -> None:
         user = User.objects.create(username="tester")
         ConstantExpenses.objects.create(
@@ -255,7 +276,7 @@ class BumpConstExpenseTest(TestCase):
         """тест: нельзя посмотреть список целей неавторизованным"""
         expense = ConstantExpenses.objects.get(name="phone")
         self.client.logout()
-        response = self.client.get(expense.get_absolute_url() + '/bump')
+        response = self.client.get(expense.get_absolute_url() + "/bump")
         self.assertRedirects(
             response,
             f"/accounts/login/?next=/expenses/constant/{expense.id}/bump",
@@ -267,7 +288,7 @@ class BumpConstExpenseTest(TestCase):
     def test_uses_add_usual_expense_template(self):
         """тест: используется правильный шаблон"""
         expense = ConstantExpenses.objects.get(name="phone")
-        response = self.client.get(expense.get_absolute_url() + '/bump')
+        response = self.client.get(expense.get_absolute_url() + "/bump")
         self.assertTemplateUsed(response, "bump_constant_expense.html")
 
     def test_using_edit_expense_form(self):
@@ -294,7 +315,9 @@ class BumpConstExpenseTest(TestCase):
         self.assertRedirects(response, "/expenses/constant/all")
 
     def test_redirects_to_all_if_outdated_expense(self):
-        ConstantExpenses.objects.create(name="old", start_date=date(2010, 1, 1), value=Decimal(10.0))
+        ConstantExpenses.objects.create(
+            name="old", start_date=date(2010, 1, 1), value=Decimal(10.0)
+        )
         expense = ConstantExpenses.objects.get(name="old")
         response = self.client.post(
             expense.get_absolute_url() + "/bump",
@@ -302,4 +325,10 @@ class BumpConstExpenseTest(TestCase):
         )
         items = ConstantExpenseHistoryItem.objects.filter(expense=expense)
         self.assertEqual(len(items), 1)
+        self.assertRedirects(response, "/expenses/constant/all")
+
+    def test_delete_constant_expense(self):
+        expense = ConstantExpenses.objects.get(name="phone")
+        response = self.client.get(expense.get_absolute_url() + "/delete")
+        self.assertEqual(ConstantExpenses.objects.count(), 0)
         self.assertRedirects(response, "/expenses/constant/all")

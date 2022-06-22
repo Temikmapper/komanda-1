@@ -41,16 +41,9 @@ class ConstExpenseHistoryAddForm(forms.ModelForm):
     class Meta:
         model = ConstantExpenseHistoryItem
         fields = ("value",)
-    
+
 
 class BumpExpenseForm(forms.ModelForm):
-
     class Meta:
         model = ConstantExpenseHistoryItem
         fields = ("date", "value")
-
-
-class ConstExpenseFinishForm(forms.ModelForm):
-    class Meta:
-        model = ConstantExpenses
-        fields = ("finish_date",)
