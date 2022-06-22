@@ -3,42 +3,120 @@
     Index page
 {% endblock title %}
 {% block subtitle_hero %}
-    All spends
+    All incomes
 {% endblock subtitle_hero %}
 {% block content %}
-    <div class="block">
-        <center>
-            <h1 class="title">All constant incomes</h1>
+    <div class="columns">
+        <div class="column">
             <form method="get" action={% url 'add_constant_income' %}>
-                <button class="button is-small is-success is-outlined">
-                    <span>Add income</span>
+                <button class="button is-primary" id="add_income_btn">
+                    <span class="icon">
+                        <i class="fa-solid fa-plus"></i>
+                    </span>
+                    <span>Add constant incomes</span>
                 </button>
             </form>
-        </center>
+        </div>
+        <div class="column has-text-centered">
+            <h1 class="title">All constant incomes</h1>
+        </div>
+        <div class="column"></div>
     </div>
-    <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-        <thead>
-            <tr>
-                <th>
-                    <abbr title="Position">Date</abbr>
-                </th>
-                <th>
-                    <abbr title="Played">Trat</abbr>
-                </th>
-                <th>
-                    <abbr title="Won">Skok</abbr>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for income in incomes %}
-                <tr>
-                    <th><a href="{{ income.get_absolute_url }}">{{ income.name }}</a></th>
-                    <td>{{ income.start_date }}</td>
-                    <td>{{ income.finish_date }}</td>
-                    <td><a href={% url 'delete_constant_income' income.id %}><button class="delete"></button></a></td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+
+    <div class="tile is-child notification is-primary is-light box">
+        <div class="columns">
+            <div class="column">
+                <div class="field">
+                    <h1 class="title">Current incomes list</h1>
+                </div>
+            </div>
+        </div>
+        {% for income in incomes %}
+            <div class="box" id="income_item">
+                <div class="columns">
+                    <div class="column">
+                        <div class="field">
+                            <h1 class="title">
+                                <span id="income_name">{{ income.name }}</span>
+                                <a id="income_edit_link" href={% url 'edit_constant_income' income.id %}><span><i class="fa-regular fa-pen-to-square fa-xs"></i></span></a>
+                            </h1>
+                        </div>
+                    </div>
+                    <div class="column" style="text-align:right;">
+                        <form method="get" action={% url 'delete_constant_income' income.id %}>
+                            <button class="button is-danger is-outlined" id="delete_btn">Delete</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="columns">
+                    <div class="column">
+                        <h2 class="subtitle">Started: <span id="start_date"><strong>{{ income.start_date|date:"d.m.Y" }}</strong></span></h2>
+                    </div>
+                    <div class="column has-text-centered">
+                        <h2 class="subtitle">Ending: <span id="finish_date"><strong>{{ income.finish_date|date:"d.m.Y" }}</strong></span></h2>
+                    </div>
+                    <div class="column" style="text-align:right;" id="goal_left">
+                        <h2 class="subtitle">
+                            <span id="income_value">{{ income.get_current_value }}</span> ₽
+                        </h2>
+                    </div>
+                </div>
+                <div class="field is-grouped pt-3">
+                    <form method="get" action={% url 'view_constant_income' income.id %} id="income_view_btn">
+                        <button class="button is-primary mr-1">View</button>
+                    </form>
+                    <form method="get" id="income_bump_btn" action={% url 'bump_constant_income' income.id %}>
+                        <button class="button is-link is-light" id="income_bump_btn">
+                            <span class="icon">
+                                <i class="fa-solid fa-circle-arrow-up"></i>
+                            </span>
+                            <span>Bump!</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    {% if outdated_incomes %}
+    <section class="section is-small">
+        <h2 class="subtitle is-2 has-text-centered">Outdated incomes</h2>
+    </section>
+    {% endif %}
+    {% for income in outdated_incomes %}
+            <div class="box" id="outdated_income_item">
+                <div class="columns">
+                    <div class="column">
+                        <div class="field">
+                            <h1 class="title">
+                                <span id="income_name" class="has-text-grey">{{ income.name }}</span>
+                                <a id="income_edit_link" href={% url 'edit_constant_income' income.id %}><span><i class="fa-regular fa-pen-to-square fa-xs"></i></span></a>
+                            </h1>
+                        </div>
+                    </div>
+                    <div class="column" style="text-align:right;">
+                        <form method="get" action={% url 'delete_constant_income' income.id %}>
+                            <button class="button is-danger is-outlined">Delete</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="columns">
+                    <div class="column">
+                        <h2 class="subtitle has-text-grey">Started: <span id="start_date">{{ income.start_date|date:"d.m.Y" }}</span></h2>
+                    </div>
+                    <div class="column has-text-centered">
+                        <h2 class="subtitle has-text-grey">Ended: <span id="finish_date">{{ income.finish_date|date:"d.m.Y" }}</span></h2>
+                    </div>
+                    <div class="column" style="text-align:right;" id="goal_left">
+                        <h2 class="subtitle has-text-grey">
+                            <span id="income_value">{{ income.get_current_value }}</span> ₽
+                        </h2>
+                    </div>
+                </div>
+                <div class="field is-grouped pt-3">
+                    <form method="get" action={% url 'view_constant_income' income.id %} id="income_view_btn">
+                        <button class="button is-primary is-light mr-1">View</button>
+                    </form>
+                </div>
+            </div>
+        {% endfor %}
 {% endblock content %}

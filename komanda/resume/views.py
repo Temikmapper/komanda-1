@@ -32,7 +32,7 @@ def view_resume(request, year, month):
     constant_expenses = get_constant_expenses(START_OF_MONTH, END_OF_MONTH)
     total_expense = sum(constant_expenses.values())
 
-    goals = get_last_goals_statuses(START_OF_MONTH, END_OF_MONTH)
+    # goals = get_last_goals_statuses(START_OF_MONTH, END_OF_MONTH)
 
     piggy_capital = {}
     piggies = Piggies.objects.all()
@@ -51,7 +51,7 @@ def view_resume(request, year, month):
             "total_income": total_income,
             "expenses": constant_expenses,
             "total_expense": total_expense,
-            "goals": goals,
+            # "goals": goals,
             "piggies": piggy_capital,
         },
     )

@@ -7,6 +7,7 @@ from django.contrib.auth import views as views_auth
 
 from goals import urls as goals_urls
 from expenses import urls as expenses_urls
+from incomes import urls as income_urls
 from monthly import urls as monthly_urls
 from resume import urls as resume_urls
 from piggy import urls as piggies_urls
@@ -20,6 +21,7 @@ urlpatterns = [
     ),
     path("goals/", include(goals_urls), name="view_all_goals"),
     path("expenses/", include(expenses_urls), name="view_all_expenses"),
+    path("incomes/", include(income_urls), name="view_all_constant_incomes"),
     path("monthly/", include(monthly_urls), name="view_month"),
     path(
         "incomes/",

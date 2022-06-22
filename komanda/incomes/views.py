@@ -1,17 +1,18 @@
 from calendar import monthrange
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from decimal import Decimal
 
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
-from .models import ConstantIncomeHistory, ConstantIncomes, Incomes
+from .models import ConstantIncomeHistoryItem, ConstantIncomes, Incomes
 from .forms import (
+    ConstIncomeHistoryAddForm,
     IncomeEditForm,
     IncomeAddForm,
-    ConstantIncomeAddForm,
-    ConstantIncomeFinishForm,
-    IncomeEditForm,
+    ConstIncomeAddForm,
+    ConstIncomeEditForm,
+    BumpIncomeForm
 )
 
 from main.views import MONTH_NAMES
@@ -93,77 +94,96 @@ def income_add(request, year, month):
         },
     )
 
-
+@login_required
 def view_all_constant_incomes(request):
-    all_incomes = ConstantIncomes.objects.all()
+    current_incomes = ConstantIncomes.objects.filter(finish_date__gte=date.today())
+    outdated_incomes = ConstantIncomes.objects.filter(finish_date__lte=date.today())
     return render(
         request,
         "view_all_constant_incomes.html",
-        {"incomes": all_incomes},
+        {"incomes": current_incomes, "outdated_incomes": outdated_incomes},
     )
 
-
+@login_required
 def delete_constant_income(request, id):
     income = ConstantIncomes.objects.get(id=id)
     income.delete()
 
-    return view_all_constant_incomes(request)
+    return redirect("view_all_constant_incomes")
 
+@login_required
+def edit_constant_income(request, id):
+    income = ConstantIncomes.objects.get(id=id)
 
+    if request.method == "POST":
+        form = ConstIncomeEditForm(request.POST, instance=income)
+        if form.is_valid():
+            income = form.save(commit=False)
+            income.save()
+            return redirect("view_all_constant_incomes")
+    else:
+        form = ConstIncomeEditForm(instance=income)
+
+    return render(
+        request,
+        "edit_constant_income.html",
+        {"form": form, "income": income},
+    )
+
+@login_required
+def bump_constant_income(request, id):
+    income = ConstantIncomes.objects.get(id=id)
+
+    if income.finish_date < date.today():
+        return redirect("view_all_constant_incomes")
+
+    if request.method == "POST":
+        form = BumpIncomeForm(request.POST)
+        if form.is_valid():
+            bump = form.save(commit=False)
+            bump.income = income
+            bump.save()
+            return redirect("view_all_constant_incomes")
+    else:
+        form = BumpIncomeForm()
+
+    return render(
+        request,
+        "bump_constant_income.html",
+        {"form": form, "income": income},
+    )
+
+@login_required
 def add_constant_income(request):
 
     if request.method == "POST":
-        income_form = ConstantIncomeAddForm(request.POST)
-        value_form = IncomeEditForm(request.POST)
+        income_form = ConstIncomeAddForm(request.POST)
+        value_form = ConstIncomeHistoryAddForm(request.POST)
         if income_form.is_valid() and value_form.is_valid():
             income = income_form.save(commit=False)
-            income.finish_date = income.start_date + timedelta(760)
-            income.save()
             value = value_form.save(commit=False)
-            income = ConstantIncomes.objects.get(id=income.id)
-            value.date = income.start_date
-            value.income = income
-            value.save()
+            ConstantIncomes.objects.create(start_date=income.start_date, name=income.name, value=value.value)
+            return redirect("view_all_constant_incomes")
     else:
-        income_form = ConstantIncomeAddForm()
-        value_form = IncomeEditForm()
+        income_form = ConstIncomeAddForm()
+        value_form = ConstIncomeHistoryAddForm()
 
     return render(
         request,
         "add_const_income.html",
-        {"income_form": income_form, "value_form": value_form},
+        {"income_form": income_form, "income_value_form": value_form},
     )
 
-
+@login_required
 def view_constant_income(request, id):
 
     income = ConstantIncomes.objects.get(id=id)
-    income_history = ConstantIncomeHistory.objects.filter(income=income)
-
-    form = None
-
-    if request.method == "POST":
-        form = IncomeEditForm(request.POST)
-        finish_form = ConstantIncomeFinishForm(request.POST, instance=income)
-        if form.is_valid() and finish_form.is_valid():
-            finish = finish_form.save(commit=False)
-            finish.save()
-            value = form.save(commit=False)
-            value.date = datetime.today()
-            value.income = income
-            value.save()
-    else:
-        form = IncomeEditForm()
-        finish_form = ConstantIncomeFinishForm(instance=income)
 
     return render(
         request,
         "view_constant_income.html",
         {
             "income": income,
-            "history": income_history,
-            "form": form,
-            "finish_form": finish_form,
         },
     )
 
@@ -177,7 +197,7 @@ def get_constant_incomes(start_of_month, end_of_month):
     income_value = {}
     for income in actual_incomes:
         current_value = (
-            ConstantIncomeHistory.objects.filter(income=income)
+            ConstantIncomeHistoryItem.objects.filter(income=income)
             .filter(date__lte=end_of_month)
             .last()
             .value
