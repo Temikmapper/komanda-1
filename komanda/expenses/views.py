@@ -1,5 +1,4 @@
-from calendar import monthrange
-from datetime import date, datetime, timedelta
+from datetime import date
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
@@ -7,7 +6,6 @@ from main.views import MONTH_NAMES
 
 from expenses.models import (
     ConstantExpenses,
-    ConstantExpenseHistoryItem,
     UsualExpenses,
     Categories,
 )
@@ -130,6 +128,7 @@ def view_all_constant_expenses(request):
         {"expenses": current_expenses, "outdated_expenses": outdated_expenses},
     )
 
+
 @login_required
 def delete_constant_expense(request, id):
     expense = ConstantExpenses.objects.get(id=id)
@@ -183,12 +182,8 @@ def bump_constant_expense(request, id):
 
 
 def view_monthly_expenses(request, year, month):
-    last_day = monthrange(year, month)[1]
 
-    start_of_month = datetime(year, month, 1)
-    end_of_month = datetime(year, month, last_day)
-
-    constant_expenses = get_constant_expenses(start_of_month, end_of_month)
+    constant_expenses = ConstantExpenses.get_objects_in_month(year, month)
 
     return render(
         request,
@@ -207,31 +202,3 @@ def delete_expense(request, id):
     expense = UsualExpenses.objects.get(id=id)
     expense.delete()
     return redirect("/")
-
-
-def get_constant_expenses(start_of_month, end_of_month):
-
-    actual_expenses = ConstantExpenses.objects.filter(
-        start_date__lte=start_of_month
-    ).filter(finish_date__gte=end_of_month)
-
-    expense_value = {}
-    for expense in actual_expenses:
-        value = (
-            ConstantExpenseHistoryItem.objects.filter(expense=expense)
-            .filter(date__lte=end_of_month)
-            .last()
-            .value
-        )
-        expense_value[expense] = value
-
-    return expense_value
-
-
-def get_sum_constant_expenses(start_of_month, end_of_month):
-
-    expenses = get_constant_expenses(start_of_month, end_of_month)
-
-    total_expenses = sum(expenses.values())
-
-    return total_expenses

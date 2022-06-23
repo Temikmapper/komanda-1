@@ -10,7 +10,12 @@ from expenses.forms import (
     ConstExpenseAddForm,
     ConstExpenseHistoryAddForm,
 )
-from expenses.models import Categories, ConstantExpenseHistoryItem, ConstantExpenses, UsualExpenses
+from expenses.models import (
+    Categories,
+    ConstantExpenseHistoryItem,
+    ConstantExpenses,
+    UsualExpenses,
+)
 from expenses.forms import ConstExpenseEditForm, BumpExpenseForm
 
 User = get_user_model()
@@ -257,8 +262,6 @@ class EditConstExpenseTest(TestCase):
             },
         )
         self.assertRedirects(response, "/expenses/constant/all")
-
-    
 
 
 class BumpConstExpenseTest(TestCase):

@@ -28,9 +28,9 @@
                         </a>
                     </div>
                 </div>
-                {% for expense, value in constant_expenses.items %}
+                {% for expense in constant_expenses %}
                     <div class="box">
-                        {{ expense.name }} <strong>{{ value }}</strong>
+                        {{ expense.name }} <strong>{{ expense.get_current_value }}</strong>
                     </div>
                 {% endfor %}
             </div>

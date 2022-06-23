@@ -5,6 +5,7 @@ from incomes import urls as income_urls
 from expenses import urls as expense_urls
 
 urlpatterns = [
+    path("", views.redirect_to_view_month, name="redirect_to_view_month"),
     path("<int:year>/<int:month>", views.view_month, name="view_month"),
     path(
         "<int:year>/<int:month>/raw", views.monthly_raw_expenses, name="view_month_raw"

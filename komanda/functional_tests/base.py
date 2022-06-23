@@ -1,3 +1,4 @@
+from decimal import Decimal
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.edge.service import Service
@@ -5,6 +6,8 @@ from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.common.keys import Keys
 import time
 import os
+
+from expenses.models import Categories, UsualExpenses
 
 MAX_WAIT = 20
 USERNAME = "test_user"
@@ -45,3 +48,10 @@ class FunctionalTest(StaticLiveServerTestCase):
 
     def tearDown(self):
         self.browser.quit()
+
+    def add_usual_expense(self, category, value, day):
+        date = date(date.today().year, date.today().month, day)
+        Categories.objects.create(name=category)
+        UsualExpenses.objects.create(date=date, category=category, value=Decimal(value))
+
+    # def add_free_money(self, value, date)

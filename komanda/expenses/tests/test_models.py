@@ -1,4 +1,4 @@
-from datetime import date, datetime
+from datetime import date
 from decimal import Decimal
 from django.test import TestCase
 
@@ -43,6 +43,36 @@ class UsualExpensesModelTest(TestCase):
         right_order = [ex4, ex3, ex2, ex1]
         self.assertEqual(exp_list, right_order)
 
+    def test_get_objects_in_month(self):
+        category = Categories.objects.create(name="test")
+        UsualExpenses.objects.create(
+            category=category, amount=Decimal(100), date=date(2022, 5, 5)
+        )
+        UsualExpenses.objects.create(
+            category=category, amount=Decimal(500), date=date(2022, 5, 7)
+        )
+        UsualExpenses.objects.create(
+            category=category, amount=Decimal(450), date=date(2022, 6, 5)
+        )
+        self.assertEqual(len(UsualExpenses.get_objects_in_month(2022, 5)), 2)
+        self.assertEqual(len(UsualExpenses.get_objects_in_month(2022, 6)), 1)
+        self.assertEqual(len(UsualExpenses.get_objects_in_month(2022, 7)), 0)
+
+    def test_sum_of_some_incomes(self):
+        category = Categories.objects.create(name="test")
+        UsualExpenses.objects.create(
+            category=category, amount=Decimal(100), date=date(2022, 5, 5)
+        )
+        UsualExpenses.objects.create(
+            category=category, amount=Decimal(500), date=date(2022, 5, 7)
+        )
+        UsualExpenses.objects.create(
+            category=category, amount=Decimal(450), date=date(2022, 6, 5)
+        )
+        self.assertEqual(UsualExpenses.get_sum_in_month(2022, 5), Decimal(600))
+        self.assertEqual(UsualExpenses.get_sum_in_month(2022, 6), Decimal(450))
+        self.assertEqual(UsualExpenses.get_sum_in_month(2022, 7), Decimal(0))
+
 
 class ConstExpensesModelTest(TestCase):
     def setUp(self):
@@ -61,3 +91,35 @@ class ConstExpensesModelTest(TestCase):
 
         value = expense.get_current_value()
         self.assertEqual(value, Decimal(200))
+
+    def test_get_objects_in_month(self):
+        expense = ConstantExpenses.objects.get(name="phone")
+        expense.delete()
+        ConstantExpenses.objects.create(
+            name="2020-2022", start_date=date(2020, 1, 1), value=Decimal(100)
+        )
+        ConstantExpenses.objects.create(
+            name="2021-2023", start_date=date(2021, 1, 1), value=Decimal(340)
+        )
+        ConstantExpenses.objects.create(
+            name="2017-2019", start_date=date(2017, 1, 1), value=Decimal(270)
+        )
+        self.assertEqual(len(ConstantExpenses.get_objects_in_month(2021, 5)), 2)
+        self.assertEqual(len(ConstantExpenses.get_objects_in_month(2022, 6)), 1)
+        self.assertEqual(len(ConstantExpenses.get_objects_in_month(2023, 7)), 0)
+
+    def test_sum_of_some_incomes(self):
+        expense = ConstantExpenses.objects.get(name="phone")
+        expense.delete()
+        ConstantExpenses.objects.create(
+            name="2020-2022", start_date=date(2020, 1, 1), value=Decimal(100)
+        )
+        ConstantExpenses.objects.create(
+            name="2021-2023", start_date=date(2021, 1, 1), value=Decimal(340)
+        )
+        ConstantExpenses.objects.create(
+            name="2017-2019", start_date=date(2017, 1, 1), value=Decimal(270)
+        )
+        self.assertEqual(ConstantExpenses.get_sum_in_month(2021, 5), Decimal(440))
+        self.assertEqual(ConstantExpenses.get_sum_in_month(2022, 6), Decimal(340))
+        self.assertEqual(ConstantExpenses.get_sum_in_month(2023, 7), Decimal(0))

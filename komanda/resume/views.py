@@ -4,8 +4,8 @@ from datetime import datetime, timedelta
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
-from incomes.views import get_constant_incomes, get_additional_incomes
-from expenses.views import get_constant_expenses
+from incomes.views import AdditionalIncomes, ConstantIncomes
+from expenses.views import ConstantExpenses
 from piggy.models import Piggies
 from main.views import MONTH_NAMES, MONTHES
 
@@ -24,13 +24,15 @@ def view_resume(request, year, month):
     START_OF_MONTH = datetime(year, month, 1)
     END_OF_MONTH = datetime(year, month, last_day)
 
-    constant_incomes = get_constant_incomes(START_OF_MONTH, END_OF_MONTH)
-    additional_incomes = get_additional_incomes(START_OF_MONTH)
+    constant_incomes = ConstantIncomes.get_objects_in_month(year, month)
+    additional_incomes = AdditionalIncomes.get_objects_in_month(year, month)
     all_incomes = constant_incomes | additional_incomes
-    total_income = sum(all_incomes.values())
+    total_income = ConstantIncomes.get_sum_in_month(
+        year, month
+    ) + AdditionalIncomes.get_sum_in_month(year, month)
 
-    constant_expenses = get_constant_expenses(START_OF_MONTH, END_OF_MONTH)
-    total_expense = sum(constant_expenses.values())
+    constant_expenses = ConstantExpenses.get_objects_in_month(year, month)
+    total_expense = ConstantExpenses.get_sum_in_month(year, month)
 
     # goals = get_last_goals_statuses(START_OF_MONTH, END_OF_MONTH)
 

@@ -37,8 +37,8 @@
                         </a>
                     </div>
                 </div>
-                {% for income, value in constant_incomes.items %}
-                    <div class="box">{{ income.name }} <strong>{{ value }}</strong></div>
+                {% for income in constant_incomes %}
+                    <div class="box">{{ income.name }} <strong>{{ income.get_current_value }}</strong></div>
                 {% endfor %}
             </div>
         </div>

@@ -8,6 +8,7 @@ from functional_tests.base import FunctionalTest, PASSWORD, USERNAME
 
 MAX_WAIT = 10
 
+
 class ConstantIncomeTest(FunctionalTest):
     def test_create_constant_income(self):
 
@@ -123,10 +124,11 @@ class ConstantIncomeTest(FunctionalTest):
         updated_expence = incomes[1].find_element(By.ID, "income_value").text
         self.assertEqual(updated_expence, "5500,00")
 
-        #удаляем доход
+        # удаляем доход
         incomes[1].find_element(By.ID, "delete_btn").click()
         incomes = self.browser.find_elements(By.ID, "income_item")
         self.assertEqual(len(incomes), 1)
+
 
 # class UsualExpenseTest(FunctionalTest):
 #     def test_create_income(self):
@@ -220,4 +222,3 @@ class ConstantIncomeTest(FunctionalTest):
 #         recent_10_incomes = self.browser.find_element(By.ID, "recent_incomes_box")
 #         income_items = recent_10_incomes.find_elements(By.ID, "income_item")
 #         # self.assertEqual(len(income_items), 0) нестабильно работает
-

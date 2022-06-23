@@ -1,17 +1,17 @@
 from django import forms
 
-from .models import Incomes, ConstantIncomes, ConstantIncomeHistoryItem
+from .models import AdditionalIncomes, ConstantIncomes, ConstantIncomeHistoryItem
 
 
 class IncomeEditForm(forms.ModelForm):
     class Meta:
-        model = Incomes
+        model = AdditionalIncomes
         fields = ("value", "name")
 
 
 class IncomeAddForm(forms.ModelForm):
     class Meta:
-        model = Incomes
+        model = AdditionalIncomes
         fields = ("value", "name")
 
 
@@ -32,6 +32,7 @@ class ConstantIncomeFinishForm(forms.ModelForm):
         model = ConstantIncomes
         fields = ("finish_date",)
 
+
 class ConstIncomeHistoryAddForm(forms.ModelForm):
     """Поле для ввода значения траты, используется только при инициализации постоянного дохода"""
 
@@ -39,10 +40,12 @@ class ConstIncomeHistoryAddForm(forms.ModelForm):
         model = ConstantIncomeHistoryItem
         fields = ("value",)
 
+
 class ConstIncomeEditForm(forms.ModelForm):
     class Meta:
         model = ConstantIncomes
         fields = ("name", "start_date", "finish_date")
+
 
 class BumpIncomeForm(forms.ModelForm):
     class Meta:

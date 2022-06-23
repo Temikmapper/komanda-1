@@ -8,7 +8,7 @@ from incomes.forms import (
     ConstIncomeAddForm,
     ConstIncomeHistoryAddForm,
     ConstIncomeEditForm,
-    BumpIncomeForm
+    BumpIncomeForm,
 )
 from incomes.models import ConstantIncomeHistoryItem, ConstantIncomes
 
@@ -208,7 +208,6 @@ class EditConstIncomeTest(TestCase):
             },
         )
         self.assertRedirects(response, "/incomes/constant/all")
-
 
 
 class BumpConstIncomeTest(TestCase):
