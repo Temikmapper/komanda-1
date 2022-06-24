@@ -10,6 +10,8 @@ from django.contrib.auth.decorators import login_required
 from main.views import MONTH_NAMES, MONTHES
 from expenses.models import UsualExpenses, ConstantExpenses
 from incomes.models import AdditionalIncomes, ConstantIncomes
+from monthly.models import FreeMoney
+from monthly.forms import BumpFreeMoneyForm
 
 
 @login_required
@@ -29,15 +31,15 @@ def view_month(request, year, month):
     START_OF_MONTH = datetime(year, month, 1)
     END_OF_MONTH = datetime(year, month, last_day)
 
-    daily_income = get_daily_income().quantize(Decimal("1.00"), ROUND_FLOOR)
+    daily_income = get_daily_income(year, month).quantize(Decimal("1.00"), ROUND_FLOOR)
     sum_of_usual_expenses = UsualExpenses.get_sum_in_month(year, month)
     sum_of_all_incomes = ConstantIncomes.get_sum_in_month(
         year, month
     ) + AdditionalIncomes.get_sum_in_month(year, month)
     sum_of_constant_expenses = ConstantExpenses.get_sum_in_month(year, month)
-    data = get_balance_for_monthly_table()
+    data = get_balance_for_monthly_table(year, month)
 
-    free_money = get_free_money_in_month()
+    free_money = FreeMoney.get_value(year, month)
 
     return render(
         request,
@@ -74,29 +76,43 @@ def monthly_raw_expenses(request, year, month):
         },
     )
 
+@login_required
+def bump_free_money(request, year, month):
 
-def get_daily_income():
+    if request.method == "POST":
+        form = BumpFreeMoneyForm(request.POST)
+        if form.is_valid():
+            free_money = form.save(commit=False)
+            free_money.save()
+        return redirect("redirect_to_view_month")
+    else:
+        form = BumpFreeMoneyForm()
 
-    monthly_income = get_free_money_in_month()
+    return render(
+        request,
+        "bump_free_money.html",
+        {
+            "form": form,
+        },
+    )
+
+
+def get_daily_income(year, month):
+
+    monthly_income = FreeMoney.get_value(year, month)
     num_of_days = abs((END_OF_MONTH - START_OF_MONTH).days + 1)
     daily_income = Decimal(monthly_income / num_of_days)
 
     return daily_income
 
 
-def get_free_money_in_month():
 
-    # Here will be model
-
-    return Decimal(7000)
-
-
-def get_balance_for_monthly_table():
+def get_balance_for_monthly_table(year, month):
 
     cur_day = START_OF_MONTH
     data = []
     accumulated = Decimal(0)
-    daily_income = get_daily_income()
+    daily_income = get_daily_income(year, month)
     accumulated_income = Decimal(0)
     accumulated_balance = Decimal(0)
 

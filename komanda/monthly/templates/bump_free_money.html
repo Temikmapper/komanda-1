@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block title %}
+    Index page
+{% endblock title %}
+{% block subtitle_hero %}
+    Bump
+{% endblock subtitle_hero %}
+{% block content %}
+    <div class="columns">
+        <div class="column">
+        </div>
+        <div class="column has-text-centered">
+            <h1 class="title">Bump</h1>
+        </div>
+        <div class="column"></div>
+    </div>
+    <div class="block">
+        <form method="POST" class="post-form">
+            {% csrf_token %}
+            <div class="field is-horizontal">
+                <div class="field-label is-normal">
+                    <label class="label">New date</label>
+                </div>
+                <div class="field-body">
+                    <div class="field is-expanded">
+                        <div class="control has-icons-left">
+                            <input class="input is-link"
+                                   type="date"
+                                   name="date"
+                                   placeholder="Start date"
+                                   required
+                                   id="{{ form.date.id_for_label }}">
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-calendar"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="field is-horizontal">
+                <div class="field-label is-normal">
+                    <label class="label">New Value</label>
+                </div>
+                <div class="field-body">
+                    <div class="field is-expanded">
+                        <div class="control has-icons-left">
+                            <input class="input is-link"
+                                   type="number"
+                                   name="value"
+                                   placeholder="7000"
+                                   step="0.01"
+                                   required
+                                   id="{{ form.value.id_for_label }}">
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-ruble-sign"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="field is-horizontal">
+                <div class="field-label">
+                    <!-- Left empty for spacing -->
+                </div>
+                <div class="field-body">
+                    <button type="submit" class="button is-success" id="bump_save_btn">
+                        <span class="icon is-small">
+                            <i class="fas fa-check"></i>
+                        </span>
+                        <span>Save</span>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock content %}

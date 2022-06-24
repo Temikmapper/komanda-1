@@ -11,6 +11,9 @@ urlpatterns = [
         "<int:year>/<int:month>/raw", views.monthly_raw_expenses, name="view_month_raw"
     ),
     path(
+        "<int:year>/<int:month>/bump_free_money", views.bump_free_money, name="bump_free_money"
+    ),
+    path(
         "<int:year>/<int:month>/expenses-chart",
         views.expenses_chart,
         name="expenses_chart",

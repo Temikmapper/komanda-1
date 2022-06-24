@@ -5,7 +5,10 @@
             <div class="column">
                 <h1 class="title">Per day: {{ daily_income }}</h1>
                 <h2 class="subtitle">
-                    <span>Free: {{ free_money }}</span>
+                    Free: <span id="free_money">{{ free_money|floatformat:"2" }} </span>
+                    <a id="bump_free_money_link" href={% url 'bump_free_money' year month %}>
+                        <span class="icon is-small"><i class="fa-regular fa-pen-to-square"></i></span>
+                    </a>
                 </h2>
             </div>
             <div class="column"></div>
@@ -27,8 +30,8 @@
                         <button class="button is-primary is-inverted">Edit</button>
                     </p>
                 </form>
-                <p class="subtitle">
-                    {{ constant_incomes }}
+                <p class="subtitle" id="total_incomes">
+                    {{ constant_incomes|floatformat:"2" }}
                 </p>
             </div>
             <div class="tile is-child notification is-warning">
@@ -38,15 +41,15 @@
                         <button class="button is-warning is-inverted">Edit</button>
                     </p>
                 </form>
-                <p class="subtitle">
-                    {{ constant_expenses }}
+                <p class="subtitle" id="total_expenses">
+                    {{ constant_expenses|floatformat:"2" }}
                 </p>
             </div>
         </div>
     </div>
 {% endblock %}
 {% block spends_table %}
-    <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+    <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth" id="table_">
         <thead>
             <tr>
                 <th>
@@ -68,7 +71,7 @@
                 <tr {% if day.date|date:"n" == date.month_ %} {% if day.date|date:"d" == date.day_ %} class="is-selected" {% endif %}
                     {% endif %}>
                     <th>{{ day.date|date:"d, D" }}</th>
-                    <td>{{ day.amount }}</td>
+                    <td>{{ day.amount|floatformat:"2" }}</td>
                     <td>
                         {% for category in day.category %}
                             <span class="tag is-light {% if category == 'No spends' %} is-normal {% else %} is-warning {% endif %}"> {{ category }}</span>
@@ -76,10 +79,10 @@
                     </td>
                     <td>
                         {% if day.accumulated_balance < 0 %}
-                            <span class="tag is-danger is-light is-medium">{{ day.accumulated_balance }}</span>
+                            <span class="tag is-danger is-light is-medium">{{ day.accumulated_balance|floatformat:"2" }}</span>
                         {% endif %}
                         {% if day.accumulated_balance > 0 %}
-                            <span class="tag is-success is-light is-medium">{{ day.accumulated_balance }}</span>
+                            <span class="tag is-success is-light is-medium">{{ day.accumulated_balance|floatformat:"2" }}</span>
                         {% endif %}
                     </td>
                 </tr>
@@ -90,7 +93,7 @@
                 <th>
                     <abbr title="Position">Total</abbr>
                 </th>
-                <th colspan="3">{{ total_expenses }}</th>
+                <th colspan="3"><span id="total_sum_of_expenses">{{ total_expenses|floatformat:"2" }}</span></th>
             </tr>
         </tfoot>
     </table>
@@ -98,11 +101,11 @@
 {% block graphs %}
     {% load static %}
     <script src="{% static 'js/charts.min.js' %}"></script>
-    <canvas id="expenses-chart" width="400" height="200"></canvas>
-    <canvas id="bar-chart" width="800" height="450"></canvas>
+    <canvas id="expenses_graph" width="400" height="200"></canvas>
+    <canvas id="donut_graph" width="800" height="450"></canvas>
     <script>
         $(document).ready(function () {
-            var $expensesChart = $("#expenses-chart");
+            var $expensesChart = $("#expenses_graph");
             $.ajax({
                 data: $(this).serialize(),
                 url: "{% url 'expenses_chart' year month %}",

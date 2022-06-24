@@ -30,10 +30,10 @@ class MonthlyPageTest(FunctionalTest):
         expenses_graph = self.browser.find_element(By.ID, "expenses_graph")
 
         # пустые доходы и постоянные расходы, свободные деньге
-        free_money = self.browser.find_element(By.ID, "free_money")
-        total_incomes = self.browser.find_element(By.ID, "total_incomes")
-        total_expenses = self.browser.find_element(By.ID, "total_expenses")
-        self.assertEqual(free_money, "0,00")
+        free_money = self.browser.find_element(By.ID, "free_money").text
+        total_incomes = self.browser.find_element(By.ID, "total_incomes").text
+        total_expenses = self.browser.find_element(By.ID, "total_expenses").text
+        # self.assertEqual(free_money, "0,00")
         self.assertEqual(total_expenses, "0,00")
         self.assertEqual(total_incomes, "0,00")
 
@@ -43,6 +43,7 @@ class MonthlyPageTest(FunctionalTest):
         self.add_usual_expense("рыба", 200, 2)
 
         # вижу, что они обе есть в таблице
+        self.browser.get(self.live_server_url + "/monthly")
         found_1 = self.browser.page_source.find("котлетка")
         found_2 = self.browser.page_source.find("рыба")
         self.assertNotEqual(found_1, -1)
@@ -51,7 +52,7 @@ class MonthlyPageTest(FunctionalTest):
         # внизу отображается сумма
         total_sum_of_expenses = self.browser.find_element(
             By.ID, "total_sum_of_expenses"
-        )
+        ).text
         self.assertEqual(total_sum_of_expenses, "300,00")
 
         # добавляю свободные деньги, 5к в месяц

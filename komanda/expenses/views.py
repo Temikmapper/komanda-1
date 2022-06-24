@@ -119,7 +119,7 @@ def view_constant_expense(request, id):
 @login_required
 def view_all_constant_expenses(request):
 
-    current_expenses = ConstantExpenses.objects.filter(finish_date__gte=date.today())
+    current_expenses = ConstantExpenses.get_objects_in_month(date.today().year, date.today().month)
     outdated_expenses = ConstantExpenses.objects.filter(finish_date__lte=date.today())
 
     return render(

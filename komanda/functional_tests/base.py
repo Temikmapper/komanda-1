@@ -1,3 +1,4 @@
+from datetime import date
 from decimal import Decimal
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
@@ -50,8 +51,8 @@ class FunctionalTest(StaticLiveServerTestCase):
         self.browser.quit()
 
     def add_usual_expense(self, category, value, day):
-        date = date(date.today().year, date.today().month, day)
-        Categories.objects.create(name=category)
-        UsualExpenses.objects.create(date=date, category=category, value=Decimal(value))
+        date_ = date(date.today().year, date.today().month, day)
+        category_ = Categories.objects.create(name=category)
+        UsualExpenses.objects.create(date=date_, category=category_, amount=Decimal(value))
 
     # def add_free_money(self, value, date)

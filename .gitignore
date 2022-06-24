@@ -1,10 +1,7 @@
 venv/
 __init__.py
 *.pyc
-komanda/main/migrations
 *.sqlite3
-komanda/goals/migrations
-komanda/expenses/migrations
+komanda/*/migrations
 komanda/SECRET_FILE.py
-komanda/incomes/migrations
 komanda/.coverage
