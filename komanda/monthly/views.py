@@ -6,6 +6,9 @@ from django.db.models import Sum
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+import cmapy
+import random
+
 
 from main.views import MONTH_NAMES, MONTHES
 from expenses.models import UsualExpenses, ConstantExpenses
@@ -99,8 +102,13 @@ def bump_free_money(request, year, month):
 
 def get_daily_income(year, month):
 
+    last_day = monthrange(year, month)[1]
+
+    start_of_month = datetime(year, month, 1)
+    end_of_month = datetime(year, month, last_day)
+
     monthly_income = FreeMoney.get_value(year, month)
-    num_of_days = abs((END_OF_MONTH - START_OF_MONTH).days + 1)
+    num_of_days = abs((end_of_month - start_of_month).days + 1)
     daily_income = Decimal(monthly_income / num_of_days)
 
     return daily_income
@@ -109,14 +117,19 @@ def get_daily_income(year, month):
 
 def get_balance_for_monthly_table(year, month):
 
-    cur_day = START_OF_MONTH
+    last_day = monthrange(year, month)[1]
+
+    start_of_month = datetime(year, month, 1)
+    end_of_month = datetime(year, month, last_day)
+
+    cur_day = start_of_month
     data = []
     accumulated = Decimal(0)
     daily_income = get_daily_income(year, month)
     accumulated_income = Decimal(0)
     accumulated_balance = Decimal(0)
 
-    while cur_day != END_OF_MONTH + timedelta(1):
+    while cur_day != end_of_month + timedelta(1):
         spends_in_day = UsualExpenses.objects.filter(date=cur_day)
         accumulated_income += daily_income
         accumulated_balance += daily_income
@@ -142,7 +155,7 @@ def get_balance_for_monthly_table(year, month):
             data.append(
                 {
                     "date": cur_day.date(),
-                    "amount": Decimal(0).quantize(Decimal("1.00"), ROUND_FLOOR),
+                    "amount": None,
                     "category": ["No spends"],
                     "accumulated_balance": accumulated_balance.quantize(
                         Decimal("1.00"), ROUND_FLOOR
@@ -156,31 +169,34 @@ def get_balance_for_monthly_table(year, month):
 
 def expenses_chart(request, year, month):
 
-    last_day = monthrange(year, month)[1]
+    monthly_table_data = get_balance_for_monthly_table(year, month)
+    balance = [{'x': day['date'], 'y': day['accumulated_balance']} for day in monthly_table_data]
+    expenses = [{'x': day['date'], 'y': day['amount']} for day in monthly_table_data]    
+    
+    categories_sum = {}
+    expenses_list = UsualExpenses.get_objects_in_month(year, month)
 
-    START_OF_MONTH = datetime(year, month, 1)
-    END_OF_MONTH = datetime(year, month, last_day)
+    for expense in expenses_list:
+        category = expense.category.name
+        value = categories_sum.get(f'{category}', Decimal(0)) + expense.amount
+        categories_sum.update({f'{category}': value})
 
-    labels = []
-    data = []
+    categories_labels = list(categories_sum.keys())
+    categories_data = list(categories_sum.values())
 
-    for i in range(START_OF_MONTH.day, END_OF_MONTH.day + 1):
-        labels.append(i)
-        day = START_OF_MONTH + timedelta(i - 1)
-        try:
-            value = (
-                UsualExpenses.objects.filter(date=day)
-                .aggregate(Sum("amount"))["amount__sum"]
-                .quantize(Decimal("1.00"), ROUND_FLOOR)
-            )
-            data.append(float(value))
-        except AttributeError:
-            data.append(None)
+    colors = []
+    for category in categories_labels:
+        color = cmapy.color('Pastel2', random.randrange(0, 256), rgb_order=True)
+        color_str = f'rgb({color[0]}, {color[1]}, {color[2]})'
+        colors.append(color_str)
 
     return JsonResponse(
         data={
-            "labels": labels,
-            "data": data,
+            "expenses": expenses,
+            "balance": balance,
+            "categories_labels": categories_labels,
+            "categories_data": categories_data,
+            "colors": colors,
         },
         status=200,
     )

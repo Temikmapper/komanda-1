@@ -52,4 +52,64 @@
             </div>
         </div>
     </div>
+    <div class="box">
+    {% load static %}
+    <script src="{% static 'js/charts.min.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@^2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@^1"></script>
+    <canvas id="graph" width="400" height="200"></canvas>
+    <script>
+        $(document).ready(function () {
+            var $expensesChart = $("#graph");
+            $.ajax({
+                data: $(this).serialize(),
+                url: "{% url 'const_expenses_chart' expense.id %}",
+                success: function (data) {
+                    var $expensesChart = $("#graph");
+                    const skipped = (ctx, value) => ctx.p0.skip || ctx.p1.skip ? value : undefined;
+                    ctx = $expensesChart[0].getContext('2d');
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            datasets: [{
+                                    label: 'Траты',
+                                    data: data.data,
+                                    borderColor: 'rgb(255, 99, 132)',
+                                    cubicInterpolationMode: 'monotone',
+                                    segment: {
+                                        borderColor: ctx => skipped(ctx, 'rgb(255, 99, 132)'),
+                                    },
+                                    fill: false,
+                                    spanGaps: true,
+                                    cubicInterpolationMode: 'monotone',
+                                    }]},
+                        options: {
+                            scales: { 
+                                y: {
+                                    min: 0,
+                                    ticks: {
+                                        callback: function(value, index, ticks) {
+                                            return value + ' ₽';
+                                        }
+                                    }
+                                },
+                                x: {
+                                    type: 'time',
+                                    time: {
+                                        unit: 'month'
+                                    },
+                                    min: data.min,
+                                    max: data.max
+                                },
+                            },
+                        }
+                    });
+                },
+                error: function (data, jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus, errorThrown);
+                }
+            })
+        })
+    </script>
+    </div>
 {% endblock content %}
