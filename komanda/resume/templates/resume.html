@@ -14,11 +14,11 @@
                             </form>
                         </div>
                         <div class="block">
-                            {% for income, value in incomes.items %}
+                            {% for income in incomes %}
                                 <div class="is-flex mb-2 is-justify-content-space-between is-align-items-center py-1"
                                      style="border-bottom: 1px dotted #fff;">
                                     <span>{{ income.name }}</span>
-                                    <span class="tag">{{ value }}</span>
+                                    <span class="tag">{{ income.get_current_value }}</span>
                                 </div>
                             {% endfor %}
                         </div>
@@ -65,11 +65,11 @@
                         </form>
                     </div>
                     <div class="block">
-                        {% for name, value in expenses.items %}
+                        {% for expense in expenses %}
                             <div class="is-flex mb-2 is-justify-content-space-between is-align-items-center py-1"
                                  style="border-bottom: 1px dotted #363636;">
-                                <span>{{ name.name }}</span>
-                                <span class="tag">{{ value }}</span>
+                                <span>{{ expense.name }}</span>
+                                <span class="tag">{{ expense.get_current_value }}</span>
                             </div>
                         {% endfor %}
                     </div>
@@ -93,9 +93,9 @@
                             </p>
                         </form>
                     </div>
-                    {% for goal, status in goals.items %}
+                    {% for goal in goals %}
                         <div class="block">
-                            <form method="get" action={% url 'add_goal' %}>
+                            <form method="get" action={% url 'bump_goal' goal.id %}>
                                 <p class="subtitle mb-3">
                                     {{ goal.name }}
                                     <button class="button is-link is-inverted is-small is-pulled-right">
@@ -107,17 +107,17 @@
                                 </p>
                             </form>
                             <progress class="progress is-small is-warning mb-1"
-                                      value="{{ status.percent|floatformat:"2u" }}"
+                                      value="{{ goal.get_percent|floatformat:"2u" }}"
                                       max="100"></progress>
                             <div class="is-flex mb-2 is-justify-content-space-between is-align-items-center py-1">
                                 <span>
                                     <h2 class="subtitle">Ending {{ goal.date }}</h2>
                                 </span>
                                 <span>
-                                    <h2 class="subtitle">{{ status.percent }} %</h2>
+                                    <h2 class="subtitle">{{ goal.get_percent }} %</h2>
                                 </span>
                                 <span>
-                                    <h2 class="subtitle">Left {{ status.left }} of {{ goal.value }}</h2>
+                                    <h2 class="subtitle">Left {{ goal.get_left }} of {{ goal.value }}</h2>
                                 </span>
                             </div>
                         </div>

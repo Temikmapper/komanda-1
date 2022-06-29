@@ -19,6 +19,9 @@ class AdditionalIncomes(models.Model):
     value = models.DecimalField(max_digits=10, decimal_places=2, default=10.00)
     name = models.CharField(max_length=50)
 
+    def get_current_value(self):
+        return self.value
+
     @staticmethod
     def get_objects_in_month(year: int, month: int):
         first_date_in_month = date(year, month, 1)

@@ -81,16 +81,16 @@
                 <div class="column is-one-third">
                     <div class="buttons is-centered">
                         <form method="get" action={% url 'add_expense' %}>
-                            <button class="button is-primary is-light is-rounded" id="main_menu_expenses_btn">Add</button>
+                            <button class="button is-primary is-light is-rounded" id="main_menu_expenses_btn">Expenses</button>
                         </form>
-                        <form method="get" action={% url 'view_all_expenses' %}>
-                            <button class="button is-link is-light is-rounded">All</button>
+                        <form method="get" action={% url 'view_monthly_incomes' current_year current_month %}>
+                            <button class="button is-link is-light is-rounded">Incomes</button>
                         </form>
-                        <form method="get" action={% url 'index' %}>
-                            <button class="button is-warning is-light is-rounded">Main</button>
+                        <form method="get" action={% url 'view_resume' current_year current_month %}>
+                            <button class="button is-warning is-light is-rounded">Dashboard</button>
                         </form>
                         <form method="get" action={% url 'view_month' current_year current_month %}>
-                            <button class="button is-danger is-light is-rounded">Montly</button>
+                            <button class="button is-danger is-light is-rounded">Monthly</button>
                         </form>
                         <form method="get" action={% url 'view_all_goals' %}>
                             <button class="button is-info is-light is-rounded" id="main_menu_goals_btn">Goals</button>

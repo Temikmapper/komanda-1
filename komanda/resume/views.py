@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 
 from incomes.views import AdditionalIncomes, ConstantIncomes
 from expenses.views import ConstantExpenses
+from goals.models import Goals
 from piggy.models import Piggies
 from main.views import MONTH_NAMES, MONTHES
 
@@ -26,7 +27,7 @@ def view_resume(request, year, month):
 
     constant_incomes = ConstantIncomes.get_objects_in_month(year, month)
     additional_incomes = AdditionalIncomes.get_objects_in_month(year, month)
-    all_incomes = constant_incomes | additional_incomes
+    all_incomes = list(constant_incomes) + list(additional_incomes)
     total_income = ConstantIncomes.get_sum_in_month(
         year, month
     ) + AdditionalIncomes.get_sum_in_month(year, month)
@@ -34,7 +35,7 @@ def view_resume(request, year, month):
     constant_expenses = ConstantExpenses.get_objects_in_month(year, month)
     total_expense = ConstantExpenses.get_sum_in_month(year, month)
 
-    # goals = get_last_goals_statuses(START_OF_MONTH, END_OF_MONTH)
+    goals = Goals.objects.all()
 
     piggy_capital = {}
     piggies = Piggies.objects.all()
@@ -53,7 +54,7 @@ def view_resume(request, year, month):
             "total_income": total_income,
             "expenses": constant_expenses,
             "total_expense": total_expense,
-            # "goals": goals,
+            "goals": goals,
             "piggies": piggy_capital,
         },
     )
