@@ -1,0 +1,12 @@
+{% extends 'cards_containers/container.html' %}
+{% block container_color %}
+    is-warning
+{% endblock container_color %}
+{% block container_title %}
+    All expenses list
+{% endblock container_title %}
+{% block cards %}
+    {% for expense in expenses %}
+        {% include 'view_all_constant_expenses/expense_card.html' %}
+    {% endfor %}
+{% endblock cards %}

@@ -206,7 +206,7 @@ def view_monthly_expenses(request, year, month):
 def delete_expense(request, id):
     expense = UsualExpenses.objects.get(id=id)
     expense.delete()
-    return redirect("/")
+    return redirect("redirect_to_view_month")
 
 
 @login_required

@@ -16,59 +16,9 @@
         </div>
         <form method="POST" class="post-form">
             {% csrf_token %}
-            <div class="field is-horizontal">
-                <div class="field-label is-normal">
-                    <label class="label">Date</label>
-                </div>
-                <div class="field-body">
-                    <div class="field is-expanded">
-                        <div class="control is-expanded has-icons-left">
-                            <input class="input is-warning"
-                                   type="date"
-                                   name="date"
-                                   value="{{ form.date.value }}"
-                                   id="{{ form.date.id_for_label }}">
-                            <span class="icon is-small is-left">
-                                <i class="fas fa-calendar"></i>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="field is-horizontal">
-                <div class="field-label is-normal">
-                    <label class="label">New price</label>
-                </div>
-                <div class="field-body">
-                    <div class="field is-expanded">
-                        <div class="control is-expanded has-icons-left">
-                            <input class="input is-warning"
-                                   type="number"
-                                   name="value"
-                                   step="0.01"
-                                   required
-                                   id="{{ form.value.id_for_label }}"
-                                   placeholder="5000">
-                            <span class="icon is-small is-left">
-                                <i class="fas fa-ruble-sign"></i>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="field is-horizontal">
-                <div class="field-label">
-                    <!-- Left empty for spacing -->
-                </div>
-                <div class="field-body">
-                    <button type="submit" class="button is-success" id="expense_save_btn">
-                        <span class="icon is-small">
-                            <i class="fas fa-check"></i>
-                        </span>
-                        <span>Save</span>
-                    </button>
-                </div>
-            </div>
+            {% include 'bump_constant_expense/field_date.html' %}
+            {% include 'bump_constant_expense/field_value.html' %}
+            {% include 'horizontal_fields/save_button.html' %}
         </form>
     </div>
 {% endblock content %}

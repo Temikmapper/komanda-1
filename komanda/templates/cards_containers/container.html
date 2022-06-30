@@ -1,0 +1,16 @@
+{% block cards_container %}
+    <div class="tile is-child notification {% block container_color %}{% endblock container_color %} is-light box">
+        <div class="columns">
+            <div class="column">
+                <div class="field">
+                    <h1 class="title">
+                        {% block container_title %}
+                        {% endblock container_title %}
+                    </h1>
+                </div>
+            </div>
+        </div>
+        {% block cards %}
+        {% endblock cards %}
+    </div>
+{% endblock cards_container %}

@@ -1,0 +1,63 @@
+{% block card %}
+    <div class="box" id="{% block card_id %}{% endblock card_id %}">
+        <div class="columns">
+            <div class="column">
+                <div class="field">
+                    <h1 class="title">
+                        <span id="expense_name">
+                            {% block card_title %}
+                            {% endblock card_title %}
+                        </span>
+                        <a id="expense_edit_link"
+                           href=
+                           {% block card_edit_link %}
+                           {% endblock card_edit_link %}><span><i class="fa-regular fa-pen-to-square fa-xs"></i></span></a>
+                    </h1>
+                </div>
+            </div>
+            <div class="column" style="text-align:right;">
+                <form method="get"
+                      action=
+                      {% block card_delete_button %}
+                      {% endblock card_delete_button %}>
+                    <button class="button is-danger is-outlined" id="delete_btn">Delete</button>
+                </form>
+            </div>
+        </div>
+        <div class="columns">
+            <div class="column">
+                {% block first_column %}
+                {% endblock first_column %}
+            </div>
+            <div class="column has-text-centered">
+                {% block second_column %}
+                {% endblock second_column %}
+            </div>
+            <div class="column" style="text-align:right;" id="goal_left">
+                {% block third_column %}
+                {% endblock third_column %}
+            </div>
+        </div>
+        <div class="field is-grouped pt-3">
+            <form method="get"
+                  action=
+                  {% block card_view_button_link %}
+                  {% endblock card_view_button_link %}
+                  id="expense_view_btn">
+                <button class="button {% block card_color %}{% endblock card_color %} mr-1">View</button>
+            </form>
+            <form method="get"
+                  id="expense_bump_btn"
+                  action=
+                  {% block card_bump_button_link %}
+                  {% endblock card_bump_button_link %}>
+                <button class="button is-link is-light" id="expense_bump_btn">
+                    <span class="icon">
+                        <i class="fa-solid fa-circle-arrow-up"></i>
+                    </span>
+                    <span>Bump!</span>
+                </button>
+            </form>
+        </div>
+    </div>
+{% endblock card %}

@@ -27,101 +27,13 @@
         </div>
         <div class="column"></div>
     </div>
-
-    <div class="tile is-child notification is-warning is-light box">
-        <div class="columns">
-            <div class="column">
-                <div class="field">
-                    <h1 class="title">Current expenses list</h1>
-                </div>
-            </div>
-        </div>
-        {% for expense in expenses %}
-            <div class="box" id="expense_item">
-                <div class="columns">
-                    <div class="column">
-                        <div class="field">
-                            <h1 class="title">
-                                <span id="expense_name">{{ expense.name }}</span>
-                                <a id="expense_edit_link" href={% url 'edit_constant_expense' expense.id %}><span><i class="fa-regular fa-pen-to-square fa-xs"></i></span></a>
-                            </h1>
-                        </div>
-                    </div>
-                    <div class="column" style="text-align:right;">
-                        <form method="get" action={% url 'delete_constant_expense' expense.id %}>
-                            <button class="button is-danger is-outlined" id="delete_btn">Delete</button>
-                        </form>
-                    </div>
-                </div>
-                <div class="columns">
-                    <div class="column">
-                        <h2 class="subtitle">Started: <span id="start_date"><strong>{{ expense.start_date|date:"d.m.Y" }}</strong></span></h2>
-                    </div>
-                    <div class="column has-text-centered">
-                        <h2 class="subtitle">Ending: <span id="finish_date"><strong>{{ expense.finish_date|date:"d.m.Y" }}</strong></span></h2>
-                    </div>
-                    <div class="column" style="text-align:right;" id="goal_left">
-                        <h2 class="subtitle">
-                            <span id="expense_value">{{ expense.get_current_value }}</span> ₽
-                        </h2>
-                    </div>
-                </div>
-                <div class="field is-grouped pt-3">
-                    <form method="get" action={% url 'view_constant_expense' expense.id %} id="expense_view_btn">
-                        <button class="button is-warning mr-1">View</button>
-                    </form>
-                    <form method="get" id="expense_bump_btn" action={% url 'bump_constant_expense' expense.id %}>
-                        <button class="button is-link is-light" id="expense_bump_btn">
-                            <span class="icon">
-                                <i class="fa-solid fa-circle-arrow-up"></i>
-                            </span>
-                            <span>Bump!</span>
-                        </button>
-                    </form>
-                </div>
-            </div>
-        {% endfor %}
-    </div>
+    {% include 'view_all_constant_expenses/expense_container.html' %}
     {% if outdated_expenses %}
-    <section class="section is-small">
-        <h2 class="subtitle is-2 has-text-centered">Outdated expenses</h2>
-    </section>
+        <section class="section is-small">
+            <h2 class="subtitle is-2 has-text-centered">Outdated expenses</h2>
+        </section>
     {% endif %}
     {% for expense in outdated_expenses %}
-            <div class="box" id="outdated_expense_item">
-                <div class="columns">
-                    <div class="column">
-                        <div class="field">
-                            <h1 class="title">
-                                <span id="expense_name" class="has-text-grey">{{ expense.name }}</span>
-                                <a id="expense_edit_link" href={% url 'edit_constant_expense' expense.id %}><span><i class="fa-regular fa-pen-to-square fa-xs"></i></span></a>
-                            </h1>
-                        </div>
-                    </div>
-                    <div class="column" style="text-align:right;">
-                        <form method="get" action={% url 'delete_constant_expense' expense.id %}>
-                            <button class="button is-danger is-outlined">Delete</button>
-                        </form>
-                    </div>
-                </div>
-                <div class="columns">
-                    <div class="column">
-                        <h2 class="subtitle has-text-grey">Started: <span id="start_date">{{ expense.start_date|date:"d.m.Y" }}</span></h2>
-                    </div>
-                    <div class="column has-text-centered">
-                        <h2 class="subtitle has-text-grey">Ended: <span id="finish_date">{{ expense.finish_date|date:"d.m.Y" }}</span></h2>
-                    </div>
-                    <div class="column" style="text-align:right;" id="goal_left">
-                        <h2 class="subtitle has-text-grey">
-                            <span id="expense_value">{{ expense.get_current_value }}</span> ₽
-                        </h2>
-                    </div>
-                </div>
-                <div class="field is-grouped pt-3">
-                    <form method="get" action={% url 'view_constant_expense' expense.id %} id="expense_view_btn">
-                        <button class="button is-warning is-light mr-1">View</button>
-                    </form>
-                </div>
-            </div>
-        {% endfor %}
+        {% include 'view_all_constant_expenses/expense_outdated_card.html' %}
+    {% endfor %}
 {% endblock content %}

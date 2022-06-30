@@ -28,79 +28,10 @@
     <div class="block">
         <form method="POST" class="post-form">
             {% csrf_token %}
-            {{ expense_form.name.errors }}
-            <div class="field is-horizontal">
-                <div class="field-label is-normal">
-                    <label class="label">New name</label>
-                </div>
-                <div class="field-body">
-                    <div class="field is-expanded">
-                        <div class="control">
-                            <input class="input is-warning"
-                                   type="text"
-                                   name="name"
-                                   placeholder="Name of expense"
-                                   required
-                                   maxlength="50"
-                                   id="{{ expense_form.name.id_for_label }}">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="field is-horizontal">
-                <div class="field-label is-normal">
-                    <label class="label">New start date</label>
-                </div>
-                <div class="field-body">
-                    <div class="field is-expanded">
-                        <div class="control has-icons-left">
-                            <input class="input is-warning"
-                                   type="date"
-                                   name="start_date"
-                                   placeholder="Start date"
-                                   required
-                                   id="{{ expense_form.start_date.id_for_label }}">
-                            <span class="icon is-small is-left">
-                                <i class="fas fa-calendar"></i>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="field is-horizontal">
-                <div class="field-label is-normal">
-                    <label class="label">New start date</label>
-                </div>
-                <div class="field-body">
-                    <div class="field is-expanded">
-                        <div class="control has-icons-left">
-                            <input class="input is-warning"
-                                   type="number"
-                                   name="value"
-                                   placeholder="Amount"
-                                   step="0.01"
-                                   required
-                                   id="{{ expense_value_form.value.id_for_label }}">
-                            <span class="icon is-small is-left">
-                                <i class="fas fa-ruble-sign"></i>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="field is-horizontal">
-                <div class="field-label">
-                    <!-- Left empty for spacing -->
-                </div>
-                <div class="field-body">
-                    <button type="submit" class="button is-success" id="expense_save_btn">
-                        <span class="icon is-small">
-                            <i class="fas fa-check"></i>
-                        </span>
-                        <span>Save</span>
-                    </button>
-                </div>
-            </div>
+            {% include 'add_const_expense/field_name.html' %}
+            {% include 'add_const_expense/field_start_date.html' %}
+            {% include 'add_const_expense/field_value.html' %}
+            {% include 'horizontal_fields/save_button.html' %}
         </form>
     </div>
 {% endblock content %}

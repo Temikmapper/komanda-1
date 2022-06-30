@@ -1,0 +1,16 @@
+{% block constant_item_description %}
+<div class="box">
+    <h1 class="title" id="expense_name_title">{% block item_title %}{% endblock item_title %}</h2>
+    <div class="columns">
+        <div class="column">
+            {% block first_column %}{% endblock first_column %}
+        </div>
+        <div class="column has-text-centered">
+            {% block second_column %}{% endblock second_column %}
+        </div>
+        <div class="column" style="text-align:right;" id="goal_left">
+            {% block third_column %}{% endblock third_column %}
+        </div>
+    </div>
+</div>
+{% endblock constant_item_description %}

@@ -1,0 +1,12 @@
+{% extends 'timeline/container.html' %}
+{% block color_start %}
+    is-warning
+{% endblock color_start %}
+{% block items %}
+    {% for object in expense.get_history %}
+        {% include 'timeline/item.html' %}
+    {% endfor %}
+{% endblock items %}
+{% block color_end %}
+    is-warning
+{% endblock color_end %}
