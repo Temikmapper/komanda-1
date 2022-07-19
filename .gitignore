@@ -3,5 +3,5 @@ __init__.py
 *.pyc
 *.sqlite3
 komanda/*/migrations
-komanda/SECRET_FILE.py
 komanda/.coverage
+komanda/.env
