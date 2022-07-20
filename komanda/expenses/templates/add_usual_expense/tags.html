@@ -1,0 +1,16 @@
+{% for category in categories %}
+    <script type="text/javascript">
+        function confirmation() {
+            var answer = confirm("Delete {{ category.name }}?")
+            if (answer){
+                window.location = "{% url 'delete_category' category.id %}";
+            }
+        }
+    </script>
+    <form id="categories-list-item"
+          class="tag"
+          method="get">
+        {{ category }}
+        <button class="delete" id="category_del_btn" onclick="confirmation()"></button>
+    </form>
+{% endfor %}

@@ -123,22 +123,10 @@
             </div>
         </form>
     </div>
-    <div class="tags are-large">
-        {% for category in categories %}
-        <script type="text/javascript">
-            function confirmation() {
-                var answer = confirm("Delete {{ category.name }}?")
-                if (answer){
-                    window.location = "{% url 'delete_category' category.id %}";
-                }
-            }
-        </script>
-            <form id="categories-list-item"
-                  class="tag"
-                  method="get">
-                {{ category }}
-                <button class="delete" id="category_del_btn" onclick="confirmation()"></button>
-            </form>
-        {% endfor %}
+    <div class="tags are-medium is-hidden-touch">
+        {% include 'add_usual_expense/tags.html' %}
+    </div>
+    <div class="tags are-small is-hidden-desktop">
+        {% include 'add_usual_expense/tags.html' %}
     </div>
 {% endblock content %}
