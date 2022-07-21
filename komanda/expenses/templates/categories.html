@@ -14,10 +14,13 @@
     </div>
     <div class="tags are-large">
         {% for category in categories %}
-        <form class="tag" method="get" action={% url 'delete_category' category.id %}>
-            {{ category }}
-            <button class="delete"></button>
-        </form>
+            <form class="tag"
+                  method="get"
+                  action
+                  {% url 'delete_category' category.id %}>
+                {{ category }}
+                <button class="delete"></button>
+            </form>
         {% endfor %}
     </div>
     <div class="block">
@@ -27,14 +30,14 @@
                 <div class="field">
                     <p class="control">
                         <input class="input is-primary"
-                        type="text"
-                        name="name"
-                        placeholder="Name of category"
-                        required
-                        id="{{ form.name.id_for_label }}">
+                               type="text"
+                               name="name"
+                               placeholder="Name of category"
+                               required
+                               id="{{ form.name.id_for_label }}">
                     </p>
                 </div>
             </div>
         </form>
     </div>
-    {% endblock content %}
+{% endblock content %}

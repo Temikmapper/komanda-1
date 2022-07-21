@@ -11,12 +11,14 @@
               href="{% static 'css/bulma/bulma.css' %}"
               type="text/css">
         <link rel="stylesheet" href="{% static 'css/all.css' %}" type="text/css">
-        <link rel="stylesheet" href="{% static 'css/bulma-timeline-master/bulma-timeline.min.css' %}" type="text/css">
+        <link rel="stylesheet"
+              href="{% static 'css/bulma-timeline-master/bulma-timeline.min.css' %}"
+              type="text/css">
         <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
         <script src="{% static 'js/dropdown.js' %}"></script>
         <script src="{% static 'js/burger.js' %}"></script>
         <title>
-            {% block title %}Kaznachevsky{% endblock %}
+            {% block title %}Казначевский{% endblock %}
         </title>
     </head>
     <body>
@@ -34,14 +36,14 @@
                         <div id="navbarMenuHeroA" class="navbar-menu">
                             <div class="navbar-end">
                                 {% if user.is_authenticated %}
-                                    <span class="navbar-item">Logged as {{ user }}</span>
+                                    <span class="navbar-item">Залогинился как {{ user }}</span>
                                     <span class="navbar-item">
                                         <form method="get" action={% url 'logout' %}>
                                             <button class="button is-primary">
                                                 <span class="icon">
                                                     <i class="fa-solid fa-right-to-bracket"></i>
                                                 </span>
-                                                <span>Logout</span>
+                                                <span>Выйти</span>
                                             </button>
                                         </form>
                                     </span>
@@ -52,7 +54,7 @@
                                                 <span class="icon">
                                                     <i class="fa-solid fa-right-to-bracket"></i>
                                                 </span>
-                                                <span>Login</span>
+                                                <span>Войти</span>
                                             </button>
                                         </form>
                                     </span>
@@ -63,48 +65,46 @@
                 </nav>
             </div>
             <div class="hero-body">
-                <p class="title">
-                    Kaznachevsky
-                </p>
+                <p class="title">Казначевский</p>
                 <p class="subtitle">
                     {% block subtitle_hero %}
-                        Subtitle
+                        Поменяй субтитл
                     {% endblock subtitle_hero %}
                 </p>
             </div>
         </div>
         {% block navigation %}
-            <div class="column is-full-touch is-half-desktop is-offset-one-quarter-desktop">
-                <div class="buttons is-centered">
-                    <form method="get" action={% url 'add_expense' %}>
-                        <button class="button is-primary is-light is-rounded" id="main_menu_expenses_btn">Expenses</button>
-                    </form>
-                    <form method="get" action={% url 'view_monthly_incomes' current_year current_month %}>
-                        <button class="button is-link is-light is-rounded">Incomes</button>
-                    </form>
-                    <form method="get" action={% url 'view_resume' current_year current_month %}>
-                        <button class="button is-warning is-light is-rounded">Dashboard</button>
-                    </form>
-                    <form method="get" action={% url 'view_month' current_year current_month %}>
-                        <button class="button is-danger is-light is-rounded">Monthly</button>
-                    </form>
-                    <form method="get" action={% url 'view_all_goals' %}>
-                        <button class="button is-info is-light is-rounded" id="main_menu_goals_btn">Goals</button>
-                    </form>
+            <div class="column is-full-touch is-10-desktop is-offset-1-desktop has-text-centered">
+                <div class="butttons is-centered">
+                    <a class="button is-primary is-light is-rounded"
+                       id="main_menu_expenses_btn"
+                       href=
+                       {% url 'add_expense' %}>Траты</a>
+                    <a class="button is-link is-light is-rounded"
+                       href=
+                       {% url 'view_monthly_incomes' current_year current_month %}>Доходы</a>
+                    <a class="button is-warning is-light is-rounded"
+                       href=
+                       {% url 'view_resume' current_year current_month %}>Дашборд</a>
+                    <a class="button is-danger is-light is-rounded"
+                       href=
+                       {% url 'view_month' current_year current_month %}>Табличка</a>
+                    <a class="button is-info is-light is-rounded"
+                       id="main_menu_goals_btn"
+                       href=
+                       {% url 'view_all_goals' %}>Цели</a>
                 </div>
             </div>
-    {% endblock navigation %}
-    {% block month_tabs %}
-    {% endblock month_tabs %}
-
-    <div class="column is-full-touch is-half-desktop is-offset-one-quarter-desktop">
-        {% block content %}
-        {% endblock content %}
-    </div>
-
-</body>
-<footer>
-    <section class="section">
-    </section>
-</footer>
+        {% endblock navigation %}
+        {% block month_tabs %}
+        {% endblock month_tabs %}
+        <div class="column is-full-touch is-10-desktop is-offset-1-desktop">
+            {% block content %}
+            {% endblock content %}
+        </div>
+    </body>
+    <footer>
+        <section class="section">
+        </section>
+    </footer>
 </html>

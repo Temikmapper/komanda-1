@@ -1,18 +1,18 @@
 {% extends 'base.html' %}
 {% block title %}
-    Index page
+    Обычные траты
 {% endblock title %}
 {% block subtitle_hero %}
-    Add spends
+    Добавить трату и категорию
 {% endblock subtitle_hero %}
 {% block content %}
-
     <div class="block">
         <center>
-            <h1 class="title">Add expence</h1>
+            <h1 class="title">Добавить трату</h1>
             <form method="get" action={% url 'add_constant_expense' %}>
-                <button class="button is-small is-link is-outlined" id="constant_expense_toggle_btn">
-                    <span>Constant</span>
+                <button class="button is-small is-link is-outlined"
+                        id="constant_expense_toggle_btn">
+                    <span>Переключить на постоянную</span>
                 </button>
             </form>
         </center>
@@ -27,7 +27,7 @@
                         <input class="input is-primary"
                                type="date"
                                name="date"
-                               placeholder="Date"
+                               placeholder="Дата"
                                required
                                value="{{ current_year }}-{{ current_month }}-{{ current_day }}"
                                id="{{ expense_form.date.id_for_label }}">
@@ -44,7 +44,7 @@
                         <input class="input is-primary"
                                type="number"
                                name="amount"
-                               placeholder="Amount"
+                               placeholder="Сколько"
                                step="0.01"
                                required
                                id="{{ expense_form.amount.id_for_label }}">
@@ -71,17 +71,18 @@
                     <span class="icon is-small">
                         <i class="fas fa-check"></i>
                     </span>
-                    <span>Save</span>
+                    <span>Сохранить</span>
                 </button>
             </div>
         </form>
     </div>
     <div class="block">
-        <div class="tile is-child notification is-primary is-light box" id="recent_expenses_box">
+        <div class="tile is-child notification is-primary is-light box"
+             id="recent_expenses_box">
             <div class="columns">
                 <div class="column">
                     <div class="field">
-                        <h1 class="title">Last added</h1>
+                        <h1 class="title">Последние добавленные</h1>
                     </div>
                 </div>
             </div>
@@ -103,7 +104,7 @@
     </div>
     <div class="block">
         <center>
-            <h1 class="title">Categories list</h1>
+            <h1 class="title">Список категорий</h1>
         </center>
     </div>
     <div class="block">
@@ -115,7 +116,7 @@
                         <input class="input is-primary"
                                type="text"
                                name="name"
-                               placeholder="Enter category"
+                               placeholder="Название категории"
                                required
                                id="category_add_field">
                     </p>
@@ -123,10 +124,6 @@
             </div>
         </form>
     </div>
-    <div class="tags are-medium is-hidden-touch">
-        {% include 'add_usual_expense/tags.html' %}
-    </div>
-    <div class="tags are-small is-hidden-desktop">
-        {% include 'add_usual_expense/tags.html' %}
-    </div>
+    <div class="tags are-medium is-hidden-touch">{% include 'add_usual_expense/tags.html' %}</div>
+    <div class="tags are-small is-hidden-desktop">{% include 'add_usual_expense/tags.html' %}</div>
 {% endblock content %}

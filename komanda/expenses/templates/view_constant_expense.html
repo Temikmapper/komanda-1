@@ -16,12 +16,12 @@
     {% include 'view_constant_expense/expense_description.html' %}
     {% include 'view_constant_expense/timeline_container.html' %}
     <div class="box">
-    {% load static %}
-    <script src="{% static 'js/charts.min.js' %}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/moment@^2"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@^1"></script>
-    <canvas id="graph" width="400" height="200"></canvas>
-    <script>
+        {% load static %}
+        <script src="{% static 'js/charts.min.js' %}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/moment@^2"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@^1"></script>
+        <canvas id="graph" width="400" height="200"></canvas>
+        <script>
         $(document).ready(function () {
             var $expensesChart = $("#graph");
             $.ajax({
@@ -73,6 +73,6 @@
                 }
             })
         })
-    </script>
+        </script>
     </div>
 {% endblock content %}
