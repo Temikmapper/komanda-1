@@ -1,3 +1,5 @@
+#!/bin/bash
+
 node {
     stage 'Test'
         sh 'python3 -m venv venv'
