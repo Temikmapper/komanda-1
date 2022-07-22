@@ -5,6 +5,7 @@ node {
             rm -rf venv
             python3 -m venv venv
             . venv/bin/activate
+            ls
             pip3 install -r komanda/requirements/local.txt
             cd komanda
             python3 manage.py test expenses goals"""
