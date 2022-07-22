@@ -74,26 +74,32 @@
             </div>
         </div>
         {% block navigation %}
-            <div class="column is-full-touch is-10-desktop is-offset-1-desktop has-text-centered">
-                <div class="butttons is-centered">
+            <div class="column is-full-touch is-10-desktop is-offset-1-desktop">
+                <div class="field is-grouped is-grouped-multiline is-justify-content-center">
+                    <div class="control">
                     <a class="button is-primary is-light is-rounded"
                        id="main_menu_expenses_btn"
                        href=
-                       {% url 'add_expense' %}>Траты</a>
+                       {% url 'add_expense' %}>Траты</a></div>
+                       <div class="control">
                     <a class="button is-link is-light is-rounded"
                        href=
-                       {% url 'view_monthly_incomes' current_year current_month %}>Доходы</a>
+                       {% url 'view_monthly_incomes' current_year current_month %}>Доходы</a></div>
+                       <div class="control">
                     <a class="button is-warning is-light is-rounded"
                        href=
-                       {% url 'view_resume' current_year current_month %}>Дашборд</a>
+                       {% url 'view_resume' current_year current_month %}>Дашборд</a></div>
+                       <div class="control">
                     <a class="button is-danger is-light is-rounded"
                        href=
-                       {% url 'view_month' current_year current_month %}>Табличка</a>
+                       {% url 'view_month' current_year current_month %}>Табличка</a></div>
+                       <div class="control">
                     <a class="button is-info is-light is-rounded"
                        id="main_menu_goals_btn"
                        href=
-                       {% url 'view_all_goals' %}>Цели</a>
+                       {% url 'view_all_goals' %}>Цели</a></div>
                 </div>
+            </div>
             </div>
         {% endblock navigation %}
         {% block month_tabs %}
