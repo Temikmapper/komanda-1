@@ -6,7 +6,6 @@ from django.db.models import Sum
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-import cmapy
 import random
 
 
@@ -186,7 +185,7 @@ def expenses_chart(request, year, month):
 
     colors = []
     for category in categories_labels:
-        color = cmapy.color('Pastel2', random.randrange(0, 256), rgb_order=True)
+        color = [213, 38, 91]
         color_str = f'rgb({color[0]}, {color[1]}, {color[2]})'
         colors.append(color_str)
 

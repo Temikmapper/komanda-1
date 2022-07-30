@@ -5,3 +5,7 @@ komanda/*/migrations
 komanda/.coverage
 komanda/.env
 komanda/db.sqlite3
+komanda/.env.dev
+komanda/.env.prod
+komanda/.env.prod.db
+komanda/whole.json
