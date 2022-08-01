@@ -7,14 +7,13 @@ from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.common.keys import Keys
 import time
 import os
+from django.contrib.auth import get_user_model
 
 from expenses.models import Categories, UsualExpenses
 
 MAX_WAIT = 20
 USERNAME = "test_user"
 PASSWORD = "12345"
-
-from django.contrib.auth import get_user_model
 
 
 User = get_user_model()
@@ -53,6 +52,8 @@ class FunctionalTest(StaticLiveServerTestCase):
     def add_usual_expense(self, category, value, day):
         date_ = date(date.today().year, date.today().month, day)
         category_ = Categories.objects.create(name=category)
-        UsualExpenses.objects.create(date=date_, category=category_, amount=Decimal(value))
+        UsualExpenses.objects.create(
+            date=date_, category=category_, amount=Decimal(value)
+        )
 
     # def add_free_money(self, value, date)

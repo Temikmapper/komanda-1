@@ -3,10 +3,10 @@ from django import forms
 from .models import AdditionalIncomes, ConstantIncomes, ConstantIncomeHistoryItem
 
 
-class IncomeEditForm(forms.ModelForm):
-    class Meta:
-        model = AdditionalIncomes
-        fields = ("value", "name")
+# class IncomeEditForm(forms.ModelForm):
+#     class Meta:
+#         model = AdditionalIncomes
+#         fields = ("value", "name")
 
 
 class IncomeAddForm(forms.ModelForm):

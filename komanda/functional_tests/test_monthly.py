@@ -25,12 +25,12 @@ class MonthlyPageTest(FunctionalTest):
 
         # автоматический редирект на текущий месяц
         # перехожу на месяц, вижу табличку с тратами пустыми, графики (бублик с категориями трат и график с изменением)
-        table_ = self.browser.find_element(By.ID, "table_")
-        donut_graph = self.browser.find_element(By.ID, "donut_graph")
-        expenses_graph = self.browser.find_element(By.ID, "expenses_graph")
+        self.browser.find_element(By.ID, "table_")
+        self.browser.find_element(By.ID, "donut_graph")
+        self.browser.find_element(By.ID, "expenses_graph")
 
         # пустые доходы и постоянные расходы, свободные деньге
-        free_money = self.browser.find_element(By.ID, "free_money").text
+        self.browser.find_element(By.ID, "free_money").text
         total_incomes = self.browser.find_element(By.ID, "total_incomes").text
         total_expenses = self.browser.find_element(By.ID, "total_expenses").text
         # self.assertEqual(free_money, "0,00")

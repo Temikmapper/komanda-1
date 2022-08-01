@@ -11,7 +11,7 @@ class Piggies(models.Model):
     def get_current_value(self):
         try:
             value = PiggyHistory.objects.filter(piggy=self).last().value
-        except:
+        except ValueError:
             value = Decimal(0.0)
         return value
 
@@ -32,7 +32,7 @@ class Piggies(models.Model):
 
         try:
             value = PiggyHistory.objects.filter(piggy=self).last().percent
-        except:
+        except ValueError:
             value = Decimal(0.0)
         return value
 
@@ -45,7 +45,7 @@ class Piggies(models.Model):
             value = sum_of_bumps.aggregate(models.Sum("value"))["value__sum"].quantize(
                 Decimal("1.00"), ROUND_FLOOR
             )
-        except:
+        except ValueError:
             value = Decimal(0.0).quantize(Decimal("1.00"), ROUND_FLOOR)
         return value
 

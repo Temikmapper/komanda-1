@@ -22,10 +22,10 @@ class AllGoalsPageTest(TestCase):
     def test_access_denied_to_unauthenticated_user(self):
         """тест: нельзя посмотреть список целей неавторизованным"""
         self.client.logout()
-        response = self.client.get(f"/goals/")
+        response = self.client.get("/goals/")
         self.assertRedirects(
             response,
-            f"/accounts/login/?next=/goals/",
+            "/accounts/login/?next=/goals/",
             status_code=302,
             target_status_code=200,
             fetch_redirect_response=True,
@@ -33,7 +33,7 @@ class AllGoalsPageTest(TestCase):
 
     def test_uses_all_goals_template(self):
         """тест: используется правильный шаблон"""
-        response = self.client.get(f"/goals/")
+        response = self.client.get("/goals/")
         self.assertTemplateUsed(response, "all_goals.html")
 
     def test_contains_goals(self):
@@ -41,7 +41,7 @@ class AllGoalsPageTest(TestCase):
         Goals.objects.create(name="car", date=date(2021, 12, 31), value=Decimal(10.0))
         Goals.objects.create(name="house", date=date(2023, 12, 31), value=Decimal(30.0))
 
-        response = self.client.get(f"/goals/")
+        response = self.client.get("/goals/")
 
         self.assertContains(response, "car")
         self.assertContains(response, "house")
@@ -53,7 +53,7 @@ class AllGoalsPageTest(TestCase):
         )
         goal.bump(date=date(2022, 12, 31), value=Decimal(5.0))
 
-        response = self.client.get(f"/goals/")
+        response = self.client.get("/goals/")
 
         self.assertContains(response, "Left <strong>5,00</strong> of 10,00")
         self.assertContains(response, "50,00 %")

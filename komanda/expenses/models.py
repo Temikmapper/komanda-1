@@ -42,7 +42,7 @@ class UsualExpenses(models.Model):
         objects = UsualExpenses.get_objects_in_month(year, month)
 
         sum_ = objects.aggregate(models.Sum("amount"))
-        if sum_["amount__sum"] == None:
+        if sum_["amount__sum"] is None:
             return Decimal(0.00)
         return sum_["amount__sum"]
 

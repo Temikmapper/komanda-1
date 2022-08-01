@@ -29,7 +29,7 @@ class AddConstIncomePageTest(TestCase):
         response = self.client.get("/incomes/add_constant")
         self.assertRedirects(
             response,
-            f"/accounts/login/?next=/incomes/add_constant",
+            "/accounts/login/?next=/incomes/add_constant",
             status_code=302,
             target_status_code=200,
             fetch_redirect_response=True,
@@ -48,7 +48,7 @@ class AddConstIncomePageTest(TestCase):
         )
 
     def test_saves_post_request(self):
-        response = self.client.post(
+        self.client.post(
             "/incomes/add_constant",
             data={"name": "test1", "start_date": "2021-01-01", "value": "100"},
         )
@@ -83,7 +83,7 @@ class ViewAllConstIncomesTest(TestCase):
         response = self.client.get("/incomes/constant/all")
         self.assertRedirects(
             response,
-            f"/accounts/login/?next=/incomes/constant/all",
+            "/accounts/login/?next=/incomes/constant/all",
             status_code=302,
             target_status_code=200,
             fetch_redirect_response=True,

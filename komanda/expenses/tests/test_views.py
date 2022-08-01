@@ -35,7 +35,7 @@ class AddUsualExpensePageTest(TestCase):
         response = self.client.get("/expenses/add")
         self.assertRedirects(
             response,
-            f"/accounts/login/?next=/expenses/add",
+            "/accounts/login/?next=/expenses/add",
             status_code=302,
             target_status_code=200,
             fetch_redirect_response=True,
@@ -62,7 +62,7 @@ class AddUsualExpensePageTest(TestCase):
     def test_saves_post_request(self):
         Categories.objects.create(name="apple")
         category = Categories.objects.get(name="apple")
-        response = self.client.post(
+        self.client.post(
             "/expenses/add",
             data={"category": f"{category.id}", "date": "2021-01-01", "amount": "10"},
         )
@@ -83,7 +83,7 @@ class AddConstExpensePageTest(TestCase):
         response = self.client.get("/expenses/add_constant")
         self.assertRedirects(
             response,
-            f"/accounts/login/?next=/expenses/add_constant",
+            "/accounts/login/?next=/expenses/add_constant",
             status_code=302,
             target_status_code=200,
             fetch_redirect_response=True,
@@ -102,7 +102,7 @@ class AddConstExpensePageTest(TestCase):
         )
 
     def test_saves_post_request(self):
-        response = self.client.post(
+        self.client.post(
             "/expenses/add_constant",
             data={"name": "test1", "start_date": "2021-01-01", "value": "100"},
         )
@@ -137,7 +137,7 @@ class ViewAllConstExpensesTest(TestCase):
         response = self.client.get("/expenses/constant/all")
         self.assertRedirects(
             response,
-            f"/accounts/login/?next=/expenses/constant/all",
+            "/accounts/login/?next=/expenses/constant/all",
             status_code=302,
             target_status_code=200,
             fetch_redirect_response=True,

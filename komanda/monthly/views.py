@@ -78,6 +78,7 @@ def monthly_raw_expenses(request, year, month):
         },
     )
 
+
 @login_required
 def bump_free_money(request, year, month):
 
@@ -111,7 +112,6 @@ def get_daily_income(year, month):
     daily_income = Decimal(monthly_income / num_of_days)
 
     return daily_income
-
 
 
 def get_balance_for_monthly_table(year, month):
@@ -169,16 +169,19 @@ def get_balance_for_monthly_table(year, month):
 def expenses_chart(request, year, month):
 
     monthly_table_data = get_balance_for_monthly_table(year, month)
-    balance = [{'x': day['date'], 'y': day['accumulated_balance']} for day in monthly_table_data]
-    expenses = [{'x': day['date'], 'y': day['amount']} for day in monthly_table_data]    
-    
+    balance = [
+        {"x": day["date"], "y": day["accumulated_balance"]}
+        for day in monthly_table_data
+    ]
+    expenses = [{"x": day["date"], "y": day["amount"]} for day in monthly_table_data]
+
     categories_sum = {}
     expenses_list = UsualExpenses.get_objects_in_month(year, month)
 
     for expense in expenses_list:
         category = expense.category.name
-        value = categories_sum.get(f'{category}', Decimal(0)) + expense.amount
-        categories_sum.update({f'{category}': value})
+        value = categories_sum.get(f"{category}", Decimal(0)) + expense.amount
+        categories_sum.update({f"{category}": value})
 
     categories_labels = list(categories_sum.keys())
     categories_data = list(categories_sum.values())
@@ -186,7 +189,7 @@ def expenses_chart(request, year, month):
     colors = []
     for category in categories_labels:
         color = [213, 38, 91]
-        color_str = f'rgb({color[0]}, {color[1]}, {color[2]})'
+        color_str = f"rgb({color[0]}, {color[1]}, {color[2]})"
         colors.append(color_str)
 
     return JsonResponse(

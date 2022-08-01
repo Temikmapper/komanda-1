@@ -26,7 +26,7 @@ class MonthlyPageWithoutArgumentsTest(TestCase):
         response = self.client.get("/monthly/")
         self.assertRedirects(
             response,
-            f"/accounts/login/?next=/monthly/",
+            "/accounts/login/?next=/monthly/",
             status_code=302,
             target_status_code=200,
             fetch_redirect_response=True,
@@ -88,13 +88,12 @@ class MonthlyPageTest(TestCase):
 
     def test_contains_free_money(self):
         response = self.client.get("/monthly/2020/5")
-        self.assertContains(response, "Free: <span id=\"free_money\">0,00")
+        self.assertContains(response, 'Free: <span id="free_money">0,00')
         FreeMoney.bump(date=date(2020, 5, 1), value=Decimal(100))
         response = self.client.get("/monthly/2020/5")
-        self.assertContains(response, "Free: <span id=\"free_money\">100,00")
+        self.assertContains(response, 'Free: <span id="free_money">100,00')
         response = self.client.get("/monthly/2020/4")
-        self.assertContains(response, "Free: <span id=\"free_money\">0,00")
-
+        self.assertContains(response, 'Free: <span id="free_money">0,00')
 
     def test_contains_usual_expenses(self):
         category1 = Categories.objects.create(name="apple")
@@ -115,6 +114,7 @@ class MonthlyPageTest(TestCase):
         self.assertNotContains(response, "apple")
         self.assertNotContains(response, "ananas")
 
+
 class BumpFreeMoneyPageTest(TestCase):
     def setUp(self) -> None:
         user = User.objects.create(username="tester")
@@ -126,7 +126,9 @@ class BumpFreeMoneyPageTest(TestCase):
     def test_access_denied_to_unauthenticated_user(self):
         """тест: нельзя посмотреть список целей неавторизованным"""
         self.client.logout()
-        response = self.client.get(f"/monthly/{date.today().year}/{date.today().month}/bump_free_money")
+        response = self.client.get(
+            f"/monthly/{date.today().year}/{date.today().month}/bump_free_money"
+        )
         self.assertRedirects(
             response,
             f"/accounts/login/?next=/monthly/{date.today().year}/{date.today().month}/bump_free_money",
@@ -137,23 +139,27 @@ class BumpFreeMoneyPageTest(TestCase):
 
     def test_uses_template(self):
         """тест: используется правильный шаблон"""
-        response = self.client.get(f"/monthly/{date.today().year}/{date.today().month}/bump_free_money")
+        response = self.client.get(
+            f"/monthly/{date.today().year}/{date.today().month}/bump_free_money"
+        )
         self.assertTemplateUsed(response, "bump_free_money.html")
 
     def test_has_form(self):
-        response = self.client.get(f"/monthly/{date.today().year}/{date.today().month}/bump_free_money")
+        response = self.client.get(
+            f"/monthly/{date.today().year}/{date.today().month}/bump_free_money"
+        )
         self.assertIsInstance(response.context["form"], BumpFreeMoneyForm)
 
     def test_saves_post_request(self):
-        response = self.client.post(
-            f"/monthly/2021/01/bump_free_money",
+        self.client.post(
+            "/monthly/2021/01/bump_free_money",
             data={"date": "2021-01-01", "value": "100"},
         )
         self.assertEqual(FreeMoney.objects.count(), 1)
 
     def test_redirects_to_monthly_page_after_saving(self):
         response = self.client.post(
-            f"/monthly/2021/01/bump_free_money",
+            "/monthly/2021/01/bump_free_money",
             data={"date": "2021-01-01", "value": "100"},
         )
         self.assertRedirects(

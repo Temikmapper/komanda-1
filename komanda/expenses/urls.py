@@ -10,7 +10,8 @@ urlpatterns = [
     path("delete/<int:id>", views.delete_expense, name="delete_expense"),
     path("categories", views.view_add_categories, name="view_add_categories"),
     path("categories/delete/<int:id>", views.delete_category, name="delete_category"),
-    path("constant/<int:id>/chart",
+    path(
+        "constant/<int:id>/chart",
         views.chart,
         name="const_expenses_chart",
     ),

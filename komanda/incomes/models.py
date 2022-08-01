@@ -36,7 +36,7 @@ class AdditionalIncomes(models.Model):
     def get_sum_in_month(year: int, month: int):
         objects = AdditionalIncomes.get_objects_in_month(year, month)
         sum_ = objects.aggregate(models.Sum("value"))
-        if sum_["value__sum"] == None:
+        if sum_["value__sum"] is None:
             return Decimal(0.00)
         return sum_["value__sum"]
 

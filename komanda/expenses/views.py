@@ -123,9 +123,9 @@ def view_constant_expense(request, id):
 def view_all_constant_expenses(request):
 
     current_expenses = ConstantExpenses.get_objects_in_month(
-        date.today().year, date.today().month)
-    outdated_expenses = ConstantExpenses.objects.filter(
-        finish_date__lte=date.today())
+        date.today().year, date.today().month
+    )
+    outdated_expenses = ConstantExpenses.objects.filter(finish_date__lte=date.today())
 
     return render(
         request,
@@ -215,34 +215,37 @@ def chart(request, id):
     objects = ConstantExpenseHistoryItem.objects.filter(expense=expense)
     data = []
 
-    min_ = ConstantExpenseHistoryItem.objects.filter(expense=expense).first().date - timedelta(1)
-    max_ = ConstantExpenseHistoryItem.objects.filter(expense=expense).last().date + timedelta(1)
+    min_ = ConstantExpenseHistoryItem.objects.filter(
+        expense=expense
+    ).first().date - timedelta(1)
+    max_ = ConstantExpenseHistoryItem.objects.filter(
+        expense=expense
+    ).last().date + timedelta(1)
 
     iteratior_min = date(min_.year, min_.month, 1)
 
-    while (iteratior_min < max_):
+    while iteratior_min < max_:
         days = monthrange(iteratior_min.year, iteratior_min.month)[1]
         try:
-            value = ConstantExpenseHistoryItem.objects.filter(expense=expense).filter(date__lte=iteratior_min).last().value
+            value = (
+                ConstantExpenseHistoryItem.objects.filter(expense=expense)
+                .filter(date__lte=iteratior_min)
+                .last()
+                .value
+            )
         except AttributeError:
             value = None
-        label_value = {'x': iteratior_min,
-                       'y': value}
+        label_value = {"x": iteratior_min, "y": value}
         data.append(label_value)
         iteratior_min += timedelta(days)
 
     for object in objects:
-        label_value = {'x': object.date,
-                       'y': object.value}
+        label_value = {"x": object.date, "y": object.value}
         data.append(label_value)
 
-    data = sorted(data, key=lambda student: student['x'])
+    data = sorted(data, key=lambda student: student["x"])
 
     return JsonResponse(
-        data={
-            "data": data,
-            "min": min_,
-            "max": max_
-        },
+        data={"data": data, "min": min_, "max": max_},
         status=200,
     )
