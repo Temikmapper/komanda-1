@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     "incomes",
     "resume",
     "piggy",
+    'api',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

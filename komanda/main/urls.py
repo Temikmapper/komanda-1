@@ -2,6 +2,7 @@ from django.urls import path, include
 
 from . import views
 from incomes import views as income_views
+from api import views as api_views
 
 from django.contrib.auth import views as views_auth
 
@@ -11,6 +12,11 @@ from incomes import urls as income_urls
 from monthly import urls as monthly_urls
 from resume import urls as resume_urls
 from piggy import urls as piggies_urls
+
+from rest_framework import routers
+router = routers.DefaultRouter()
+router.register('usual_expenses', api_views.UsualExpensesViewSet)
+router.register('categories', api_views.CategoriesViewSet)
 
 urlpatterns = [
     path("", views.index, name="index"),
@@ -50,4 +56,5 @@ urlpatterns = [
     ),
     path("resume/", include(resume_urls), name="view_resume"),
     path("piggies/", include(piggies_urls), name="view_all_piggies"),
+    path('api/', include(router.urls), name='api_root'),
 ]
