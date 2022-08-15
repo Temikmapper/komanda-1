@@ -51,7 +51,7 @@ class Piggies(models.Model):
             value = sum_of_bumps.aggregate(models.Sum("value"))["value__sum"].quantize(
                 Decimal("1.00"), ROUND_FLOOR
             )
-        except ValueError:
+        except AttributeError:
             value = Decimal(0.0).quantize(Decimal("1.00"), ROUND_FLOOR)
         return value
 
