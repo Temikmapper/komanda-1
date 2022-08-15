@@ -1,3 +1,4 @@
+# Сборка для дебага
 FROM python:3.10.5-alpine
 
 # set work directory
