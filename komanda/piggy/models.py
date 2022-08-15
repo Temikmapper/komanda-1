@@ -3,8 +3,7 @@ from django.db import models
 
 
 class Piggies(models.Model):
-    """Модель для свиньи-копилки
-    """
+    """Модель для свиньи-копилки"""
 
     name = models.CharField(max_length=50)
 
