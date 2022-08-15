@@ -3,6 +3,9 @@ from django.db import models
 
 
 class Piggies(models.Model):
+    """Модель для свиньи-копилки
+    """
+
     name = models.CharField(max_length=50)
 
     def get_absolute_url(self):
@@ -24,7 +27,10 @@ class Piggies(models.Model):
         sum_of_bumps = PiggyHistory.objects.filter(piggy=self).aggregate(
             models.Sum("value")
         )["value__sum"]
-        result = sum_of_bumps.quantize(Decimal("1.00"), ROUND_FLOOR)
+        try:
+            result = sum_of_bumps.quantize(Decimal("1.00"), ROUND_FLOOR)
+        except AttributeError:
+            result = Decimal(0)
 
         return result
 
