@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% block instance_head %}
+        <div class="columns">
+            <div class="column">
+                <form method="get">
+                    <button class="button {{ instance_color }}">
+                        <span>Смотреть всех</span>
+                    </button>
+                </form>
+            </div>
+            <div class="column has-text-centered">
+                <h1 class="title">{{ instance_head_title }}</h1>
+            </div>
+            <div class="column"></div>
+        </div>
+    {% endblock instance_head %}
+    {% block instance_info %}
+        <div class="box">
+            <h1 class="title">{{ instance.name }}</h1>
+            {% block instance_info__additional %}
+                <div class="columns">
+                    <div class="column">
+                        {% block first_column %}
+                        {% endblock first_column %}
+                    </div>
+                    <div class="column has-text-centered">
+                        {% block second_column %}
+                        {% endblock second_column %}
+                    </div>
+                    <div class="column" style="text-align:right;" id="goal_left">
+                        {% block third_column %}
+                        {% endblock third_column %}
+                    </div>
+                </div>
+            {% endblock instance_info__additional %}
+            <form method="get" action="{{ instance.get_edit_url }}">
+                <button class="button {{ instance_color }} is-light">
+                    <span class="icon">
+                        <i class="fa-solid fa-pencil"></i>
+                    </span>
+                    <span>Редактировать</span>
+                </button>
+            </form>
+        </div>
+    {% endblock instance_info %}
+    {% block instance_history %}
+    {% endblock instance_history %}
+    {% block instance_graphs %}
+    {% endblock instance_graphs %}
+{% endblock content %}

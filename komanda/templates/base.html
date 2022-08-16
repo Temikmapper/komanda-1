@@ -14,9 +14,17 @@
         <link rel="stylesheet"
               href="{% static 'css/bulma-timeline-master/bulma-timeline.min.css' %}"
               type="text/css">
-        <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png' %}">
-        <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
-        <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
+        <link rel="apple-touch-icon"
+              sizes="180x180"
+              href="{% static 'favicon/apple-touch-icon.png' %}">
+        <link rel="icon"
+              type="image/png"
+              sizes="32x32"
+              href="{% static 'favicon/favicon-32x32.png' %}">
+        <link rel="icon"
+              type="image/png"
+              sizes="16x16"
+              href="{% static 'favicon/favicon-16x16.png' %}">
         <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
         <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
         <script src="{% static 'js/dropdown.js' %}"></script>
@@ -81,40 +89,40 @@
             <div class="column is-full-touch is-10-desktop is-offset-1-desktop">
                 <div class="field is-grouped is-grouped-multiline is-justify-content-center">
                     <div class="control">
-                    <a class="button is-primary is-light is-rounded"
-                       id="main_menu_expenses_btn"
-                       href=
-                       {% url 'add_expense' %}>Траты</a></div>
-                       <div class="control">
-                    <a class="button is-link is-light is-rounded"
-                       href=
-                       {% url 'view_monthly_incomes' current_year current_month %}>Доходы</a></div>
-                       <div class="control">
-                    <a class="button is-warning is-light is-rounded"
-                       href=
-                       {% url 'view_resume' current_year current_month %}>Дашборд</a></div>
-                       <div class="control">
-                    <a class="button is-danger is-light is-rounded"
-                       href=
-                       {% url 'view_month' current_year current_month %}>Табличка</a></div>
-                       <div class="control">
-                    <a class="button is-info is-light is-rounded"
-                       id="main_menu_goals_btn"
-                       href=
-                       {% url 'view_all_goals' %}>Цели</a></div>
+                        <a class="button is-primary is-light is-rounded"
+                           id="main_menu_expenses_btn"
+                           href="{% url 'add_expense' %}">Траты</a>
+                    </div>
+                    <div class="control">
+                        <a class="button is-link is-light is-rounded"
+                           href="{% url 'view_monthly_incomes' current_year current_month %}">Доходы</a>
+                    </div>
+                    <div class="control">
+                        <a class="button is-warning is-light is-rounded"
+                           href="{% url 'view_resume' current_year current_month %}">Дашборд</a>
+                    </div>
+                    <div class="control">
+                        <a class="button is-danger is-light is-rounded"
+                           href="{% url 'view_month' current_year current_month %}">Табличка</a>
+                    </div>
+                    <div class="control">
+                        <a class="button is-info is-light is-rounded"
+                           id="main_menu_goals_btn"
+                           href="{% url 'view_all_goals' %}">Цели</a>
+                    </div>
                 </div>
             </div>
-            </div>
-        {% endblock navigation %}
-        {% block month_tabs %}
-        {% endblock month_tabs %}
-        <div class="column is-full-touch is-10-desktop is-offset-1-desktop">
-            {% block content %}
-            {% endblock content %}
         </div>
-    </body>
-    <footer>
-        <section class="section">
-        </section>
-    </footer>
+    {% endblock navigation %}
+    {% block month_tabs %}
+    {% endblock month_tabs %}
+    <div class="column is-full-touch is-10-desktop is-offset-1-desktop">
+        {% block content %}
+        {% endblock content %}
+    </div>
+</body>
+<footer>
+    <section class="section">
+    </section>
+</footer>
 </html>

@@ -15,6 +15,7 @@ from expenses.models import (
 from expenses.forms import (
     UsualExpenseAddForm,
     CategoryAddForm,
+    CategoryEditForm,
     ConstExpenseAddForm,
     ConstExpenseEditForm,
     ConstExpenseHistoryAddForm,
@@ -43,6 +44,39 @@ def view_add_categories(request):
         request,
         "categories.html",
         {"form": form, "categories": categories},
+    )
+
+
+@login_required
+def view_category(request, id):
+    category = Categories.objects.get(id=id)
+    return render(
+        request,
+        "view_category.html",
+        {'instance': category,
+         'instance_color': "is-primary"}
+    )
+
+
+@login_required
+def edit_category(request, id):
+    category = Categories.objects.get(id=id)
+
+    if request.method == "POST":
+        form = CategoryEditForm(request.POST, instance=category)
+        if form.is_valid():
+            category = form.save(commit=False)
+            category.save()
+            return redirect("add_expense")
+    else:
+        form = CategoryEditForm(instance=category)
+
+    return render(
+        request,
+        "edit_category.html",
+        {"form": form,
+         "instance": category,
+         'instance_color': "is-primary"},
     )
 
 
@@ -125,7 +159,8 @@ def view_all_constant_expenses(request):
     current_expenses = ConstantExpenses.get_objects_in_month(
         date.today().year, date.today().month
     )
-    outdated_expenses = ConstantExpenses.objects.filter(finish_date__lte=date.today())
+    outdated_expenses = ConstantExpenses.objects.filter(
+        finish_date__lte=date.today())
 
     return render(
         request,

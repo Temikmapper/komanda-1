@@ -22,7 +22,11 @@ class CategoryAddForm(forms.ModelForm):
         model = Categories
         fields = ("name",)
 
-
+class CategoryEditForm(forms.ModelForm):
+    class Meta:
+        model = Categories
+        fields = ("name",)
+        
 class ConstExpenseEditForm(forms.ModelForm):
     class Meta:
         model = ConstantExpenses

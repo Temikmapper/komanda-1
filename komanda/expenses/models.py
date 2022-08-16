@@ -20,6 +20,12 @@ class Categories(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return f"/expenses/categories/{self.id}"
+    
+    def get_edit_url(self):
+        return f"/expenses/categories/{self.id}/edit"
+
 
 class UsualExpenses(models.Model):
     date = models.DateField()
