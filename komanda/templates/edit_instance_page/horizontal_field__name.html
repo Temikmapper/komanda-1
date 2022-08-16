@@ -1,0 +1,14 @@
+{% extends './horizontal_field.html' %}
+{% block label_name %}
+    Новое название
+{% endblock label_name %}
+{% block control_tag %}
+    <div class="control">
+        <input class="input is-warning"
+               type="text"
+               name="name"
+               value="{{ form.name.value }}"
+               placeholder="{{ form.name.value }}"
+               id="{{ form.name.id_for_label }}">
+    </div>
+{% endblock control_tag %}
