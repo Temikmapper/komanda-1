@@ -4,7 +4,7 @@
 {% endblock label_name %}
 {% block control_tag %}
     <div class="control">
-        <input class="input is-warning"
+        <input class="input {{ instance_color }}"
                type="text"
                name="name"
                value="{{ form.name.value }}"

@@ -193,7 +193,7 @@ def edit_constant_expense(request, id):
     return render(
         request,
         "edit_constant_expense.html",
-        {"form": form, "expense": expense},
+        {"form": form, "instance": expense},
     )
 
 
