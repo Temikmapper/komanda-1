@@ -1,16 +1,16 @@
-{% extends 'horizontal_fields/base.html' %}
+{% extends '../horizontal_field.html' %}
 {% block label_name %}
-    New price
+    Новое значение
 {% endblock label_name %}
 {% block control_tag %}
     <div class="control has-icons-left">
-        <input class="input is-warning"
+        <input class="input {{ instance_color }}"
                type="number"
                name="value"
                placeholder="5000"
                step="0.01"
                required
-               id="{{ expense_value_form.value.id_for_label }}">
+               id="{{ form.value.id_for_label }}">
         <span class="icon is-small is-left">
             <i class="fas fa-ruble-sign"></i>
         </span>

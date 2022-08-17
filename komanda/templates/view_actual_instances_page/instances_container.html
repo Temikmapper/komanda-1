@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="columns">
+        <div class="column">
+            <form method="get"
+                  action="{% block instances_head__add_new_button_url %}{% endblock instances_head__add_new_button_url %}">
+                <button class="button {{ instances_color }}">
+                    <span class="icon">
+                        <i class="fa-solid fa-plus"></i>
+                    </span>
+                    <span>Создать</span>
+                </button>
+            </form>
+        </div>
+        <div class="column has-text-centered">
+            <h1 class="title">
+                <span>
+                    {% block instances_head__title %}
+                    {% endblock instances_head__title %}
+                </span>
+            </h1>
+            {% block instances_head__additional_row %}
+            {% endblock instances_head__additional_row %}
+        </div>
+        <div class="column"></div>
+    </div>
+    <div class="tile is-child notification {{ instances_color }} is-light box">
+        <div class="columns">
+            <div class="column">
+                <div class="field">
+                    <h1 class="title">
+                        {% block container_box__title %}
+                        {% endblock container_box__title %}
+                    </h1>
+                </div>
+            </div>
+        </div>
+        {% for instance in instances %}
+            <div class="box" id="{% block card_id %}{% endblock card_id %}">
+                <div class="columns">
+                    <div class="column">
+                        <div class="field">
+                            <h1 class="title">
+                                <span>{{ instance.name }}</span>
+                                <a href="{{ instance.get_edit_url }}"><span><i class="fa-regular fa-pen-to-square fa-xs"></i></span></a>
+                            </h1>
+                        </div>
+                    </div>
+                    <div class="column" style="text-align:right;">
+                        <form method="get" action="{{ instance.get_delete_url }}">
+                            <button class="button is-danger is-outlined">Удалить</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="columns">
+                    <div class="column">
+                        {% block first_column %}
+                        {% endblock first_column %}
+                    </div>
+                    <div class="column has-text-centered">
+                        {% block second_column %}
+                        {% endblock second_column %}
+                    </div>
+                    <div class="column" style="text-align:right;" id="goal_left">
+                        {% block third_column %}
+                        {% endblock third_column %}
+                    </div>
+                </div>
+                <div class="field is-grouped pt-3">
+                    <form method="get" action="{{ instance.get_absolute_url }}">
+                        <button class="button {{ instances_color }} mr-1">Открыть</button>
+                    </form>
+                    <form method="get" action="{{ instance.get_bump_url }}">
+                        <button class="button is-link is-light">
+                            <span class="icon">
+                                <i class="fa-solid fa-circle-arrow-up"></i>
+                            </span>
+                            <span>Бамп!</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    {% if outdated_instances %}
+        <section class="section is-small">
+            <h2 class="subtitle is-2 has-text-centered">Неактуальное</h2>
+        </section>
+    {% endif %}
+    {% for instance in outdated_instances %}
+        <div class="box">
+            <div class="columns">
+                <div class="column">
+                    <div class="field">
+                        <h1 class="title">
+                            <span id="expense_name" class="has-text-grey">{{ instance.name }}</span>
+                            <a id="expense_edit_link" href="{{ instance.get_edit_url }}"><span><i class="fa-regular fa-pen-to-square fa-xs"></i></span></a>
+                        </h1>
+                    </div>
+                </div>
+                <div class="column" style="text-align:right;">
+                    <form method="get" action="{{ instance.get_delete_url }}">
+                        <button class="button is-danger is-outlined">Удалить</button>
+                    </form>
+                </div>
+            </div>
+            <div class="columns">
+                <div class="column">
+                    {% block outdated_first_column %}
+                    {% endblock outdated_first_column %}
+                </div>
+                <div class="column has-text-centered">
+                    {% block outdated_second_column %}
+                    {% endblock outdated_second_column %}
+                </div>
+                <div class="column" style="text-align:right;">
+                    {% block outdated_third_column %}
+                    {% endblock outdated_third_column %}
+                </div>
+            </div>
+            <div class="field is-grouped pt-3">
+                <form method="get" action="{{ instance.get_absolute_url }}">
+                    <button class="button {{ instances_color }} is-light mr-1">Открыть</button>
+                </form>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock content %}

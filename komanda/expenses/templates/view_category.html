@@ -1,3 +1,8 @@
 {% extends 'view_instance_page/instance_container.html' %}
+{% block instance_head__view_all_url %}
+    {% url 'view_add_categories' %}
+{% endblock instance_head__view_all_url %}
 {% block instance_info__additional %}
 {% endblock instance_info__additional %}
+{% block instance_history %}
+{% endblock instance_history %}

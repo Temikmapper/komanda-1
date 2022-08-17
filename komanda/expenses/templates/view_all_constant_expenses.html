@@ -1,39 +1,52 @@
-{% extends 'base.html' %}
+{% extends 'view_actual_instances_page/instances_container.html' %}
 {% block title %}
-    Index page
+    Казначевский
 {% endblock title %}
 {% block subtitle_hero %}
-    All spends
+    Постоянные траты
 {% endblock subtitle_hero %}
-{% block content %}
-    <div class="columns">
-        <div class="column">
-            <form method="get" action={% url 'add_constant_expense' %}>
-                <button class="button is-warning" id="add_expense_btn">
-                    <span class="icon">
-                        <i class="fa-solid fa-plus"></i>
-                    </span>
-                    <span>Add constant expenses</span>
-                </button>
-            </form>
-        </div>
-        <div class="column has-text-centered">
-            <h1 class="title">All constant spends</h1>
-            <form method="get" action={% url 'view_all_expenses' %}>
-                <button class="button is-small is-success is-outlined">
-                    <span>Regular</span>
-                </button>
-            </form>
-        </div>
-        <div class="column"></div>
-    </div>
-    {% include 'view_all_constant_expenses/expense_container.html' %}
-    {% if outdated_expenses %}
-        <section class="section is-small">
-            <h2 class="subtitle is-2 has-text-centered">Outdated expenses</h2>
-        </section>
-    {% endif %}
-    {% for expense in outdated_expenses %}
-        {% include 'view_all_constant_expenses/expense_outdated_card.html' %}
-    {% endfor %}
-{% endblock content %}
+{% block instances_head__add_new_button_url %}
+{% endblock instances_head__add_new_button_url %}
+{% block instances_head__title %}
+    Все постоянные траты
+{% endblock instances_head__title %}
+{% block instances_head__additional_row %}
+    <form method="get" action={% url 'view_all_expenses' %}>
+        <button class="button is-small is-success is-outlined">
+            <span>Обычные</span>
+        </button>
+    </form>
+{% endblock instances_head__additional_row %}
+{% block container_box__title %}
+    Список трат
+{% endblock container_box__title %}
+{% block first_column %}
+    <h2 class="subtitle">
+        Начало: <span id="start_date"><strong>{{ instance.start_date|date:"d.m.Y" }}</strong></span>
+    </h2>
+{% endblock first_column %}
+{% block second_column %}
+    <h2 class="subtitle">
+        Конец: <span id="finish_date"><strong>{{ instance.finish_date|date:"d.m.Y" }}</strong></span>
+    </h2>
+{% endblock second_column %}
+{% block third_column %}
+    <h2 class="subtitle">
+        <span id="expense_value">{{ instance.get_current_value }} ₽</span>
+    </h2>
+{% endblock third_column %}
+{% block outdated_first_column %}
+    <h2 class="subtitle">
+        Начало: <span id="start_date"><strong>{{ instance.start_date|date:"d.m.Y" }}</strong></span>
+    </h2>
+{% endblock outdated_first_column %}
+{% block outdated_second_column %}
+    <h2 class="subtitle">
+        Конец: <span id="finish_date"><strong>{{ instance.finish_date|date:"d.m.Y" }}</strong></span>
+    </h2>
+{% endblock outdated_second_column %}
+{% block outdated_third_column %}
+    <h2 class="subtitle">
+        <span id="expense_value">{{ instance.get_current_value }} ₽</span>
+    </h2>
+{% endblock outdated_third_column %}

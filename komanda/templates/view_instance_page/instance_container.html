@@ -3,14 +3,17 @@
     {% block instance_head %}
         <div class="columns">
             <div class="column">
-                <form method="get">
-                    <button class="button {{ instance_color }}">
+                <form method="get" action="{% block instance_head__view_all_url %}{% endblock instance_head__view_all_url %}">
+                    <button class="button {{ instance_color }}"
                         <span>Смотреть всех</span>
                     </button>
                 </form>
             </div>
             <div class="column has-text-centered">
-                <h1 class="title">{{ instance_head_title }}</h1>
+                <h1 class="title">
+                    {% block instance_head__title %}
+                    {% endblock instance_head__title %}
+                </h1>
             </div>
             <div class="column"></div>
         </div>
@@ -45,6 +48,21 @@
         </div>
     {% endblock instance_info %}
     {% block instance_history %}
+        <div class="box">
+            <div class="timeline">
+                <header class="timeline-header">
+                    <span class="tag is-medium {{ instance_color }}">Старт</span>
+                </header>
+                {% block items %}
+                    {% for object in instance.get_history %}
+                        {% include './instance_history__item.html' %}
+                    {% endfor %}
+                {% endblock items %}
+                <div class="timeline-header">
+                    <span class="tag is-medium {{ instance_color }}">Конец</span>
+                </div>
+            </div>
+        </div>
     {% endblock instance_history %}
     {% block instance_graphs %}
     {% endblock instance_graphs %}

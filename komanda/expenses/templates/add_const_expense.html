@@ -1,37 +1,14 @@
-{% extends 'base.html' %}
-{% block title %}
-    Index page
-{% endblock title %}
-{% block subtitle_hero %}
-    Add spends
-{% endblock subtitle_hero %}
-{% block content %}
-    <div class="columns">
-        <div class="column">
-            <form method="get" action={% url 'view_all_constant_expenses' %}>
-                <button class="button is-warning" id="view_all_constant_expenses_btn">
-                    <span>View all</span>
-                </button>
-            </form>
-        </div>
-        <div class="column has-text-centered">
-            <h1 class="title">Constant expence</h1>
-            <form method="get" action={% url 'add_expense' %}>
-                <button class="button is-small is-success is-outlined"
-                        id="constant_expense_toggle_btn">
-                    <span>Usual</span>
-                </button>
-            </form>
-        </div>
-        <div class="column"></div>
-    </div>
-    <div class="block">
-        <form method="POST" class="post-form">
-            {% csrf_token %}
-            {% include 'add_const_expense/field_name.html' %}
-            {% include 'add_const_expense/field_start_date.html' %}
-            {% include 'add_const_expense/field_value.html' %}
-            {% include 'horizontal_fields/save_button.html' %}
-        </form>
-    </div>
-{% endblock content %}
+{% extends 'pages_with_forms/instance_container.html' %}
+{% block instance_head__title %}
+    Добавление постоянной траты
+{% endblock instance_head__title %}
+{% block instance_info %}
+{% endblock instance_info %}
+{% block instance_forms %}
+    {% with instance_color="is-warning"%}
+        {% include 'pages_with_forms/add_instance_page/horizontal_field__name.html' %}
+        {% include 'pages_with_forms/add_instance_page/horizontal_field__start_date.html' %}
+        {% include 'pages_with_forms/add_instance_page/horizontal_field__value.html' %}
+        {% include 'pages_with_forms/horizontal_field__save_button.html' %}
+    {% endwith %}
+{% endblock instance_forms %}

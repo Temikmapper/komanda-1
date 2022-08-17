@@ -65,6 +65,9 @@ class ConstantExpenses(models.Model):
     finish_date = models.DateField(default=None)
     objects = ConstantExpenseManager()
 
+    class Meta:
+        ordering = ["start_date", "id"]
+
     @staticmethod
     def get_objects_in_month(year: int, month: int):
         first_date_in_month = date(year, month, 1)
@@ -88,6 +91,15 @@ class ConstantExpenses(models.Model):
 
     def get_absolute_url(self):
         return f"/expenses/constant/{self.id}"
+
+    def get_edit_url(self):
+        return f"/expenses/constant/{self.id}/edit"
+
+    def get_bump_url(self):
+        return f"/expenses/constant/{self.id}/bump"
+
+    def get_delete_url(self):
+        return f"/expenses/constant/{self.id}/delete"
 
     def get_history(self):
         return ConstantExpenseHistoryItem.objects.filter(expense=self)

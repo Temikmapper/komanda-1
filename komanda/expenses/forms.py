@@ -16,7 +16,6 @@ class UsualExpenseAddForm(forms.ModelForm):
             "category",
         )
 
-
 class CategoryAddForm(forms.ModelForm):
     class Meta:
         model = Categories
@@ -32,20 +31,10 @@ class ConstExpenseEditForm(forms.ModelForm):
         model = ConstantExpenses
         fields = ("name", "start_date", "finish_date")
 
-
-class ConstExpenseAddForm(forms.ModelForm):
-    class Meta:
-        model = ConstantExpenses
-        fields = ("name", "start_date")
-
-
-class ConstExpenseHistoryAddForm(forms.ModelForm):
-    """Поле для ввода значения траты, используется только при инициализации постоянной траты"""
-
-    class Meta:
-        model = ConstantExpenseHistoryItem
-        fields = ("value",)
-
+class ConstExpenseAddForm(forms.Form):
+    name = forms.CharField(max_length=50)
+    start_date = forms.DateField()
+    value = forms.DecimalField(max_digits=9, decimal_places=2)
 
 class BumpExpenseForm(forms.ModelForm):
     class Meta:

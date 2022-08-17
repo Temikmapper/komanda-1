@@ -1,5 +1,6 @@
 from calendar import monthrange
 from datetime import date, timedelta
+from decimal import Decimal
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
@@ -18,7 +19,6 @@ from expenses.forms import (
     CategoryEditForm,
     ConstExpenseAddForm,
     ConstExpenseEditForm,
-    ConstExpenseHistoryAddForm,
     BumpExpenseForm,
 )
 
@@ -121,23 +121,21 @@ def add_usual_expense(request):
 def add_constant_expense(request):
 
     if request.method == "POST":
-        expense_form = ConstExpenseAddForm(request.POST)
-        value_form = ConstExpenseHistoryAddForm(request.POST)
-        if expense_form.is_valid() and value_form.is_valid():
-            expense = expense_form.save(commit=False)
-            value = value_form.save(commit=False)
+        form = ConstExpenseAddForm(request.POST)
+        if form.is_valid():
+            expense = form.cleaned_data
             ConstantExpenses.objects.create(
-                start_date=expense.start_date, name=expense.name, value=value.value
+                start_date=expense['start_date'], name=expense['name'], value=expense['value']
             )
             return redirect("view_all_constant_expenses")
     else:
-        expense_form = ConstExpenseAddForm()
-        value_form = ConstExpenseHistoryAddForm()
+        form = ConstExpenseAddForm()
+
 
     return render(
         request,
         "add_const_expense.html",
-        {"expense_form": expense_form, "expense_value_form": value_form},
+        {"form": form},
     )
 
 
@@ -149,7 +147,8 @@ def view_constant_expense(request, id):
     return render(
         request,
         "view_constant_expense.html",
-        {"expense": expense},
+        {"instance": expense,
+        "instance_color": "is-warning"},
     )
 
 
@@ -165,7 +164,7 @@ def view_all_constant_expenses(request):
     return render(
         request,
         "view_all_constant_expenses.html",
-        {"expenses": current_expenses, "outdated_expenses": outdated_expenses},
+        {"instances_color": "is-warning","instances": current_expenses, "outdated_instances": outdated_expenses},
     )
 
 
@@ -217,7 +216,7 @@ def bump_constant_expense(request, id):
     return render(
         request,
         "bump_constant_expense.html",
-        {"form": form, "expense": expense},
+        {"form": form, "instance": expense},
     )
 
 

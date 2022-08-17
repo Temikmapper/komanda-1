@@ -1,15 +1,14 @@
-{% extends 'horizontal_fields/base.html' %}
+{% extends '../horizontal_field.html' %}
 {% block label_name %}
-    New start date
+    Новая начальная дата
 {% endblock label_name %}
 {% block control_tag %}
     <div class="control has-icons-left">
-        <input class="input is-warning"
+        <input class="input {{ instance_color }}"
                type="date"
                name="start_date"
-               placeholder="Start date"
-               required
-               id="{{ expense_form.start_date.id_for_label }}">
+               value="{{ instance.start_date|date:"Y-m-d" }}"
+               id="{{ form.start_date.id_for_label }}">
         <span class="icon is-small is-left">
             <i class="fas fa-calendar"></i>
         </span>

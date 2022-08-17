@@ -1,14 +1,14 @@
-{% extends 'horizontal_fields/base.html' %}
+{% extends '../horizontal_field.html' %}
 {% block label_name %}
-    Date of rising
+    Дата повышения
 {% endblock label_name %}
 {% block control_tag %}
     <div class="control is-expanded has-icons-left">
-        <input class="input is-warning"
+        <input class="input {{ instance_color }}"
                type="date"
                name="date"
                value="{{ form.date.value }}"
-               id="{{ form.date.id_for_label }}">
+               id="{{ date_form.date.id_for_label }}">
         <span class="icon is-small is-left">
             <i class="fas fa-calendar"></i>
         </span>
