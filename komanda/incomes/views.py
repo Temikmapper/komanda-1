@@ -6,9 +6,9 @@ from django.contrib.auth.decorators import login_required
 from .models import ConstantIncomes, AdditionalIncomes
 from .forms import (
     ConstIncomeHistoryAddForm,
+    ConstantIncomeAddForm,
     IncomeEditForm,
     IncomeAddForm,
-    ConstIncomeAddForm,
     ConstIncomeEditForm,
     BumpIncomeForm,
 )
@@ -155,25 +155,24 @@ def bump_constant_income(request, id):
 
 @login_required
 def add_constant_income(request):
+    """Страница добавления постоянного дохода
+    """
 
     if request.method == "POST":
-        income_form = ConstIncomeAddForm(request.POST)
-        value_form = ConstIncomeHistoryAddForm(request.POST)
-        if income_form.is_valid() and value_form.is_valid():
-            income = income_form.save(commit=False)
-            value = value_form.save(commit=False)
+        form = ConstantIncomeAddForm(request.POST)
+        if form.is_valid():
+            income = form.cleaned_data
             ConstantIncomes.objects.create(
-                start_date=income.start_date, name=income.name, value=value.value
+                start_date=income['start_date'], name=income['name'], value=income['value']
             )
             return redirect("view_all_constant_incomes")
     else:
-        income_form = ConstIncomeAddForm()
-        value_form = ConstIncomeHistoryAddForm()
+        form = ConstantIncomeAddForm()
 
     return render(
         request,
-        "add_const_income.html",
-        {"income_form": income_form, "income_value_form": value_form},
+        "add_constant_income.html",
+        {"form": form},
     )
 
 

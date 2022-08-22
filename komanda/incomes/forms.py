@@ -8,7 +8,6 @@ from .models import AdditionalIncomes, ConstantIncomes, ConstantIncomeHistoryIte
 #         model = AdditionalIncomes
 #         fields = ("value", "name")
 
-
 class IncomeAddForm(forms.ModelForm):
     class Meta:
         model = AdditionalIncomes
@@ -26,6 +25,10 @@ class ConstIncomeAddForm(forms.ModelForm):
         model = ConstantIncomes
         fields = ("name", "start_date")
 
+class ConstantIncomeAddForm(forms.Form):
+    name = forms.CharField(max_length=50)
+    start_date = forms.DateField()
+    value = forms.DecimalField(max_digits=9, decimal_places=2)
 
 class ConstantIncomeFinishForm(forms.ModelForm):
     class Meta:
