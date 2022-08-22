@@ -74,6 +74,15 @@ class ConstantIncomes(models.Model):
     def get_absolute_url(self):
         return f"/incomes/constant/{self.id}"
 
+    def get_edit_url(self):
+        return f"/incomes/constant/{self.id}/edit"
+
+    def get_bump_url(self):
+        return f"/incomes/constant/{self.id}/bump"
+
+    def get_delete_url(self):
+        return f"/incomes/constant/{self.id}/delete"
+
     def get_history(self):
         return ConstantIncomeHistoryItem.objects.filter(income=self)
 

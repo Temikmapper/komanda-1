@@ -116,6 +116,7 @@ def add_usual_expense(request):
 
 @login_required
 def add_constant_expense(request):
+    """Страница добавления постоянной траты"""
 
     if request.method == "POST":
         form = ConstExpenseAddForm(request.POST)
@@ -151,6 +152,7 @@ def view_constant_expense(request, id):
 
 @login_required
 def view_all_constant_expenses(request):
+    """Страница просмотра всех постоянных трат"""
 
     current_expenses = ConstantExpenses.get_objects_in_month(
         date.today().year, date.today().month

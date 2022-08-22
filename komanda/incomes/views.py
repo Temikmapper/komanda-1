@@ -36,8 +36,7 @@ def view_monthly_incomes(request, year, month):
 
 @login_required
 def edit_income(request, id, year, month):
-    """Страница изменения разового дохода
-    """
+    """Страница изменения разового дохода"""
 
     income = AdditionalIncomes.objects.get(id=id)
 
@@ -94,14 +93,21 @@ def add_income(request, year, month):
 
 @login_required
 def view_all_constant_incomes(request):
+    """Страница просмотра всех постоянных доходов"""
+
     current_incomes = ConstantIncomes.get_objects_in_month(
         date.today().year, date.today().month
     )
     outdated_incomes = ConstantIncomes.objects.filter(finish_date__lte=date.today())
+
     return render(
         request,
         "view_all_constant_incomes.html",
-        {"incomes": current_incomes, "outdated_incomes": outdated_incomes},
+        {
+            "instances_color": "is-link",
+            "instances": current_incomes,
+            "outdated_instances": outdated_incomes,
+        },
     )
 
 
@@ -115,8 +121,7 @@ def delete_constant_income(request, id):
 
 @login_required
 def edit_constant_income(request, id):
-    """Страница изменения постоянного дохода
-    """
+    """Страница изменения постоянного дохода"""
 
     income = ConstantIncomes.objects.get(id=id)
 
@@ -138,8 +143,7 @@ def edit_constant_income(request, id):
 
 @login_required
 def bump_constant_income(request, id):
-    """Страница бампа постоянного дохода 
-    """
+    """Страница бампа постоянного дохода"""
 
     income = ConstantIncomes.objects.get(id=id)
 
