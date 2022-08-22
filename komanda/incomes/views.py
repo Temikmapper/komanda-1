@@ -193,6 +193,8 @@ def add_constant_income(request):
 
 @login_required
 def view_constant_income(request, id):
+    """Страница для просмотра постоянного дохода
+    """
 
     income = ConstantIncomes.objects.get(id=id)
 
@@ -200,6 +202,7 @@ def view_constant_income(request, id):
         request,
         "view_constant_income.html",
         {
-            "income": income,
+            "instance": income,
+            "instance_color": "is-link"
         },
     )
