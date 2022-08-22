@@ -149,7 +149,7 @@ def bump_constant_income(request, id):
     return render(
         request,
         "bump_constant_income.html",
-        {"form": form, "income": income},
+        {"form": form, "instance": income},
     )
 
 
