@@ -7,7 +7,7 @@ from django.contrib.auth import get_user_model
 from incomes.forms import (
     ConstIncomeAddForm,
     ConstIncomeHistoryAddForm,
-    ConstIncomeEditForm,
+    ConstantIncomeEditForm,
     BumpIncomeForm,
 )
 from incomes.models import ConstantIncomeHistoryItem, ConstantIncomes
@@ -179,7 +179,7 @@ class EditConstIncomeTest(TestCase):
     def test_using_edit_income_form(self):
         income = ConstantIncomes.objects.get(name="phone")
         response = self.client.get(income.get_absolute_url() + "/edit")
-        self.assertIsInstance(response.context["form"], ConstIncomeEditForm)
+        self.assertIsInstance(response.context["form"], ConstantIncomeEditForm)
 
     def test_saves_post_request(self):
         income = ConstantIncomes.objects.get(name="phone")

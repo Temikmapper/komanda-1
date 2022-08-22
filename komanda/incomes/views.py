@@ -8,7 +8,7 @@ from .forms import (
     ConstantIncomeAddForm,
     IncomeEditForm,
     IncomeAddForm,
-    ConstIncomeEditForm,
+    ConstantIncomeEditForm,
     BumpIncomeForm,
 )
 
@@ -36,13 +36,15 @@ def view_monthly_incomes(request, year, month):
 
 @login_required
 def income_edit(request, id, year, month):
+    """Страница изменения разового дохода
+    """
+
     income = AdditionalIncomes.objects.get(id=id)
 
     if request.method == "POST":
         form = IncomeEditForm(request.POST, instance=income)
         if form.is_valid():
             income = form.save(commit=False)
-            income.name
             income.save()
     else:
         form = IncomeEditForm(instance=income)
@@ -51,7 +53,7 @@ def income_edit(request, id, year, month):
         request,
         "income_edit.html",
         {
-            "income": income,
+            "instance": income,
             "form": form,
         },
     )
@@ -114,18 +116,18 @@ def edit_constant_income(request, id):
     income = ConstantIncomes.objects.get(id=id)
 
     if request.method == "POST":
-        form = ConstIncomeEditForm(request.POST, instance=income)
+        form = ConstantIncomeEditForm(request.POST, instance=income)
         if form.is_valid():
             income = form.save(commit=False)
             income.save()
             return redirect("view_all_constant_incomes")
     else:
-        form = ConstIncomeEditForm(instance=income)
+        form = ConstantIncomeEditForm(instance=income)
 
     return render(
         request,
         "edit_constant_income.html",
-        {"form": form, "income": income},
+        {"form": form, "instance": income},
     )
 
 
