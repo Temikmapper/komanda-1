@@ -1,0 +1,17 @@
+{% extends 'pages_with_forms/instance_container.html' %}
+{% block subtitle_hero %}
+    Доходы
+{% endblock subtitle_hero %}
+{% block instance_head__title %}
+    Добавление постоянного дохода
+{% endblock instance_head__title %}
+{% block instance_info %}
+{% endblock instance_info %}
+{% block instance_forms %}
+    {% with instance_color="is-link"%}
+        {% include 'pages_with_forms/add_instance_page/horizontal_field__name.html' %}
+        {% include 'pages_with_forms/add_instance_page/horizontal_field__start_date.html' %}
+        {% include 'pages_with_forms/add_instance_page/horizontal_field__value.html' %}
+        {% include 'pages_with_forms/horizontal_field__save_button.html' %}
+    {% endwith %}
+{% endblock instance_forms %}
