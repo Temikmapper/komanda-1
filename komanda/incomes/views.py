@@ -35,7 +35,7 @@ def view_monthly_incomes(request, year, month):
 
 
 @login_required
-def income_edit(request, id, year, month):
+def edit_income(request, id, year, month):
     """Страница изменения разового дохода
     """
 
@@ -46,12 +46,14 @@ def income_edit(request, id, year, month):
         if form.is_valid():
             income = form.save(commit=False)
             income.save()
+
+            return redirect("view_monthly_incomes", year, month)
     else:
         form = IncomeEditForm(instance=income)
 
     return render(
         request,
-        "income_edit.html",
+        "edit_income.html",
         {
             "instance": income,
             "form": form,
@@ -113,6 +115,9 @@ def delete_constant_income(request, id):
 
 @login_required
 def edit_constant_income(request, id):
+    """Страница изменения постоянного дохода
+    """
+
     income = ConstantIncomes.objects.get(id=id)
 
     if request.method == "POST":
@@ -133,6 +138,9 @@ def edit_constant_income(request, id):
 
 @login_required
 def bump_constant_income(request, id):
+    """Страница бампа постоянного дохода 
+    """
+
     income = ConstantIncomes.objects.get(id=id)
 
     if income.finish_date < date.today():

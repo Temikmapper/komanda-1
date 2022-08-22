@@ -1,0 +1,20 @@
+{% extends '../horizontal_field.html' %}
+{% block label_name %}
+    Новое значение
+{% endblock label_name %}
+{% block control_tag %}
+{% load l10n %}
+    <div class="control has-icons-left">
+        <input class="input {{ instance_color }}"
+               type="number"
+               name="value"
+               placeholder="5000"
+               value={{ instance.value|unlocalize }}
+               step="0.01"
+               required
+               id="{{ form.value.id_for_label }}">
+        <span class="icon is-small is-left">
+            <i class="fas fa-ruble-sign"></i>
+        </span>
+    </div>
+{% endblock control_tag %}
