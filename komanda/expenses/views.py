@@ -53,8 +53,7 @@ def view_category(request, id):
     return render(
         request,
         "view_category.html",
-        {'instance': category,
-         'instance_color': "is-primary"}
+        {"instance": category, "instance_color": "is-primary"},
     )
 
 
@@ -74,9 +73,7 @@ def edit_category(request, id):
     return render(
         request,
         "edit_category.html",
-        {"form": form,
-         "instance": category,
-         'instance_color': "is-primary"},
+        {"form": form, "instance": category, "instance_color": "is-primary"},
     )
 
 
@@ -125,12 +122,13 @@ def add_constant_expense(request):
         if form.is_valid():
             expense = form.cleaned_data
             ConstantExpenses.objects.create(
-                start_date=expense['start_date'], name=expense['name'], value=expense['value']
+                start_date=expense["start_date"],
+                name=expense["name"],
+                value=expense["value"],
             )
             return redirect("view_all_constant_expenses")
     else:
         form = ConstExpenseAddForm()
-
 
     return render(
         request,
@@ -147,8 +145,7 @@ def view_constant_expense(request, id):
     return render(
         request,
         "view_constant_expense.html",
-        {"instance": expense,
-        "instance_color": "is-warning"},
+        {"instance": expense, "instance_color": "is-warning"},
     )
 
 
@@ -158,13 +155,16 @@ def view_all_constant_expenses(request):
     current_expenses = ConstantExpenses.get_objects_in_month(
         date.today().year, date.today().month
     )
-    outdated_expenses = ConstantExpenses.objects.filter(
-        finish_date__lte=date.today())
+    outdated_expenses = ConstantExpenses.objects.filter(finish_date__lte=date.today())
 
     return render(
         request,
         "view_all_constant_expenses.html",
-        {"instances_color": "is-warning","instances": current_expenses, "outdated_instances": outdated_expenses},
+        {
+            "instances_color": "is-warning",
+            "instances": current_expenses,
+            "outdated_instances": outdated_expenses,
+        },
     )
 
 

@@ -5,7 +5,6 @@ from django.contrib.auth.decorators import login_required
 
 from .models import ConstantIncomes, AdditionalIncomes
 from .forms import (
-    ConstIncomeHistoryAddForm,
     ConstantIncomeAddForm,
     IncomeEditForm,
     IncomeAddForm,
@@ -66,8 +65,7 @@ def income_delete(request, id, year, month):
 
 
 @login_required
-def income_add(request, year, month):
-
+def add_income(request, year, month):
     date = datetime(year, month, 1)
 
     if request.method == "POST":
@@ -76,6 +74,8 @@ def income_add(request, year, month):
             income = form.save(commit=False)
             income.date = date
             income.save()
+
+            return redirect("view_monthly_incomes", year, month)
     else:
         form = IncomeAddForm()
 
@@ -155,15 +155,16 @@ def bump_constant_income(request, id):
 
 @login_required
 def add_constant_income(request):
-    """Страница добавления постоянного дохода
-    """
+    """Страница добавления постоянного дохода"""
 
     if request.method == "POST":
         form = ConstantIncomeAddForm(request.POST)
         if form.is_valid():
             income = form.cleaned_data
             ConstantIncomes.objects.create(
-                start_date=income['start_date'], name=income['name'], value=income['value']
+                start_date=income["start_date"],
+                name=income["name"],
+                value=income["value"],
             )
             return redirect("view_all_constant_incomes")
     else:

@@ -1,36 +1,16 @@
-{% extends 'base.html' %}
-{% block content %}
-    <div class="block">
-        <center>
-            <h1 class="title">Add income</h1>
-        </center>
-    </div>
-    <div class="box">
-        <form method="POST" class="post-form">
-            {% csrf_token %}
-            <div class="field">
-                <h4 class="title is-4">Add new income</h4>
-                <div class="control">
-                    <label class="label">Name</label>
-                    <input class="input is-primary"
-                           type="text"
-                           name="name"
-                           placeholder="Salary"
-                           id="{{ form.name.id_for_label }}"
-                           required>
-                </div>
-                <div class="control">
-                    <label class="label">Value</label>
-                    <input class="input is-primary"
-                           type="number"
-                           name="value"
-                           step="0.01"
-                           placeholder="90000,00"
-                           id="{{ form.value.id_for_label }}"
-                           required>
-                </div>
-            </div>
-            <button class="button is-primary">Add</button>
-        </form>
-    </div>
-{% endblock content %}
+{% extends 'pages_with_forms/instance_container.html' %}
+{% block subtitle_hero %}
+    Доходы
+{% endblock subtitle_hero %}
+{% block instance_head__title %}
+    Добавление разового дохода
+{% endblock instance_head__title %}
+{% block instance_info %}
+{% endblock instance_info %}
+{% block instance_forms %}
+    {% with instance_color="is-link"%}
+        {% include 'pages_with_forms/add_instance_page/horizontal_field__name.html' %}
+        {% include 'pages_with_forms/add_instance_page/horizontal_field__value.html' %}
+        {% include 'pages_with_forms/horizontal_field__save_button.html' %}
+    {% endwith %}
+{% endblock instance_forms %}
