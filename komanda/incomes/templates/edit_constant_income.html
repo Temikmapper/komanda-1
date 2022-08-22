@@ -1,89 +1,17 @@
-{% extends 'base.html' %}
-{% block content %}
-    <div class="block">
-        <center>
-            <h1 class="title">Editing income</h1>
-        </center>
-    </div>
-    <div class="box is-notification is-primary">
-        <div class="field is-horizontal">
-            <div class="field-label">
-                <!-- Left empty for spacing -->
-            </div>
-            <div class="field-body">
-                <h1 class="title" id="income_name_title">{{ income.name }}</h1>
-            </div>
-        </div>
-        <form method="POST" class="post-form">
-            {% csrf_token %}
-            <div class="field is-horizontal">
-                <div class="field-label is-normal">
-                    <label class="label">New name</label>
-                </div>
-                <div class="field-body">
-                    <div class="field is-expanded">
-                        <div class="control">
-                            <input class="input is-primary"
-                                   type="text"
-                                   name="name"
-                                   value="{{ form.name.value }}"
-                                   placeholder="{{ form.name.value }}"
-                                   id="{{ form.name.id_for_label }}">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="field is-horizontal">
-                <div class="field-label is-normal">
-                    <label class="label">New start date</label>
-                </div>
-                <div class="field-body">
-                    <div class="field is-expanded">
-                        <div class="control has-icons-left">
-                            <input class="input is-primary"
-                                   type="date"
-                                   name="start_date"
-                                   value="{{ income.start_date|date:"Y-m-d" }}"
-                                   id="{{ form.start_date.id_for_label }}">
-                            <span class="icon is-small is-left">
-                                <i class="fas fa-calendar"></i>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="field is-horizontal">
-                <div class="field-label is-normal">
-                    <label class="label">New finish date</label>
-                </div>
-                <div class="field-body">
-                    <div class="field is-expanded">
-                        <div class="control has-icons-left">
-                            <input class="input is-primary"
-                                   type="date"
-                                   name="finish_date"
-                                   value="{{ income.finish_date|date:"Y-m-d" }}"
-                                   id="{{ form.finish_date.id_for_label }}">
-                            <span class="icon is-small is-left">
-                                <i class="fas fa-calendar"></i>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="field is-horizontal">
-                <div class="field-label">
-                    <!-- Left empty for spacing -->
-                </div>
-                <div class="field-body">
-                    <button type="submit" class="button is-success" id="income_save_btn">
-                        <span class="icon is-small">
-                            <i class="fas fa-check"></i>
-                        </span>
-                        <span>Save</span>
-                    </button>
-                </div>
-            </div>
-        </form>
-    </div>
-{% endblock %}
+{% extends 'pages_with_forms/instance_container.html' %}
+{% block subtitle_hero %}
+    Доходы
+{% endblock subtitle_hero %}
+{% block instance_head__title %}
+    Редактирование постоянного дохода
+{% endblock instance_head__title %}
+{% block instance_info %}
+{% endblock instance_info %}
+{% block instance_forms %}
+    {% with instance_color="is-link"%}
+        {% include 'pages_with_forms/edit_instance_page/horizontal_field__name.html' %}
+        {% include 'pages_with_forms/edit_instance_page/horizontal_field__start_date.html' %}
+        {% include 'pages_with_forms/edit_instance_page/horizontal_field__finish_date.html' %}
+        {% include 'pages_with_forms/horizontal_field__save_button.html' %}
+    {% endwith %}
+{% endblock instance_forms %}
