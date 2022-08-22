@@ -8,6 +8,7 @@ from .models import AdditionalIncomes, ConstantIncomes, ConstantIncomeHistoryIte
 #         model = AdditionalIncomes
 #         fields = ("value", "name")
 
+
 class IncomeAddForm(forms.ModelForm):
     class Meta:
         model = AdditionalIncomes
@@ -25,23 +26,17 @@ class ConstIncomeAddForm(forms.ModelForm):
         model = ConstantIncomes
         fields = ("name", "start_date")
 
+
 class ConstantIncomeAddForm(forms.Form):
     name = forms.CharField(max_length=50)
     start_date = forms.DateField()
     value = forms.DecimalField(max_digits=9, decimal_places=2)
 
+
 class ConstantIncomeFinishForm(forms.ModelForm):
     class Meta:
         model = ConstantIncomes
         fields = ("finish_date",)
-
-
-class ConstIncomeHistoryAddForm(forms.ModelForm):
-    """Поле для ввода значения траты, используется только при инициализации постоянного дохода"""
-
-    class Meta:
-        model = ConstantIncomeHistoryItem
-        fields = ("value",)
 
 
 class ConstIncomeEditForm(forms.ModelForm):

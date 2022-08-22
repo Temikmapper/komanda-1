@@ -22,7 +22,7 @@ class Categories(models.Model):
 
     def get_absolute_url(self):
         return f"/expenses/categories/{self.id}"
-    
+
     def get_edit_url(self):
         return f"/expenses/categories/{self.id}/edit"
 

@@ -4,7 +4,7 @@ from . import views
 
 urlpatterns = [
     path("", views.view_monthly_incomes, name="view_monthly_incomes"),
-    path("add", views.income_add, name="income_add"),
+    path("add", views.add_income, name="income_add"),
     path("<int:id>/edit", views.income_edit, name="income_edit"),
     path("<int:id>/delete", views.income_delete, name="income_delete"),
     path("add_constant", views.add_constant_income, name="add_constant_income"),
