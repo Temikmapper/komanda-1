@@ -12,17 +12,11 @@
 
 ## Сборка проекта
 
-Требования: Python 3.7+, pip3.
+Требования: Docker Compose version v2.7.0
 
 - `git clone https://github.com/Temikmapper77/komanda.git`
 - `cd komanda`
-- `python3 -m venv venv`
-- `source venv/bin/activate`
-- `pip3 install -r komanda/requirements/production.txt`
-- `cd komanda`
-- `python3 manage.py makemigrations expenses incomes goals piggy monthly`
-- `python3 manage.py migrate`
-- `python3 manage.py runserver`
+- `docker compose up -d --build`
 
 ## Скриншоты
 
