@@ -8,7 +8,6 @@ from incomes.forms import (
     ConstIncomeAddForm,
     ConstantIncomeEditForm,
     BumpIncomeForm,
-    ConstantIncomeHistoryAddForm,
 )
 from incomes.models import ConstantIncomeHistoryItem, ConstantIncomes
 
