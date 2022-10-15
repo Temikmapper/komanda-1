@@ -8,6 +8,7 @@ from incomes.forms import (
     ConstIncomeAddForm,
     ConstantIncomeEditForm,
     BumpIncomeForm,
+    ConstantIncomeHistoryAddForm,
 )
 from incomes.models import ConstantIncomeHistoryItem, ConstantIncomes
 
@@ -41,7 +42,8 @@ class AddConstIncomePageTest(TestCase):
 
     def test_has_add_usual_income_form(self):
         response = self.client.get("/incomes/add_constant")
-        self.assertIsInstance(response.context["income_form"], ConstIncomeAddForm)
+        self.assertIsInstance(
+            response.context["income_form"], ConstIncomeAddForm)
         self.assertIsInstance(
             response.context["income_value_form"], ConstIncomeHistoryAddForm
         )
@@ -108,7 +110,6 @@ class ViewAllConstIncomesTest(TestCase):
         )
         response = self.client.get("/incomes/constant/all")
         self.assertContains(response, "30 000")
-
 
 
 class ViewConstIncomeTest(TestCase):
