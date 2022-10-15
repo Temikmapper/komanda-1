@@ -7,7 +7,8 @@ from django.db import models
 class ConstantIncomeManager(models.Manager):
     def create(self, name, start_date, value):
         income = super().create(
-            name=name, start_date=start_date, finish_date=start_date + timedelta(730)
+            name=name, start_date=start_date, finish_date=start_date +
+            timedelta(730)
         )
         ConstantIncomeHistoryItem.objects.create(
             date=start_date, value=value, income=income
@@ -55,10 +56,11 @@ class ConstantIncomes(models.Model):
         first_date_in_month = date(year, month, 1)
         last_day = monthrange(year, month)[1]
         last_date_in_month = date(year, month, last_day)
-        objects = ConstantIncomes.objects.filter(
-            start_date__lte=first_date_in_month
-        ).filter(finish_date__gte=last_date_in_month)
-
+        before_month = ConstantIncomes.objects.filter(
+            start_date__lte=last_date_in_month)
+        after_month = ConstantIncomes.objects.filter(
+            finish_date__gte=first_date_in_month)
+        objects = before_month & after_month
         return objects
 
     @staticmethod
