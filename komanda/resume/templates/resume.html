@@ -8,8 +8,8 @@
                         <div class="block">
                             <form method="get" action={% url 'view_monthly_incomes' year month %}>
                                 <p class="title">
-                                    Incomes
-                                    <button class="button is-primary is-inverted">Edit</button>
+                                    Доходы
+                                    <button class="button is-primary is-inverted">Изменить</button>
                                 </p>
                             </form>
                         </div>
@@ -18,15 +18,15 @@
                                 <div class="is-flex mb-2 is-justify-content-space-between is-align-items-center py-1"
                                      style="border-bottom: 1px dotted #fff;">
                                     <span>{{ income.name }}</span>
-                                    <span class="tag">{{ income.get_current_value }}</span>
+                                    <span class="tag">{{ income.get_current_value }} ₽</span>
                                 </div>
                             {% endfor %}
                         </div>
                         <div class="is-flex mb-2 is-justify-content-space-between is-align-items-center">
                             <span>
-                                <p class="subtitle">Total</p>
+                                <p class="subtitle">Итого</p>
                             </span>
-                            <span class="tag is-medium has-text-weight-bold">{{ total_income }}</span>
+                            <span class="tag is-medium has-text-weight-bold">{{ total_income }} ₽</span>
                         </div>
                     </div>
                 </div>
@@ -35,8 +35,8 @@
                         <div class="block">
                             <form method="get" action={% url 'view_all_piggies' %}>
                                 <p class="title">
-                                    Piggy
-                                    <button class="button is-danger is-inverted">Edit</button>
+                                    Свинки
+                                    <button class="button is-danger is-inverted">Изменить</button>
                                 </p>
                             </form>
                         </div>
@@ -45,7 +45,7 @@
                                 <div class="is-flex mb-2 is-justify-content-space-between is-align-items-center py-1"
                                      style="border-bottom: 1px dotted #fff;">
                                     <span>{{ piggy.name }}</span>
-                                    <span class="tag">{{ capital }}</span>
+                                    <span class="tag">{{ capital }} ₽</span>
                                 </div>
                             {% endfor %}
                         </div>
@@ -57,8 +57,8 @@
                     <div class="block">
                         <form method="get" action={% url 'view_monthly_expenses' year month %}>
                             <p class="title">
-                                Expenses
-                                <button class="button is-warning is-inverted">Edit</button>
+                                Траты
+                                <button class="button is-warning is-inverted">Изменить</button>
                             </p>
                         </form>
                     </div>
@@ -67,15 +67,15 @@
                             <div class="is-flex mb-2 is-justify-content-space-between is-align-items-center py-1"
                                  style="border-bottom: 1px dotted #363636;">
                                 <span>{{ expense.name }}</span>
-                                <span class="tag">{{ expense.get_current_value }}</span>
+                                <span class="tag">{{ expense.get_current_value }} ₽</span>
                             </div>
                         {% endfor %}
                     </div>
                     <div class="is-flex mb-2 is-justify-content-space-between is-align-items-center">
                         <span>
-                            <p class="subtitle">Total</p>
+                            <p class="subtitle">Итого</p>
                         </span>
-                        <span class="tag is-medium has-text-weight-bold">{{ total_expense }}</span>
+                        <span class="tag is-medium has-text-weight-bold">{{ total_expense }} ₽</span>
                     </div>
                 </div>
             </div>
@@ -84,8 +84,8 @@
                     <div class="block">
                         <form method="get" action={% url 'view_all_goals' %}>
                             <p class="title">
-                                Goals
-                                <button class="button is-link is-inverted">Edit</button>
+                                Цели
+                                <button class="button is-link is-inverted">Изменить</button>
                             </p>
                         </form>
                     </div>
@@ -98,7 +98,7 @@
                                         <span class="icon">
                                             <i class="fa-solid fa-plus"></i>
                                         </span>
-                                        <span>Bump!</span>
+                                        <span>Бамп!</span>
                                     </button>
                                 </p>
                             </form>
@@ -107,13 +107,13 @@
                                       max="100"></progress>
                             <div class="is-flex mb-2 is-justify-content-space-between is-align-items-center py-1">
                                 <span>
-                                    <h2 class="subtitle">Ending {{ goal.date }}</h2>
+                                    <h2 class="subtitle">К {{ goal.date }}</h2>
                                 </span>
                                 <span>
                                     <h2 class="subtitle">{{ goal.get_percent }} %</h2>
                                 </span>
                                 <span>
-                                    <h2 class="subtitle">Left {{ goal.get_left }} of {{ goal.value }}</h2>
+                                    <h2 class="subtitle">Осталось {{ goal.get_left }} ₽ из {{ goal.value }} ₽</h2>
                                 </span>
                             </div>
                         </div>

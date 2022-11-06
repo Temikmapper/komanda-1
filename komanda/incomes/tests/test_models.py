@@ -13,8 +13,7 @@ class ConstIncomesModelTest(TestCase):
 
     def test_const_income_creates_history_at_creation(self):
         income = ConstantIncomes.objects.get(name="phone")
-        history_object = ConstantIncomeHistoryItem.objects.filter(
-            income=income)
+        history_object = ConstantIncomeHistoryItem.objects.filter(income=income)
         self.assertEqual(len(history_object), 1)
 
     def test_returns_current_value(self):
@@ -42,8 +41,7 @@ class ConstIncomesModelTest(TestCase):
         self.assertEqual(len(ConstantIncomes.get_objects_in_month(2021, 5)), 2)
         self.assertEqual(len(ConstantIncomes.get_objects_in_month(2022, 6)), 1)
         self.assertEqual(len(ConstantIncomes.get_objects_in_month(2023, 7)), 0)
-        self.assertEqual(
-            len(ConstantIncomes.get_objects_in_month(2025, 11)), 1)
+        self.assertEqual(len(ConstantIncomes.get_objects_in_month(2025, 11)), 1)
 
     def test_sum_of_some_incomes(self):
         income = ConstantIncomes.objects.get(name="phone")
@@ -57,10 +55,8 @@ class ConstIncomesModelTest(TestCase):
         ConstantIncomes.objects.create(
             name="2017-2019", start_date=date(2017, 1, 1), value=Decimal(270)
         )
-        self.assertEqual(
-            ConstantIncomes.get_sum_in_month(2021, 5), Decimal(440))
-        self.assertEqual(
-            ConstantIncomes.get_sum_in_month(2022, 6), Decimal(340))
+        self.assertEqual(ConstantIncomes.get_sum_in_month(2021, 5), Decimal(440))
+        self.assertEqual(ConstantIncomes.get_sum_in_month(2022, 6), Decimal(340))
         self.assertEqual(ConstantIncomes.get_sum_in_month(2023, 7), Decimal(0))
 
     def test_has_actual_value_in_month(self):
@@ -82,12 +78,9 @@ class AdditionalIncomesModelTest(TestCase):
         AdditionalIncomes.objects.create(
             name="3", value=Decimal(450), date=date(2022, 6, 5)
         )
-        self.assertEqual(
-            len(AdditionalIncomes.get_objects_in_month(2022, 5)), 2)
-        self.assertEqual(
-            len(AdditionalIncomes.get_objects_in_month(2022, 6)), 1)
-        self.assertEqual(
-            len(AdditionalIncomes.get_objects_in_month(2022, 7)), 0)
+        self.assertEqual(len(AdditionalIncomes.get_objects_in_month(2022, 5)), 2)
+        self.assertEqual(len(AdditionalIncomes.get_objects_in_month(2022, 6)), 1)
+        self.assertEqual(len(AdditionalIncomes.get_objects_in_month(2022, 7)), 0)
 
     def test_sum_of_some_incomes(self):
         AdditionalIncomes.objects.create(
@@ -99,9 +92,6 @@ class AdditionalIncomesModelTest(TestCase):
         AdditionalIncomes.objects.create(
             name="3", value=Decimal(450), date=date(2022, 6, 5)
         )
-        self.assertEqual(
-            AdditionalIncomes.get_sum_in_month(2022, 5), Decimal(600))
-        self.assertEqual(
-            AdditionalIncomes.get_sum_in_month(2022, 6), Decimal(450))
-        self.assertEqual(
-            AdditionalIncomes.get_sum_in_month(2022, 7), Decimal(0))
+        self.assertEqual(AdditionalIncomes.get_sum_in_month(2022, 5), Decimal(600))
+        self.assertEqual(AdditionalIncomes.get_sum_in_month(2022, 6), Decimal(450))
+        self.assertEqual(AdditionalIncomes.get_sum_in_month(2022, 7), Decimal(0))

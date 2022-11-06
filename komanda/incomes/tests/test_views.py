@@ -41,8 +41,7 @@ class AddConstIncomePageTest(TestCase):
 
     def test_has_add_usual_income_form(self):
         response = self.client.get("/incomes/add_constant")
-        self.assertIsInstance(
-            response.context["income_form"], ConstIncomeAddForm)
+        self.assertIsInstance(response.context["income_form"], ConstIncomeAddForm)
 
     def test_saves_post_request(self):
         self.client.post(
