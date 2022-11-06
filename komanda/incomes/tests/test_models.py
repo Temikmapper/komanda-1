@@ -60,11 +60,13 @@ class ConstIncomesModelTest(TestCase):
         self.assertEqual(ConstantIncomes.get_sum_in_month(2023, 7), Decimal(0))
 
     def test_has_actual_value_in_month(self):
-        ConstantIncomes.objects.create(
+        checked_income = ConstantIncomes.objects.create(
             name="November", start_date=date(2022, 11, 13), value=Decimal(20000)
         )
         november = ConstantIncomes.objects.get(name="November")
-        self.assertEqual(november.get_current_value(), Decimal(20000))
+        november.bump(date=date(2022, 12, 1), value=Decimal(30000))
+        self.assertEqual(november.get_value_in_month(2022, 11), Decimal(20000))
+        self.assertEqual(november.get_value_in_month(2022, 12), Decimal(30000))
 
 
 class AdditionalIncomesModelTest(TestCase):

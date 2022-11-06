@@ -14,11 +14,11 @@
                             </form>
                         </div>
                         <div class="block">
-                            {% for income in incomes %}
+                            {% for name, value in incomes.items %}
                                 <div class="is-flex mb-2 is-justify-content-space-between is-align-items-center py-1"
                                      style="border-bottom: 1px dotted #fff;">
-                                    <span>{{ income.name }}</span>
-                                    <span class="tag">{{ income.get_current_value }} ₽</span>
+                                    <span>{{ name }}</span>
+                                    <span class="tag">{{ value }} ₽</span>
                                 </div>
                             {% endfor %}
                         </div>

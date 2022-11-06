@@ -28,6 +28,9 @@ def view_resume(request, year, month):
     constant_incomes = ConstantIncomes.get_objects_in_month(year, month)
     additional_incomes = AdditionalIncomes.get_objects_in_month(year, month)
     all_incomes = list(constant_incomes) + list(additional_incomes)
+    incomes = {}
+    for income in all_incomes:
+        incomes.update({income.name: income.get_value_in_month(year, month)})
     total_income = ConstantIncomes.get_sum_in_month(
         year, month
     ) + AdditionalIncomes.get_sum_in_month(year, month)
@@ -50,7 +53,7 @@ def view_resume(request, year, month):
             "month": month,
             "monthes": MONTHES,
             "cur_month": MONTH_NAMES[month],
-            "incomes": all_incomes,
+            "incomes": incomes,
             "total_income": total_income,
             "expenses": constant_expenses,
             "total_expense": total_expense,

@@ -70,7 +70,7 @@ class ConstantIncomes(models.Model):
         result = Decimal(0)
 
         for item in objects:
-            result += item.get_current_value()
+            result += item.get_value_in_month(year, month)
 
         return result
 
@@ -93,6 +93,19 @@ class ConstantIncomes(models.Model):
         return ConstantIncomeHistoryItem.objects.create(
             date=date, value=value, income=self
         )
+
+    def get_value_in_month(self, year, month):
+        first_date_in_month = date(year, month, 1)
+        last_day = monthrange(year, month)[1]
+        last_date_in_month = date(year, month, last_day)
+        before_month = ConstantIncomeHistoryItem.objects.filter(
+            date__lte=last_date_in_month
+        )
+        after_month = ConstantIncomeHistoryItem.objects.filter(
+            date__gte=first_date_in_month
+        )
+        objects_in_month = before_month & after_month
+        return objects_in_month.filter(income=self).last().value
 
     def get_current_value(self):
         return ConstantIncomeHistoryItem.objects.filter(income=self).last().value
