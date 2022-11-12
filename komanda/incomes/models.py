@@ -98,14 +98,22 @@ class ConstantIncomes(models.Model):
         first_date_in_month = date(year, month, 1)
         last_day = monthrange(year, month)[1]
         last_date_in_month = date(year, month, last_day)
-        before_month = ConstantIncomeHistoryItem.objects.filter(
+        history_items = ConstantIncomeHistoryItem.objects.filter(income=self)
+        before_month = history_items.filter(
             date__lte=last_date_in_month
         )
-        after_month = ConstantIncomeHistoryItem.objects.filter(
+        after_month = history_items.filter(
             date__gte=first_date_in_month
         )
         objects_in_month = before_month & after_month
-        return objects_in_month.filter(income=self).last().value
+        try:
+            if len(objects_in_month) == 0:
+                value = before_month.last().value
+            else:
+                value = objects_in_month.last().value
+            return value
+        except AttributeError:
+            return 0
 
     def get_current_value(self):
         return ConstantIncomeHistoryItem.objects.filter(income=self).last().value
