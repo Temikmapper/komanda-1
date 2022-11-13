@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "resume",
     "piggy",
     "api",
+    "tableau",
     "rest_framework",
 ]
 

@@ -1,4 +1,5 @@
-from datetime import datetime
+from calendar import monthrange
+from datetime import date, datetime
 from decimal import ROUND_FLOOR, Decimal
 from django.db import models
 from django.utils import timezone
@@ -20,10 +21,6 @@ class Goals(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        if len(GoalStatus.objects.filter(goal=self)) == 0:
-            GoalStatus.objects.create(
-                date=datetime.today(), value=Decimal(0), percent=Decimal(0), goal=self
-            )
 
     def bump(self, value, date):
         self.accumulated += value
@@ -43,6 +40,23 @@ class Goals(models.Model):
     def get_history_list(self):
         statuses = GoalStatus.objects.filter(goal=self)
         return list(statuses)
+
+    def get_value_in_month(self, year, month):
+        first_date_in_month = date(year, month, 1)
+        last_day = monthrange(year, month)[1]
+        last_date_in_month = date(year, month, last_day)
+        history_items = GoalStatus.objects.filter(goal=self)
+        before_month = history_items.filter(date__lte=last_date_in_month)
+        after_month = history_items.filter(date__gte=first_date_in_month)
+        objects_in_month = before_month & after_month
+        try:
+            if len(objects_in_month) == 0:
+                value = 0
+            else:
+                value = objects_in_month.last().value
+            return value
+        except AttributeError:
+            return 0
 
 
 class GoalStatus(models.Model):

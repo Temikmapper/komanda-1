@@ -12,6 +12,7 @@ from incomes import urls as income_urls
 from monthly import urls as monthly_urls
 from resume import urls as resume_urls
 from piggy import urls as piggies_urls
+from tableau import views as tableu_views
 
 from rest_framework import routers
 
@@ -58,4 +59,5 @@ urlpatterns = [
     path("resume/", include(resume_urls), name="view_resume"),
     path("piggies/", include(piggies_urls), name="view_all_piggies"),
     path("api/", include(router.urls), name="api_root"),
+    path("tableau/<int:year>", tableu_views.view_tableau, name="view_tableau"),
 ]

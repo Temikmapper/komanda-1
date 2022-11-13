@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% block title %}
+    Мегатабличка
+{% endblock title %}
+{% block subtitle_hero %}
+    Мегатабличка
+{% endblock subtitle_hero %}
+{% block content %}
+    <div class="container">
+        <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+            <thead>
+                <tr>
+                    <th colspan="2"></th>
+                    {% for month_num, month_name in monthes.items %}
+                        <th>
+                            <abbr>{{ month_name }}</abbr>
+                        </th>
+                    {% endfor %}
+                    <th>
+                        <abbr>Год</abbr>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <td rowspan="{{ income_categories.items|length|add:"1" }}">Доходы</td>
+                {% for income_category_name, income_per_month in income_categories.items %}
+                    <tr>
+                        {% if income_category_name.class == "str" %}
+                            <td>{{ income_category_name }}</td>
+                        {% else %}
+                            <td><a href="{{ income_category_name.get_absolute_url }}">{{ income_category_name.name }}</a></td>
+                        {% endif %}
+                        {% for month_income in income_per_month %}<td>{{ month_income }}</td>{% endfor %}
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <td colspan="15"></td>
+                </tr>
+                
+                <td rowspan="3">Свободные</td>
+                    <tr>
+                        <td>Выделено</td>
+                        {% for month_free_money in free_money_per_month %}<td>{{ month_free_money }}</td>{% endfor %}
+                    </tr>
+                    <tr>
+                        <td>Осталось</td>
+                        {% for value in balance_after_free_money %}<td>{{ value }}</td>{% endfor %}
+                    </tr>
+                <tr>
+                    <td colspan="15"></td>
+                </tr>
+
+                <td rowspan="{{ expenses_categories.items|length|add:"2" }}">Постоянные траты</td>
+                {% for expenses_category_name, expenses_per_month in expenses_categories.items %}
+                    <tr>
+                        <td><a href="{{ expenses_category_name.get_absolute_url }}">{{ expenses_category_name.name }}</a></td>
+                        {% for month_expenses in expenses_per_month %}<td>{{ month_expenses }}</td>{% endfor %}
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <td>Осталось</td>
+                    {% for value in balance_after_regular_expenses %}<td>{{ value }}</td>{% endfor %}
+                </tr>
+                <tr>
+                    <td colspan="15"></td>
+                </tr>
+
+                <td rowspan="{{ goals_categories.items|length|add:"2" }}">Цели</td>
+                {% for goals_category_name, goals_per_month in goals_categories.items %}
+                    <tr>
+                        <td><a href="{{ goals_category_name.get_absolute_url }}">{{ goals_category_name.name }}</a></td>
+                        {% for month_goals in goals_per_month %}<td>{{ month_goals }}</td>{% endfor %}
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <td>Осталось</td>
+                    {% for value in balance_after_regular_goals %}<td>{{ value }}</td>{% endfor %}
+                </tr>
+                <tr>
+                    <td colspan="15"></td>
+                </tr>
+
+                <td rowspan="{{ piggy_categories.items|length|add:"1" }}">НЗ</td>
+                {% for piggy_category_name, piggy_per_month in piggy_categories.items %}
+                    <tr>
+                        <td>{{ piggy_category_name }}</td>
+                        {% for month_piggy in piggy_per_month %}<td>{{ month_piggy }}</td>{% endfor %}
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <td colspan="15"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+{% endblock content %}
