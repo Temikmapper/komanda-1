@@ -61,6 +61,7 @@ def view_tableau(request, year):
         request,
         "tableau.html",
         {
+            "year": year,
             "monthes": MONTH_NAMES,
             "income_categories": income_categories,
             "free_money_per_month": free_money_values,
