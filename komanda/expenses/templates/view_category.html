@@ -3,6 +3,18 @@
     {% url 'view_add_categories' %}
 {% endblock instance_head__view_all_url %}
 {% block instance_info__additional %}
+<span class="bd-color"
+              style="
+              background: {{ instance.color }};
+              border-radius: 2px;
+              box-shadow: 0 2px 3px 0 rgb(0 0 0 / 10%), inset 0 0 0 1px rgb(0 0 0 / 10%);
+              display: inline-block;
+              float: left;
+              height: 24px;
+              margin-right: 8px;
+              margin-top: 8px;
+              width: 24px;
+          }"></span>
 {% endblock instance_info__additional %}
 {% block instance_history %}
 {% endblock instance_history %}

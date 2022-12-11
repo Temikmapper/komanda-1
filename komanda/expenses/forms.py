@@ -26,7 +26,7 @@ class CategoryAddForm(forms.ModelForm):
 class CategoryEditForm(forms.ModelForm):
     class Meta:
         model = Categories
-        fields = ("name",)
+        fields = ("name", "color")
 
 
 class ConstExpenseEditForm(forms.ModelForm):

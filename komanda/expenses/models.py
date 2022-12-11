@@ -15,7 +15,22 @@ class ConstantExpenseManager(models.Manager):
 
 
 class Categories(models.Model):
+    colors = [
+        ("hsl(169, 75.4%, 41.4%)", "Бирюзовый"),
+        ("hsl(140, 44.8%, 51%)", "Зелёный"),
+        ("hsl(203,64.9%,52%)", "Синий"),
+        ("hsl(203,67.9%,43.9%)", "Тёмно-синий"),
+        ("hsl(289,29.1%,50.2%)", "Пурпуный"),
+        ("hsl(210,28.8%,28.6%)", "Тёмно-серый"),
+        ("hsl(48,88%,51%)", "Жёлтый"),
+        ("hsl(35,91.5%,54.1%)", "Оранжевый"),
+        ("hsl(28,80.3%,52.2%)", "Тёмно-оранжевый"),
+        ("hsl(5,78.8%,57.5%)", "Красный"),
+        ("hsl(6,63%,46.7%)", "Тёмно-красный"),
+        ("hsl(213,9.1%,76.3%)", "Светло-серый"),
+    ]
     name = models.CharField(max_length=20)
+    color = models.CharField(max_length=50, choices=colors, default="hsl(6,63%,46.7%)")
 
     def __str__(self):
         return self.name

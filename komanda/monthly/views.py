@@ -10,7 +10,7 @@ import random
 
 
 from main.views import MONTH_NAMES, MONTHES
-from expenses.models import UsualExpenses, ConstantExpenses
+from expenses.models import Categories, UsualExpenses, ConstantExpenses
 from incomes.models import AdditionalIncomes, ConstantIncomes
 from monthly.models import FreeMoney
 from monthly.forms import BumpFreeMoneyForm
@@ -188,8 +188,7 @@ def expenses_chart(request, year, month):
 
     colors = []
     for category in categories_labels:
-        color = [213, 38, 91]
-        color_str = f"rgb({color[0]}, {color[1]}, {color[2]})"
+        color_str = Categories.objects.get(name=category).color
         colors.append(color_str)
 
     return JsonResponse(

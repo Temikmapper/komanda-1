@@ -1,0 +1,20 @@
+{% extends '../horizontal_field.html' %}
+{% block label_name %}
+    Новый цвет
+{% endblock label_name %}
+{% block control_tag %}
+    <div class="block">
+        {{ form.color.errors }}
+        <div class="select is-primary">
+            <select name="color" required id="id_color">
+                {% for id, name in form.color.field.choices %}
+                    <option value="{{ id }}">
+                        {{ name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <span class="bd-color"
+              style="background: {{ instance.color }}; border-radius: 2px; box-shadow: 0 2px 3px 0 rgb(0 0 0 / 10%), inset 0 0 0 1px rgb(0 0 0 / 10%); display: inline-block; float: left; height: 24px; margin-right: 8px; margin-top: 8px; width: 24px; }"></span>
+    </div>
+{% endblock control_tag %}
