@@ -3,7 +3,7 @@ from decimal import Decimal
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 
-from goals.models import Goals, GoalStatus
+from goals.models import Goals, GoalExpense
 from goals.forms import GoalBumpForm, GoalEditForm
 
 User = get_user_model()
@@ -51,7 +51,7 @@ class AllGoalsPageTest(TestCase):
         goal = Goals.objects.create(
             name="car", date=date(2023, 12, 31), value=Decimal(10.0)
         )
-        goal.bump(date=date(2022, 12, 31), value=Decimal(5.0))
+        goal.add_expense(date=date(2022, 12, 31), value=Decimal(5.0))
 
         response = self.client.get("/goals/")
 
@@ -88,8 +88,8 @@ class GoalPageTest(TestCase):
 
         goal = Goals.objects.get(name="car")
 
-        goal.bump(date=date(2022, 6, 30), value=Decimal(2.0))
-        goal.bump(date=date(2022, 7, 31), value=Decimal(2.0))
+        goal.add_expense(date=date(2022, 6, 30), value=Decimal(2.0))
+        goal.add_expense(date=date(2022, 7, 31), value=Decimal(2.0))
 
         response = self.client.get(goal.get_absolute_url())
 
@@ -188,7 +188,7 @@ class GoalBumpPageTest(TestCase):
             f"/goals/{goal.id}/bump",
             data={"date": f"{date(2021, 1, 1)}", "value": "100"},
         )
-        self.assertEqual(GoalStatus.objects.count(), 2)
+        self.assertEqual(GoalExpense.objects.count(), 2)
 
     def test_POST_redirects_to_current_goal(self):
         """тест: переадресуется в конкретную цель"""
