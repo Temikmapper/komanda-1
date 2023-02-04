@@ -59,6 +59,23 @@ class Goals(models.Model):
         except AttributeError:
             return 0
 
+    def get_balance_by_month(self, year: int, month: int) -> Decimal:
+        """Почитать баланс на месяц
+
+        Args:
+            year (int): Год, к которому нужно псчитать
+            month (int): Месяц, к которому нужно посчитать
+
+        Returns:
+            Decimal: Посчитанный баланс
+        """
+        accumulated = self.get_accumulated_by_month(year=year, month=month)
+        spent = self.get_spent_by_month(year=year, month=month)
+
+        balance = accumulated - spent
+
+        return balance
+
     def get_accumulated_by_month(self, year: int, month: int) -> Decimal:
         """Посчитать, сколько накоплено к году и месяцу
 
