@@ -26,7 +26,7 @@ def bump_goal(request, id):
         form = GoalBumpForm(request.POST)
         if form.is_valid():
             data = form.save(commit=False)
-            goal.bump(date=data.date, value=data.value)
+            goal.add_expense(date=data.date, value=data.value)
             return redirect("view_all_goals")
     else:
         form = GoalBumpForm()
