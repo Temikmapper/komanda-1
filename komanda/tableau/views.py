@@ -1,3 +1,4 @@
+from datetime import date
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from incomes import models as income_models
@@ -28,9 +29,46 @@ def get_data_for_model(objects, year):
     return item_categories
 
 
+def get_data_for_goals(objects, year):
+    item_categories = {}
+    for item in objects:
+        item_values = []
+        for month_num in MONTH_NAMES.keys():
+            if item.date < date(year, month_num, 1):
+                stats = {
+                    "accumulated": 0,
+                    "spent": 0,
+                    "balance": 0,
+                }
+            else:
+                stats = {
+                    "accumulated": item.get_accumulated_by_month(
+                        year=year, month=month_num
+                    ),
+                    "spent": item.get_spent_by_month(year=year, month=month_num),
+                    "balance": item.get_balance_by_month(year=year, month=month_num),
+                }
+            item_values.append(stats)
+
+        item_categories.update({item: item_values})
+
+    items_total_list = list(item_categories.values())
+    monthly_sum = []
+    for i in range(12):
+        sum_value = 0
+        for item in range(len(item_categories.values())):
+            print(items_total_list[item][i])
+            sum_value += items_total_list[item][i]["accumulated"]
+        monthly_sum.append({"accumulated": sum_value})
+    item_categories.update({"Итого": monthly_sum})
+    return item_categories
+
+
 @login_required
 def view_tableau(request, year):
-    regular_incomes = income_models.ConstantIncomes.objects.all()
+    regular_incomes = income_models.ConstantIncomes.objects.filter(
+        start_date__lte=date(year, 1, 1)
+    ).filter(finish_date__gte=date(year, 12, 31))
     income_categories = get_data_for_model(regular_incomes, year)
 
     free_money = free_money_models.FreeMoney.objects.first()
@@ -43,18 +81,21 @@ def view_tableau(request, year):
         i - fm for i, fm in zip(income_categories["Итого"], free_money_values)
     ]
 
-    regular_expenses = expenses_models.ConstantExpenses.objects.all()
+    regular_expenses = expenses_models.ConstantExpenses.objects.filter(
+        start_date__lte=date(year, 12, 31)
+    ).filter(finish_date__gte=date(year, 1, 1))
     expenses_categories = get_data_for_model(regular_expenses, year)
 
     balance_after_regular_expenses = [
         fm - e for fm, e in zip(balance_after_free_money, expenses_categories["Итого"])
     ]
 
-    goals = goals_models.Goals.objects.all()
-    goals_categories = get_data_for_model(goals, 2022)
+    goals = goals_models.Goals.objects.filter(date__gte=date(year, 1, 1))
+    goals_categories = get_data_for_goals(goals, year)
 
     balance_after_goals = [
-        e - g for e, g in zip(balance_after_regular_expenses, goals_categories["Итого"])
+        e - g["accumulated"]
+        for e, g in zip(balance_after_regular_expenses, goals_categories["Итого"])
     ]
 
     return render(

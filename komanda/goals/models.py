@@ -87,11 +87,13 @@ class Goals(models.Model):
             Decimal: Посчитанная сумма
         """
         last_day = monthrange(year, month)[1]
-        result = GoalBump.objects.filter(goal=self, date__lte=date(year=year, month=month, day=last_day)).aggregate(Sum('value'))
+        result = GoalBump.objects.filter(
+            goal=self, date__lte=date(year=year, month=month, day=last_day)
+        ).aggregate(Sum("value"))
 
-        if not result['value__sum']:
+        if not result["value__sum"]:
             return Decimal(0)
-        return result['value__sum']
+        return result["value__sum"]
 
     def get_spent_by_month(self, year: int, month: int) -> Decimal:
         """Посчитать, сколько потрачено на цель к году и месяцу
@@ -105,11 +107,13 @@ class Goals(models.Model):
         """
 
         last_day = monthrange(year, month)[1]
-        result = GoalExpense.objects.filter(goal=self, date__lte=date(year=year, month=month, day=last_day)).aggregate(Sum('value'))
+        result = GoalExpense.objects.filter(
+            goal=self, date__lte=date(year=year, month=month, day=last_day)
+        ).aggregate(Sum("value"))
 
-        if not result['value__sum']:
+        if not result["value__sum"]:
             return Decimal(0)
-        return result['value__sum']
+        return result["value__sum"]
 
 
 class GoalExpense(models.Model):

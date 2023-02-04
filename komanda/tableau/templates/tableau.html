@@ -77,7 +77,11 @@
                         <td>
                             <a href="{{ goals_category_name.get_absolute_url }}">{{ goals_category_name.name }}</a>
                         </td>
-                        {% for month_goals in goals_per_month %}<td>{{ month_goals }}</td>{% endfor %}
+                        {% for month_goals in goals_per_month %}<td>
+                            {% if month_goals.accumulated or month_goals.accumulated == 0 %}<span class="tag is-primary is-light">{{ month_goals.accumulated }}</span> <br>{% endif %}
+                            {% if month_goals.spent or month_goals.spent == 0 %}<span class="tag is-warning is-light">{{ month_goals.spent }}</span> <br>{% endif %}
+                            {% if month_goals.balance or month_goals.balance == 0 %}<span class="tag {% if month_goals.balance < 0 %}is-danger {% endif %}is-light">{{ month_goals.balance }}</span>{% endif %}
+                        </td>{% endfor %}
                     </tr>
                 {% endfor %}
                 <tr>
