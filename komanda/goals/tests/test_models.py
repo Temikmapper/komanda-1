@@ -43,13 +43,20 @@ class GoalsModelTest(TestCase):
         percent = goal.get_percent()
         self.assertEqual(percent, Decimal(50.0))
 
-
     def test_goal_returns_accumulated(self):
-        goal = Goals.objects.create(name="house", date=date(2023, 12, 31), value=Decimal(100.0))
+        goal = Goals.objects.create(
+            name="house", date=date(2023, 12, 31), value=Decimal(100.0)
+        )
 
-        GoalExpense.objects.create(goal=goal, value=Decimal(10.0), date=date(2023, 1, 31))
-        GoalExpense.objects.create(goal=goal, value=Decimal(30.0), date=date(2023, 2, 15))
-        GoalExpense.objects.create(goal=goal, value=Decimal(10.0), date=date(2023, 3, 15))
+        GoalExpense.objects.create(
+            goal=goal, value=Decimal(10.0), date=date(2023, 1, 31)
+        )
+        GoalExpense.objects.create(
+            goal=goal, value=Decimal(30.0), date=date(2023, 2, 15)
+        )
+        GoalExpense.objects.create(
+            goal=goal, value=Decimal(10.0), date=date(2023, 3, 15)
+        )
 
         spent_by_june = goal.get_spent_by_month(year=2023, month=6)
         self.assertEqual(spent_by_june, Decimal(50.0))
@@ -89,7 +96,9 @@ class GoalsModelTest(TestCase):
         self.assertEqual(goal_history_list, right_order)
 
     def test_goal_add_bumps(self):
-        goal = Goals.objects.create(name="car", date=date(2023, 12, 31), value=Decimal(10.0))
+        goal = Goals.objects.create(
+            name="car", date=date(2023, 12, 31), value=Decimal(10.0)
+        )
         GoalBump.objects.create(goal=goal, value=Decimal(10.0), date=date(2023, 1, 31))
         GoalBump.objects.create(goal=goal, value=Decimal(30.0), date=date(2023, 2, 15))
         GoalBump.objects.create(goal=goal, value=Decimal(10.0), date=date(2023, 3, 15))
@@ -104,15 +113,23 @@ class GoalsModelTest(TestCase):
         goal.delete()
 
     def test_goal_balance(self):
-        goal = Goals.objects.create(name="boat", date=date(2023, 12, 31), value=Decimal(1000.0))
+        goal = Goals.objects.create(
+            name="boat", date=date(2023, 12, 31), value=Decimal(1000.0)
+        )
         GoalBump.objects.create(goal=goal, value=Decimal(100.0), date=date(2023, 1, 30))
-        GoalExpense.objects.create(goal=goal, value=Decimal(10.0), date=date(2023, 1, 31))
+        GoalExpense.objects.create(
+            goal=goal, value=Decimal(10.0), date=date(2023, 1, 31)
+        )
 
         GoalBump.objects.create(goal=goal, value=Decimal(30.0), date=date(2023, 2, 15))
-        GoalExpense.objects.create(goal=goal, value=Decimal(40.0), date=date(2023, 2, 16))
+        GoalExpense.objects.create(
+            goal=goal, value=Decimal(40.0), date=date(2023, 2, 16)
+        )
 
         GoalBump.objects.create(goal=goal, value=Decimal(50.0), date=date(2023, 3, 15))
-        GoalExpense.objects.create(goal=goal, value=Decimal(10.0), date=date(2023, 3, 17))
+        GoalExpense.objects.create(
+            goal=goal, value=Decimal(10.0), date=date(2023, 3, 17)
+        )
 
         balance_by_june = goal.get_balance_by_month(year=2023, month=6)
         self.assertEqual(balance_by_june, Decimal(120.0))
