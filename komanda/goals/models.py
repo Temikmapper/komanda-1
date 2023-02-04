@@ -59,9 +59,36 @@ class Goals(models.Model):
         except AttributeError:
             return 0
 
-    def get_accumulated_by_month(self, year: int, month: int):
+    def get_accumulated_by_month(self, year: int, month: int) -> Decimal:
+        """Посчитать, сколько накоплено к году и месяцу
+
+        Args:
+            year (int): Год, к которому надо посичтать
+            month (int): Месяц к которому надо посичтать
+
+        Returns:
+            Decimal: Посчитанная сумма
+        """
         last_day = monthrange(year, month)[1]
         result = GoalBump.objects.filter(goal=self, date__lte=date(year=year, month=month, day=last_day)).aggregate(Sum('value'))
+
+        if not result['value__sum']:
+            return Decimal(0)
+        return result['value__sum']
+
+    def get_spent_by_month(self, year: int, month: int) -> Decimal:
+        """Посчитать, сколько потрачено на цель к году и месяцу
+
+        Args:
+            year (int): Год к которому надо посчитать
+            month (int): Месяц к которому надо посчитать
+
+        Returns:
+            Decimal: Посчитанная сумма трат
+        """
+
+        last_day = monthrange(year, month)[1]
+        result = GoalExpense.objects.filter(goal=self, date__lte=date(year=year, month=month, day=last_day)).aggregate(Sum('value'))
 
         if not result['value__sum']:
             return Decimal(0)

@@ -43,10 +43,21 @@ class GoalsModelTest(TestCase):
         percent = goal.get_percent()
         self.assertEqual(percent, Decimal(50.0))
 
-    @skip
+
     def test_goal_returns_accumulated(self):
-        """тест: цель возращает сколько накоплено"""
-        goal = Goals.objects.all()[0]
+        goal = Goals.objects.create(name="house", date=date(2023, 12, 31), value=Decimal(100.0))
+
+        GoalExpense.objects.create(goal=goal, value=Decimal(10.0), date=date(2023, 1, 31))
+        GoalExpense.objects.create(goal=goal, value=Decimal(30.0), date=date(2023, 2, 15))
+        GoalExpense.objects.create(goal=goal, value=Decimal(10.0), date=date(2023, 3, 15))
+
+        spent_by_june = goal.get_spent_by_month(year=2023, month=6)
+        self.assertEqual(spent_by_june, Decimal(50.0))
+        spent_by_february = goal.get_spent_by_month(year=2023, month=2)
+        self.assertEqual(spent_by_february, Decimal(40))
+        spent_by_2022 = goal.get_spent_by_month(year=2022, month=12)
+        self.assertEqual(spent_by_2022, Decimal(0))
+
         goal.add_expense(Decimal(3.0), date=date(2022, 1, 1))
         goal.add_expense(Decimal(4.0), date=date(2022, 1, 2))
         accumulated = goal.get_accumulated()
