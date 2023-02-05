@@ -20,19 +20,43 @@ class Goals(models.Model):
     def get_absolute_url(self):
         return f"/goals/{self.id}"
 
+    def get_bump_url(self):
+        return f"/goals/{self.id}/bump"
+
+    def get_expense_url(self):
+        return f"/goals/{self.id}/expense"
+
+    def get_edit_url(self):
+        return f"/goals/{self.id}/edit"
+
+    def get_delete_url(self):
+        return f"/goals/{self.id}/delete"
+
+    def get_history(self):
+        # TODO: объединить с Траты и бампы, сделать разделение на шаблоне
+        return GoalExpense.objects.filter(goal=self)
+
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
 
     def add_expense(self, value, date):
-        self.accumulated += value
-        self.save()
         return GoalExpense.objects.create(date=date, value=value, goal=self)
 
-    def get_left(self):
-        return (self.value - self.accumulated).quantize(Decimal("1.00"), ROUND_FLOOR)
+    def bump(self, value, date):
+        return GoalBump.objects.create(date=date, value=value, goal=self)
 
-    def get_percent(self):
-        percent = (self.accumulated / self.value) * 100
+    def get_percent(self) -> Decimal:
+        """Получить процент на сегодня
+
+        Returns:
+            Decimal: Баланс
+        """
+        balance = self.get_current_balance()
+        if balance < 0:
+            percent = Decimal(0)
+        else:
+            percent = (balance / self.value) * 100
+
         return percent.quantize(Decimal("1.00"), ROUND_FLOOR)
 
     def get_accumulated(self):
@@ -42,7 +66,18 @@ class Goals(models.Model):
         statuses = GoalExpense.objects.filter(goal=self)
         return list(statuses)
 
-    def get_objects_in_month(self, object_type: models.Model, year: int, month: int) -> models.QuerySet:
+    def get_current_balance(self) -> Decimal:
+        """Получить баланс на сегодня
+
+        Returns:
+            Decimal: Баланс
+        """
+        today = date.today()
+        return self.get_balance_by_month(year=today.year, month=today.month)
+
+    def get_objects_in_month(
+        self, object_type: models.Model, year: int, month: int
+    ) -> models.QuerySet:
         """Получить объекты внутри месяца
 
         Args:
@@ -58,7 +93,9 @@ class Goals(models.Model):
         last_date_in_month = date(year, month, last_day)
 
         history_items = object_type.objects.filter(goal=self)
-        objects_in_month = history_items.filter(date__lte=last_date_in_month, date__gte=first_date_in_month)
+        objects_in_month = history_items.filter(
+            date__lte=last_date_in_month, date__gte=first_date_in_month
+        )
 
         return objects_in_month
 
@@ -72,8 +109,10 @@ class Goals(models.Model):
         Returns:
             models.QuerySet: Queryset объектов
         """
-        return self.get_objects_in_month(object_type=GoalExpense, year=year, month=month)
-    
+        return self.get_objects_in_month(
+            object_type=GoalExpense, year=year, month=month
+        )
+
     def get_expenses_value_in_month(self, year: int, month: int) -> Decimal:
         """Получить сумму трат в месяце
 

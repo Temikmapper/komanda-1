@@ -1,14 +1,13 @@
 {% extends 'pages_with_forms/instance_container.html' %}
 {% block instance_head__title %}
-    Добавление цели
+    Добавить трату внутри цели
 {% endblock instance_head__title %}
 {% block instance_info %}
 {% endblock instance_info %}
 {% block instance_forms %}
     {% with instance_color="is-info"%}
-        {% include 'pages_with_forms/add_instance_page/horizontal_field__name.html' %}
-        {% include 'pages_with_forms/add_instance_page/horizontal_field__date.html' %}
-        {% include 'pages_with_forms/add_instance_page/horizontal_field__value.html' %}
+        {% include 'pages_with_forms/bump_instance_page/horizontal_field__date.html' %}
+        {% include 'pages_with_forms/bump_instance_page/horizontal_field__value.html' %}
         {% include 'pages_with_forms/horizontal_field__save_button.html' %}
     {% endwith %}
 {% endblock instance_forms %}

@@ -36,6 +36,8 @@
         <span id="expense_value">{{ instance.get_current_value }} ₽</span>
     </h2>
 {% endblock third_column %}
+{% block add_expense_button %}
+{% endblock add_expense_button %}
 {% block outdated_first_column %}
     <h2 class="subtitle">
         Начало: <span id="start_date"><strong>{{ instance.start_date|date:"d.m.Y" }}</strong></span>

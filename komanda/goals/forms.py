@@ -1,6 +1,6 @@
 from django import forms
 
-from goals.models import Goals
+from goals.models import Goals, GoalExpense, GoalBump
 
 
 class GoalAddForm(forms.ModelForm):
@@ -9,9 +9,15 @@ class GoalAddForm(forms.ModelForm):
         fields = ("name", "date", "value")
 
 
+class GoalAddExpenseForm(forms.ModelForm):
+    class Meta:
+        model = GoalExpense
+        fields = ("date", "value")
+
+
 class GoalBumpForm(forms.ModelForm):
     class Meta:
-        model = Goals
+        model = GoalBump
         fields = ("date", "value")
 
 

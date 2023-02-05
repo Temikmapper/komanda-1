@@ -1,20 +1,50 @@
+from datetime import date
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
 from goals.models import Goals
-from goals.forms import GoalAddForm, GoalBumpForm, GoalEditForm
+from goals.forms import GoalAddForm, GoalAddExpenseForm, GoalEditForm, GoalBumpForm
 
 # Create your views here.
 
 
 @login_required
 def view_all_goals(request):
-    all_goals = Goals.objects.all()
+    today = date.today()
+    current_goals = Goals.objects.filter(date__gte=today)
+    outdated_expenses = Goals.objects.filter(date__lt=today)
 
     return render(
         request,
         "all_goals.html",
-        {"goals": all_goals},
+        {
+            "instances_color": "is-info",
+            "instances": current_goals,
+            "outdated_instances": outdated_expenses,
+        },
+    )
+
+
+@login_required
+def add_expense_goal(request, id):
+    goal = Goals.objects.get(id=id)
+
+    if request.method == "POST":
+        form = GoalAddExpenseForm(request.POST)
+        if form.is_valid():
+            data = form.save(commit=False)
+            goal.add_expense(date=data.date, value=data.value)
+            return redirect("view_all_goals")
+    else:
+        form = GoalAddExpenseForm()
+
+    return render(
+        request,
+        "expense_goal.html",
+        {
+            "form": form,
+            "instance": goal,
+        },
     )
 
 
@@ -26,7 +56,7 @@ def bump_goal(request, id):
         form = GoalBumpForm(request.POST)
         if form.is_valid():
             data = form.save(commit=False)
-            goal.add_expense(date=data.date, value=data.value)
+            goal.bump(date=data.date, value=data.value)
             return redirect("view_all_goals")
     else:
         form = GoalBumpForm()
@@ -36,7 +66,7 @@ def bump_goal(request, id):
         "bump_goal.html",
         {
             "form": form,
-            "goal": goal,
+            "instance": goal,
         },
     )
 
@@ -72,7 +102,8 @@ def view_goal(request, id):
         request,
         "view_goal.html",
         {
-            "goal": goal,
+            "instance": goal,
+            "instance_color": "is-info",
         },
     )
 

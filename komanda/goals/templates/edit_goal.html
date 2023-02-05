@@ -1,62 +1,14 @@
-{% extends 'base.html' %}
-{% block content %}
-    <div class="block">
-        <center>
-            <h1 class="title">Editing Goal</h1>
-        </center>
-    </div>
-    <div class="box is-notification is-info">
-        <h1 class="title" id="goal_name_title">{{ goal.name }}</h1>
-        <progress class="progress is-info"
-                  value="{{ goal.get_percent|floatformat:"2u" }}"
-                  max="100"></progress>
-        <form method="POST" class="post-form">
-            {% csrf_token %}
-            <div class="field">
-                <label class="label">New name</label>
-                <div class="control">
-                    <input class="input is-info"
-                           type="text"
-                           name="name"
-                           value="{{ form.name.value }}"
-                           placeholder="{{ form.name.value }}"
-                           id="{{ form.name.id_for_label }}">
-                </div>
-                <label class="label">New deadline</label>
-                <div class="control has-icons-left">
-                    <input class="input is-info"
-                           type="date"
-                           name="date"
-                           value="{{ goal.date|date:"Y-m-d" }}"
-                           id="{{ form.date.id_for_label }}"
-                           placeholder="{{ form.date.value }}">
-                    <span class="icon is-small is-left">
-                        <i class="fas fa-calendar"></i>
-                    </span>
-                </div>
-                <label class="label">New value</label>
-                <div class="control has-icons-left">
-                    <input class="input is-info"
-                           type="number"
-                           name="value"
-                           step="0.01"
-                           required
-                           value="{{ goal.value|floatformat:"2u" }}"
-                           id="{{ form.value.id_for_label }}"
-                           placeholder="{{ form.value.value }}">
-                    <span class="icon is-small is-left">
-                        <i class="fas fa-ruble-sign"></i>
-                    </span>
-                </div>
-            </div>
-            <div class="block">
-                <button type="submit" class="button is-success" id="goal_save_btn">
-                    <span class="icon is-small">
-                        <i class="fas fa-check"></i>
-                    </span>
-                    <span>Save</span>
-                </button>
-            </div>
-        </form>
-    </div>
-{% endblock %}
+{% extends 'pages_with_forms/instance_container.html' %}
+{% block instance_head__title %}
+    Редактирование цели
+{% endblock instance_head__title %}
+{% block instance_info %}
+{% endblock instance_info %}
+{% block instance_forms %}
+    {% with instance_color="is-info"%}
+        {% include 'pages_with_forms/edit_instance_page/horizontal_field__name.html' %}
+        {% include 'pages_with_forms/edit_instance_page/horizontal_field__date.html' %}
+        {% include 'pages_with_forms/edit_instance_page/horizontal_field__value.html' %}
+        {% include 'pages_with_forms/horizontal_field__save_button.html' %}
+    {% endwith %}
+{% endblock instance_forms %}
