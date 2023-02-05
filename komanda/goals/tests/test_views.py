@@ -4,7 +4,7 @@ from django.test import TestCase
 from django.contrib.auth import get_user_model
 
 from goals.models import Goals, GoalExpense
-from goals.forms import GoalBumpForm, GoalEditForm
+from goals.forms import GoalAddExpenseForm, GoalEditForm
 
 User = get_user_model()
 
@@ -180,7 +180,7 @@ class GoalBumpPageTest(TestCase):
     def test_using_bump_goal_form(self):
         goal = Goals.objects.get(name="car")
         response = self.client.get(f"/goals/{goal.id}/bump")
-        self.assertIsInstance(response.context["form"], GoalBumpForm)
+        self.assertIsInstance(response.context["form"], GoalAddExpenseForm)
 
     def test_saves_post_request(self):
         goal = Goals.objects.get(name="car")

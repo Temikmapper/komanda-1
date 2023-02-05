@@ -52,6 +52,8 @@
                         </form>
                     </div>
                 </div>
+                {% block progress_bar %}
+                {% endblock progress_bar %}
                 <div class="columns">
                     <div class="column">
                         {% block first_column %}
@@ -70,14 +72,26 @@
                     <form method="get" action="{{ instance.get_absolute_url }}">
                         <button class="button {{ instances_color }} mr-1">Открыть</button>
                     </form>
+                    {% block bump_button %}
                     <form method="get" action="{{ instance.get_bump_url }}">
-                        <button class="button is-link is-light">
+                        <button class="button is-link is-light mr-1">
                             <span class="icon">
                                 <i class="fa-solid fa-circle-arrow-up"></i>
                             </span>
                             <span>Бамп!</span>
                         </button>
                     </form>
+                    {% endblock bump_button %}
+                    {% block add_expense_button %}
+                    <form method="get" action="{{ instance.get_expense_url }}">
+                        <button class="button is-warning is-light mr-1">
+                            <span class="icon">
+                                <i class="fa-solid fa-circle-arrow-down"></i>
+                            </span>
+                            <span>Потрачено!</span>
+                        </button>
+                    </form>
+                    {% endblock add_expense_button %}
                 </div>
             </div>
         {% endfor %}

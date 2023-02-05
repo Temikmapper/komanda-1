@@ -22,6 +22,8 @@
         <div class="box">
             <h1 class="title">{{ instance.name }}</h1>
             {% block instance_info__additional %}
+            {% block progress_bar %}
+            {% endblock progress_bar %}
                 <div class="columns">
                     <div class="column">
                         {% block first_column %}

@@ -1,0 +1,16 @@
+{% extends '../horizontal_field.html' %}
+{% block label_name %}
+    Новая дата
+{% endblock label_name %}
+{% block control_tag %}
+    <div class="control has-icons-left">
+        <input class="input {{ instance_color }}"
+               type="date"
+               name="date"
+               value="{{ instance.date|date:"Y-m-d" }}"
+               id="{{ form.date.id_for_label }}">
+        <span class="icon is-small is-left">
+            <i class="fas fa-calendar"></i>
+        </span>
+    </div>
+{% endblock control_tag %}

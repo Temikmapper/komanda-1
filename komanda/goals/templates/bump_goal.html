@@ -1,52 +1,13 @@
-{% extends 'base.html' %}
-{% block content %}
-    <div class="block">
-        <center>
-            <h1 class="title">Goal's bump</h1>
-        </center>
-    </div>
-    <div class="box">
-        <h2 class="subtitle">{{ goal.name }}</h2>
-        <progress class="progress is-info"
-                  value="{{ goal.get_percent|floatformat:"2u" }}"
-                  max="100">15%</progress>
-        <form method="POST" class="post-form">
-            {% csrf_token %}
-            <div class="field">
-                <label class="label">Date</label>
-                <div class="control has-icons-left">
-                    <input class="input is-info"
-                           type="date"
-                           name="date"
-                           value="{{ form.date.value }}"
-                           id="{{ form.date.id_for_label }}"
-                           placeholder="Salary">
-                    <span class="icon is-small is-left">
-                        <i class="fas fa-calendar"></i>
-                    </span>
-                </div>
-                <label class="label">To add</label>
-                <div class="control has-icons-left">
-                    <input class="input is-info"
-                           type="number"
-                           name="value"
-                           step="0.01"
-                           required
-                           id="{{ form.value.id_for_label }}"
-                           placeholder="5000">
-                    <span class="icon is-small is-left">
-                        <i class="fas fa-ruble-sign"></i>
-                    </span>
-                </div>
-            </div>
-            <div class="block">
-                <button type="submit" class="button is-success" id="goal_save_btn">
-                    <span class="icon is-small">
-                        <i class="fas fa-check"></i>
-                    </span>
-                    <span>Save</span>
-                </button>
-            </div>
-        </form>
-    </div>
-{% endblock content %}
+{% extends 'pages_with_forms/instance_container.html' %}
+{% block instance_head__title %}
+    Добавить бабки на цель
+{% endblock instance_head__title %}
+{% block instance_info %}
+{% endblock instance_info %}
+{% block instance_forms %}
+    {% with instance_color="is-info"%}
+        {% include 'pages_with_forms/bump_instance_page/horizontal_field__date.html' %}
+        {% include 'pages_with_forms/bump_instance_page/horizontal_field__value.html' %}
+        {% include 'pages_with_forms/horizontal_field__save_button.html' %}
+    {% endwith %}
+{% endblock instance_forms %}

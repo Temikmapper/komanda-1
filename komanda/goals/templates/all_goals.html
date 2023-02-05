@@ -1,76 +1,54 @@
-{% extends 'base.html' %}
-{% block content %}
-    <div class="columns">
-        <div class="column">
-            <form method="get" action={% url 'add_goal' %}>
-                <button class="button is-info is-outlined" id="add_goal_btn">
-                    <span class="icon">
-                        <i class="fa-solid fa-plus"></i>
-                    </span>
-                    <span>Add goal</span>
-                </button>
-            </form>
-        </div>
-        <div class="column has-text-centered">
-            <h1 class="title" id="goals_title">All goals</h1>
-        </div>
-        <div class="column"></div>
-    </div>
-    <div class="tile is-child notification is-info is-light box">
-        <div class="columns">
-            <div class="column">
-                <div class="field">
-                    <h1 class="title">Goals list</h1>
-                </div>
-            </div>
-        </div>
-        {% for goal in goals %}
-            <div class="box" id="goal_container">
-                <div class="columns">
-                    <div class="column">
-                        <div class="field">
-                            <h1 class="title">
-                                <span>{{ goal.name }}</span>
-                                <a id="goal_edit_link" href={% url 'edit_goal' goal.id %}><span><i class="fa-regular fa-pen-to-square fa-xs"></i></span></a>
-                            </h1>
-                        </div>
-                    </div>
-                    <div class="column" style="text-align:right;">
-                        <form method="get" action={% url 'delete_goal' goal.id %}>
-                            <button class="button is-danger is-outlined">Delete</button>
-                        </form>
-                    </div>
-                </div>
-                <progress class="progress is-info"
-                          value="{{ goal.get_percent|floatformat:"2u" }}"
+{% extends 'view_actual_instances_page/instances_container.html' %}
+{% block title %}
+    Казначевский
+{% endblock title %}
+{% block subtitle_hero %}
+    Текущие цели
+{% endblock subtitle_hero %}
+{% block instances_head__add_new_button_url %}
+    {% url "add_goal" %}
+{% endblock instances_head__add_new_button_url %}
+{% block instances_head__title %}
+    Все цели
+{% endblock instances_head__title %}
+{% block instances_head__additional_row %}
+{% endblock instances_head__additional_row %}
+{% block container_box__title %}
+    Список целей
+{% endblock container_box__title %}
+{% block progress_bar %}
+<progress class="progress is-info"
+                          value="{{ instance.get_percent|floatformat:"2u" }}"
                           max="100"></progress>
-                <div class="columns">
-                    <div class="column">
-                        <h2 class="subtitle">Ending {{ goal.date }}</h2>
-                    </div>
-                    <div class="column has-text-centered">
-                        <h2 class="subtitle">{{ goal.get_percent }} %</h2>
-                    </div>
-                    <div class="column" style="text-align:right;" id="goal_left">
-                        <h2 class="subtitle">
-                            Left <strong>{{ goal.get_left }}</strong> of {{ goal.value }}
-                        </h2>
-                    </div>
-                </div>
-                <div class="field is-grouped pt-3">
-                    <form method="get" action={% url 'view_goal' goal.id %} id="goal_view_btn">
-                        <button class="button is-info mr-1">View</button>
-                    </form>
-                    <form method="get" id="goal_bump_btn" action={% url 'bump_goal' goal.id %}>
-                        <button class="button is-link" id="goal_bump_btn">
-                            <span class="icon">
-                                <i class="fa-solid fa-circle-arrow-up"></i>
-                            </span>
-                            <span>Bump!</span>
-                        </button>
-                    </form>
-                </div>
-            </div>
-        {% endfor %}
-    </div>
-{% endblock content %}
+{% endblock progress_bar %}
+{% block first_column %}
+    <h2 class="subtitle">
+        Конец: <span id="date"><strong>{{ instance.date|date:"d.m.Y" }}</strong></span>
+    </h2>
+{% endblock first_column %}
+{% block second_column %}
+    <h2 class="subtitle">
+        <span id="percent"><strong>{{ instance.get_percent }} %</strong></span>
+    </h2>
+{% endblock second_column %}
+{% block third_column %}
+    <h2 class="subtitle">
+        Есть <span id="percent"><strong>{{ instance.get_current_balance }}</strong> из {{ instance.value }} ₽</span>
+    </h2>
+{% endblock third_column %}
+{% block outdated_first_column %}
+<h2 class="subtitle">
+    Конец: <span id="date"><strong>{{ instance.date|date:"d.m.Y" }}</strong></span>
+</h2>
+{% endblock outdated_first_column %}
+{% block outdated_second_column %}
+<h2 class="subtitle">
+    <span id="percent"><strong>{{ instance.get_percent }} %</strong></span>
+</h2>
+{% endblock outdated_second_column %}
+{% block outdated_third_column %}
+<h2 class="subtitle">
+    Было <span id="percent"><strong>{{ instance.get_current_balance }}</strong> из {{ instance.value }} ₽</span>
+</h2>
+{% endblock outdated_third_column %}
+
