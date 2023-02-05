@@ -38,25 +38,87 @@ class Goals(models.Model):
     def get_accumulated(self):
         return self.accumulated.quantize(Decimal("1.00"), ROUND_FLOOR)
 
-    def get_history_list(self):
+    def get_expenses_list(self):
         statuses = GoalExpense.objects.filter(goal=self)
         return list(statuses)
 
-    def get_value_in_month(self, year, month):
+    def get_objects_in_month(self, object_type: models.Model, year: int, month: int) -> models.QuerySet:
+        """Получить объекты внутри месяца
+
+        Args:
+            object_type (models.Model): Тип объекта -- бампы или траты
+            year (int): Год
+            month (int): Месяц
+
+        Returns:
+            models.QuerySet: Queryset объектов
+        """
         first_date_in_month = date(year, month, 1)
         last_day = monthrange(year, month)[1]
         last_date_in_month = date(year, month, last_day)
-        history_items = GoalExpense.objects.filter(goal=self)
-        before_month = history_items.filter(date__lte=last_date_in_month)
-        after_month = history_items.filter(date__gte=first_date_in_month)
-        objects_in_month = before_month & after_month
-        try:
-            if len(objects_in_month) == 0:
-                value = 0
-            else:
-                value = objects_in_month.last().value
-            return value
-        except AttributeError:
+
+        history_items = object_type.objects.filter(goal=self)
+        objects_in_month = history_items.filter(date__lte=last_date_in_month, date__gte=first_date_in_month)
+
+        return objects_in_month
+
+    def get_expenses_in_month(self, year: int, month: int) -> models.QuerySet:
+        """Получить список трат в месяце
+
+        Args:
+            year (int): Год
+            month (Месяц): Месяц
+
+        Returns:
+            models.QuerySet: Queryset объектов
+        """
+        return self.get_objects_in_month(object_type=GoalExpense, year=year, month=month)
+    
+    def get_expenses_value_in_month(self, year: int, month: int) -> Decimal:
+        """Получить сумму трат в месяце
+
+        Args:
+            year (int): Год
+            month (int): Месяц
+
+        Returns:
+            Decimal: Сумма трат
+        """
+
+        result = self.get_expenses_in_month(year=year, month=month)
+        if result:
+            result = result.aggregate(Sum("value"))
+            return result["value__sum"]
+        else:
+            return 0
+
+    def get_bumps_in_month(self, year: int, month: int) -> models.QuerySet:
+        """Получить queryset бампов в месяце
+
+        Args:
+            year (int): Год
+            month (int): Месяц
+
+        Returns:
+            models.QuerySet: Queryset объектов
+        """
+        return self.get_objects_in_month(object_type=GoalBump, year=year, month=month)
+
+    def get_bumps_value_in_month(self, year: int, month: int) -> Decimal:
+        """Получить сумму поступлений в месяце
+
+        Args:
+            year (int): Год
+            month (int): Месяц
+
+        Returns:
+            Decimal: Сумма поступлений
+        """
+        result = self.get_bumps_in_month(year=year, month=month)
+        if result:
+            result = result.aggregate(Sum("value"))
+            return result["value__sum"]
+        else:
             return 0
 
     def get_balance_by_month(self, year: int, month: int) -> Decimal:
@@ -80,7 +142,7 @@ class Goals(models.Model):
         """Посчитать, сколько накоплено к году и месяцу
 
         Args:
-            year (int): Год, к которому надо посичтать
+            year (int): Год, к которому надо посчитать
             month (int): Месяц к которому надо посичтать
 
         Returns:

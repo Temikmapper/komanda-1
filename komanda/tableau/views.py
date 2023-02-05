@@ -42,10 +42,10 @@ def get_data_for_goals(objects, year):
                 }
             else:
                 stats = {
-                    "accumulated": item.get_accumulated_by_month(
+                    "accumulated": item.get_bumps_value_in_month(
                         year=year, month=month_num
                     ),
-                    "spent": item.get_spent_by_month(year=year, month=month_num),
+                    "spent": item.get_expenses_value_in_month(year=year, month=month_num),
                     "balance": item.get_balance_by_month(year=year, month=month_num),
                 }
             item_values.append(stats)
