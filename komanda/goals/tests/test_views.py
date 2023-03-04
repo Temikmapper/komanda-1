@@ -136,7 +136,7 @@ class GoalEditPageTest(TestCase):
             f"/goals/{goal.id}/edit",
             data={"name": "car1", "date": date(2021, 1, 1), "value": "1000.00"},
         )
-        new_date = Goals.objects.first().date
+        new_date = Goals.objects.first().finish_date
         self.assertEqual(new_date, date(2021, 1, 1))
 
     def test_POST_redirects_to_list_view(self):

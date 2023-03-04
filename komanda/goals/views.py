@@ -11,8 +11,8 @@ from goals.forms import GoalAddForm, GoalAddExpenseForm, GoalEditForm, GoalBumpF
 @login_required
 def view_all_goals(request):
     today = date.today()
-    current_goals = Goals.objects.filter(date__gte=today)
-    outdated_expenses = Goals.objects.filter(date__lt=today)
+    current_goals = Goals.objects.filter(finish_date__gte=today)
+    outdated_expenses = Goals.objects.filter(finish_date__lt=today)
 
     return render(
         request,
@@ -89,7 +89,7 @@ def edit_goal(request, id):
         "edit_goal.html",
         {
             "form": form,
-            "goal": goal,
+            "instance": goal,
         },
     )
 
