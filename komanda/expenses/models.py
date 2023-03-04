@@ -108,6 +108,11 @@ class ConstantExpenses(models.Model):
         first_date_in_month = date(year, month, 1)
         last_day = monthrange(year, month)[1]
         last_date_in_month = date(year, month, last_day)
+
+        # Если доход закончился, то возвращаем 0
+        if last_date_in_month > self.finish_date:
+            return 0
+
         history_items = ConstantExpenseHistoryItem.objects.filter(expense=self)
         before_month = history_items.filter(date__lte=last_date_in_month)
         after_month = history_items.filter(date__gte=first_date_in_month)
