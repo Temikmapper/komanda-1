@@ -1,5 +1,5 @@
 from calendar import monthrange
-from datetime import date, datetime
+from datetime import date
 from django.db.models import Sum
 from decimal import ROUND_FLOOR, Decimal
 from django.db import models

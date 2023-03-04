@@ -19,6 +19,7 @@ def get_data_for_model(objects, year):
         item_values.append(sum(item_values))
         item_categories.update({item: item_values})
 
+    # Расчёт суммы
     items_total_list = list(item_categories.values())
     monthly_sum = []
     for i in range(13):
