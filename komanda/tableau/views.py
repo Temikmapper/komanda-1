@@ -1,5 +1,6 @@
 from datetime import date
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.shortcuts import render
 from incomes import models as income_models
 from monthly import models as free_money_models
@@ -67,10 +68,19 @@ def get_data_for_goals(objects, year):
 
 
 @login_required
-def view_tableau(request, year):
+def view_tableau(request, year) -> HttpResponse:
+    """Вьюшка для Мегатаблички. Ждёт рефакторинга
+
+    Args:
+        request (_type_): _description_
+        year (int): Год для отображения
+
+    Returns:
+        HttpResponse: Ответ сервера
+    """
     regular_incomes = income_models.ConstantIncomes.objects.filter(
-        start_date__lte=date(year, 1, 1)
-    ).filter(finish_date__gte=date(year, 12, 31))
+        start_date__lte=date(year, 12, 31)
+    ).filter(finish_date__gte=date(year, 1, 1))
     income_categories = get_data_for_model(regular_incomes, year)
 
     free_money = free_money_models.FreeMoney.objects.first()
