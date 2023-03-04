@@ -8,7 +8,8 @@ from django.utils import timezone
 
 class Goals(models.Model):
     name = models.CharField(max_length=50)
-    date = models.DateField()
+    start_date = models.DateField(default=date(2022, 1, 1))
+    finish_date = models.DateField()
     value = models.DecimalField(max_digits=13, decimal_places=2)
     accumulated = models.DecimalField(
         max_digits=13, decimal_places=2, default=Decimal(0)

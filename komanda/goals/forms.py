@@ -6,7 +6,7 @@ from goals.models import Goals, GoalExpense, GoalBump
 class GoalAddForm(forms.ModelForm):
     class Meta:
         model = Goals
-        fields = ("name", "date", "value")
+        fields = ("name", "start_date", "finish_date", "value")
 
 
 class GoalAddExpenseForm(forms.ModelForm):
@@ -24,4 +24,4 @@ class GoalBumpForm(forms.ModelForm):
 class GoalEditForm(forms.ModelForm):
     class Meta:
         model = Goals
-        fields = ("name", "date", "value")
+        fields = ("name", "start_date", "finish_date", "value")

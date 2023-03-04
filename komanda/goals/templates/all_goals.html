@@ -23,7 +23,7 @@
 {% endblock progress_bar %}
 {% block first_column %}
     <h2 class="subtitle">
-        Конец: <span id="date"><strong>{{ instance.date|date:"d.m.Y" }}</strong></span>
+        Конец: <span id="date"><strong>{{ instance.finish_date|date:"d.m.Y" }}</strong></span>
     </h2>
 {% endblock first_column %}
 {% block second_column %}
@@ -38,7 +38,7 @@
 {% endblock third_column %}
 {% block outdated_first_column %}
 <h2 class="subtitle">
-    Конец: <span id="date"><strong>{{ instance.date|date:"d.m.Y" }}</strong></span>
+    Конец: <span id="date"><strong>{{ instance.finish_date|date:"d.m.Y" }}</strong></span>
 </h2>
 {% endblock outdated_first_column %}
 {% block outdated_second_column %}
