@@ -31,12 +31,12 @@ def get_data_for_model(objects, year):
     return item_categories
 
 
-def get_data_for_goals(objects, year):
+def get_data_for_goals(objects: goals_models.Goals, year: int):
     item_categories = {}
     for item in objects:
         item_values = []
         for month_num in MONTH_NAMES.keys():
-            if item.date < date(year, month_num, 1):
+            if item.finish_date < date(year, month_num, 1):
                 stats = {
                     "accumulated": 0,
                     "spent": 0,
@@ -103,7 +103,9 @@ def view_tableau(request, year) -> HttpResponse:
         fm - e for fm, e in zip(balance_after_free_money, expenses_categories["Итого"])
     ]
 
-    goals = goals_models.Goals.objects.filter(date__gte=date(year, 1, 1))
+    goals = goals_models.Goals.objects.filter(
+        start_date__lte=date(year, 12, 31)
+    ).filter(finish_date__gte=date(year, 1, 1))
     goals_categories = get_data_for_goals(goals, year)
 
     balance_after_goals = [
