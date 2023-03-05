@@ -3,9 +3,9 @@
     <div class="block">
         <div class="columns">
             <div class="column">
-                <h1 class="title">Per day: {{ daily_income }}</h1>
+                <h1 class="title">В день: {{ daily_income }}</h1>
                 <h2 class="subtitle">
-                    Free: <span id="free_money">{{ free_money|floatformat:"2" }}</span>
+                    Выделено: <span id="free_money">{{ free_money|floatformat:"2" }}</span>
                     <a id="bump_free_money_link" href={% url 'bump_free_money' year month %}>
                         <span class="icon is-small"><i class="fa-regular fa-pen-to-square"></i></span>
                     </a>
@@ -16,7 +16,7 @@
                 <left>
                 <form method="get" action={% url 'view_month_raw' year month %}>
                     <button class="button">
-                        <span class="icon is-small"><i class="fa-regular fa-pen-to-square"></i></span><span>Edit expenses</span>
+                        <span class="icon is-small"><i class="fa-regular fa-pen-to-square"></i></span><span>Удалить траты</span>
                     </button>
                 </form>
                 </left>
@@ -26,7 +26,7 @@
             <div class="tile is-child notification is-primary">
                 <form method="get" action={% url 'view_monthly_incomes' year month %}>
                     <p class="title">
-                        Incomes
+                        Доходы
                         <button class="button is-primary is-inverted">Edit</button>
                     </p>
                 </form>
@@ -35,7 +35,7 @@
             <div class="tile is-child notification is-warning">
                 <form method="get" action={% url 'view_monthly_expenses' year month %}>
                     <p class="title">
-                        Expenses
+                        Расходы
                         <button class="button is-warning is-inverted">Edit</button>
                     </p>
                 </form>
@@ -50,16 +50,16 @@
         <thead>
             <tr>
                 <th>
-                    <abbr title="Position">Date</abbr>
+                    <abbr title="Дата">Дата</abbr>
                 </th>
                 <th>
-                    <abbr title="Played">Trat</abbr>
+                    <abbr title="Трата">Трата</abbr>
                 </th>
                 <th>
-                    <abbr title="Won">Kategr</abbr>
+                    <abbr title="Категория">Категория</abbr>
                 </th>
                 <th>
-                    <abbr title="Won">Balance</abbr>
+                    <abbr title="Баланс">Баланс</abbr>
                 </th>
             </tr>
         </thead>
@@ -88,7 +88,7 @@
         <tfoot>
             <tr>
                 <th>
-                    <abbr title="Position">Total</abbr>
+                    <abbr title="Position">Всего</abbr>
                 </th>
                 <th colspan="3">
                     <span id="total_sum_of_expenses">{{ total_expenses|floatformat:"2" }}</span>
