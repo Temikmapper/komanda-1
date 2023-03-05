@@ -61,7 +61,6 @@ def get_data_for_goals(objects: goals_models.Goals, year: int):
     for i in range(12):
         sum_value = 0
         for item in range(len(item_categories.values())):
-            print(items_total_list[item][i])
             sum_value += items_total_list[item][i]["accumulated"]
         monthly_sum.append({"accumulated": sum_value})
     item_categories.update({"Итого": monthly_sum})
