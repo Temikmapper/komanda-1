@@ -3,29 +3,41 @@
     Месячный дашборд
 {% endblock title %}
 {% block subtitle_hero %}
-    Месяцный дашборд
+    Месячный дашборд
 {% endblock subtitle_hero %}
 {% block month_tabs %}
-    <div class="block">
-        <div class="block">
-            <center>
-                <h1 class="title">{{ cur_month }} {{ year|stringformat:"i" }}</h1>
-            </center>
-        </div>
-        <div class="tabs is-centered is-toggle">
-            <ul>
-                {% for month in monthes %}
-                    <li {% if month.name == cur_month %} class="is-active"{% endif %}>
-                        <a href={% url 'view_resume' year month.id %}>{{ month.name }}</a>
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
-        </block>
-    {% endblock month_tabs %}
-    {% block content %}
-        {% block settings %}
-        {% endblock settings %}
-        {% block spends_table %}
-        {% endblock spends_table %}
-    {% endblock content %}
+    {% now "F" as current_month_str %}
+    <div class="mb-3">
+        <center>
+            <h1 class="title">{{ cur_month }} {{ year|safe }}</h1>
+        </center>
+    </div>
+    <div class="tabs is-centered is-toggle mb-3">
+        <ul>
+            <li>
+                <a href="{% url 'view_resume' year|add:"-1" current_month %}">{{ year|add:"-1"|safe }}</a>
+            </li>
+            <li class="is-active">
+                <a href={% url 'view_resume' year current_month %}>{{ year|safe }}</a>
+            </li>
+            <li>
+                <a href="{% url 'view_resume' year|add:"1" current_month %}">{{ year|add:"1"|safe }}</a>
+            </li>
+        </ul>
+    </div>
+    <div class="tabs is-centered is-toggle mb-3">
+        <ul>
+            {% for month in monthes %}
+                <li {% if month.name == cur_month %} class="is-active"{% endif %}>
+                    <a href={% url 'view_resume' year month.id %}>{{ month.name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock month_tabs %}
+{% block content %}
+    {% block settings %}
+    {% endblock settings %}
+    {% block spends_table %}
+    {% endblock spends_table %}
+{% endblock content %}
