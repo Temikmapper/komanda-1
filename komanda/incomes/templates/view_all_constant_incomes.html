@@ -32,6 +32,8 @@
     <h2 class="subtitle">
         Начало: <span id="start_date"><strong>{{ instance.start_date|date:"d.m.Y" }}</strong></span>
     </h2>
+{% block add_expense_button %}
+{% endblock add_expense_button %}
 {% endblock outdated_first_column %}
 {% block outdated_second_column %}
     <h2 class="subtitle">
