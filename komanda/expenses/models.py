@@ -3,6 +3,8 @@ from datetime import date, timedelta
 from decimal import Decimal
 from django.db import models
 
+from main.mixin_models import BaseContinousEntity
+
 
 class ConstantExpenseManager(models.Manager):
     def create(self, name, start_date, value):
@@ -73,87 +75,43 @@ class UsualExpenses(models.Model):
     def __str__(self) -> str:
         return f'Usual: {self.date} category "{self.category.name}" value {self.amount:.2f}'
 
+class ConstantExpenseHistoryItem(models.Model):
+    date = models.DateField()
+    value = models.DecimalField(max_digits=9, decimal_places=2, default=00.00)
+    expense = models.ForeignKey('ConstantExpenses', on_delete=models.CASCADE)
 
-class ConstantExpenses(models.Model):
+    class Meta:
+        ordering = ["date", "id"]
+
+class ConstantExpenses(models.Model, BaseContinousEntity):
+    _name_class = "expense"
+    _url_name = "expenses"
+    _child_class = ConstantExpenseHistoryItem
     name = models.CharField(max_length=50)
     start_date = models.DateField(default=None)
     finish_date = models.DateField(default=None)
     objects = ConstantExpenseManager()
 
     class Meta:
-        ordering = ["start_date", "id"]
+        ordering = ["name", "start_date"]
 
-    @staticmethod
-    def get_objects_in_month(year: int, month: int):
-        first_date_in_month = date(year, month, 1)
-        last_day = monthrange(year, month)[1]
-        last_date_in_month = date(year, month, last_day)
-        objects = ConstantExpenses.objects.filter(
-            start_date__lte=first_date_in_month
-        ).filter(finish_date__gte=last_date_in_month)
+    
+    @classmethod
+    def get_objects_in_month(cls, year: int, month: int) -> models.QuerySet:
+        return super().get_objects_in_month(year, month)
 
-        return objects
+    @classmethod
+    def get_sum_in_month(cls, year: int, month: int) -> Decimal:
+        return super().get_sum_in_month(year, month)
 
-    @staticmethod
-    def get_sum_in_month(year: int, month: int):
-        objects = ConstantExpenses.get_objects_in_month(year, month)
-        result = Decimal(0)
+    def get_value_in_month(self, year: int, month: int) -> Decimal:
+        return super().get_value_in_month(year, month)
 
-        for item in objects:
-            result += item.get_current_value()
+    def get_history(self) -> models.QuerySet:
+        return super().get_children()
 
-        return result
+    def bump(self, value: Decimal, date: date) -> models.Model:
+        return super().bump(value, date)
 
-    def get_value_in_month(self, year, month):
-        first_date_in_month = date(year, month, 1)
-        last_day = monthrange(year, month)[1]
-        last_date_in_month = date(year, month, last_day)
-
-        # Если доход закончился, то возвращаем 0
-        if last_date_in_month > self.finish_date:
-            return 0
-
-        history_items = ConstantExpenseHistoryItem.objects.filter(expense=self)
-        before_month = history_items.filter(date__lte=last_date_in_month)
-        after_month = history_items.filter(date__gte=first_date_in_month)
-        objects_in_month = before_month & after_month
-        try:
-            if len(objects_in_month) == 0:
-                value = before_month.last().value
-            else:
-                value = objects_in_month.last().value
-            return value
-        except AttributeError:
-            return 0
-
-    def get_absolute_url(self):
-        return f"/expenses/constant/{self.id}"
-
-    def get_edit_url(self):
-        return f"/expenses/constant/{self.id}/edit"
-
-    def get_bump_url(self):
-        return f"/expenses/constant/{self.id}/bump"
-
-    def get_delete_url(self):
-        return f"/expenses/constant/{self.id}/delete"
-
-    def get_history(self):
-        return ConstantExpenseHistoryItem.objects.filter(expense=self)
-
-    def bump(self, value, date):
-        return ConstantExpenseHistoryItem.objects.create(
-            date=date, value=value, expense=self
-        )
-
-    def get_current_value(self):
-        return ConstantExpenseHistoryItem.objects.filter(expense=self).last().value
-
-
-class ConstantExpenseHistoryItem(models.Model):
-    date = models.DateField()
-    value = models.DecimalField(max_digits=9, decimal_places=2, default=00.00)
-    expense = models.ForeignKey(ConstantExpenses, on_delete=models.CASCADE)
-
-    class Meta:
-        ordering = ["date", "id"]
+    def get_current_value(self) -> Decimal:
+        return super().get_current_value()

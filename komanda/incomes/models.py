@@ -3,6 +3,8 @@ from datetime import date, timedelta
 from decimal import Decimal
 from django.db import models
 
+from main.mixin_models import BaseContinousEntity
+
 
 class ConstantIncomeManager(models.Manager):
     def create(self, name, start_date, value):
@@ -44,58 +46,75 @@ class AdditionalIncomes(models.Model):
         return self.name
 
 
-class ConstantIncomes(models.Model):
+class ConstantIncomeHistoryItem(models.Model):
+    date = models.DateField()
+    value = models.DecimalField(max_digits=9, decimal_places=2, default=00.00)
+    income = models.ForeignKey('ConstantIncomes', on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ["date", "id"]
+
+
+class ConstantIncomes(models.Model, BaseContinousEntity):
+    _name_class = "income"
+    _url_name = "incomes"
+    _child_class = ConstantIncomeHistoryItem
     name = models.CharField(max_length=50)
     start_date = models.DateField(default=None)
     finish_date = models.DateField(default=None)
     objects = ConstantIncomeManager()
 
-    @staticmethod
-    def get_objects_in_month(year: int, month: int):
-        first_date_in_month = date(year, month, 1)
-        last_day = monthrange(year, month)[1]
-        last_date_in_month = date(year, month, last_day)
-        before_month = ConstantIncomes.objects.filter(
-            start_date__lte=last_date_in_month
-        )
-        after_month = ConstantIncomes.objects.filter(
-            finish_date__gte=first_date_in_month
-        )
-        objects = before_month & after_month
-        return objects
+    class Meta:
+        ordering = ["name", "start_date"]
 
-    @staticmethod
-    def get_sum_in_month(year: int, month: int):
-        objects = ConstantIncomes.get_objects_in_month(year, month)
-        result = Decimal(0)
+    @classmethod
+    def get_objects_in_month(cls, year: int, month: int) -> models.QuerySet:
+        """Получить все доходы за месяц
 
-        for item in objects:
-            result += item.get_value_in_month(year, month)
+        Args:
+            year (int): Год
+            month (int): Месяц
 
-        return result
+        Returns:
+            models.QuerySet: Queryset из доходов
+        """
+        return super().get_objects_in_month(year, month)
 
-    def get_absolute_url(self):
-        return f"/incomes/constant/{self.id}"
+    @classmethod
+    def get_sum_in_month(cls, year: int, month: int) -> Decimal:
+        """Получить сумму доходов за месяц
 
-    def get_edit_url(self):
-        return f"/incomes/constant/{self.id}/edit"
+        Args:
+            year (int): Год
+            month (int): Месяц
 
-    def get_bump_url(self):
-        return f"/incomes/constant/{self.id}/bump"
+        Returns:
+            Decimal: Сумма за месяц
+        """ 
+        return super().get_sum_in_month(year, month)
 
-    def get_delete_url(self):
-        return f"/incomes/constant/{self.id}/delete"
+    def get_history(self) -> models.QuerySet:
+        """Получить историю доходов
 
-    def get_history(self):
-        return ConstantIncomeHistoryItem.objects.filter(income=self)
+        Returns:
+            models.QuerySet: Queryset из ConstantHistoryItem
+        """
+        return super().get_children()
 
-    def bump(self, value, date):
-        return ConstantIncomeHistoryItem.objects.create(
-            date=date, value=value, income=self
-        )
+    def bump(self, value: Decimal, date: date) -> ConstantIncomeHistoryItem:
+        """Изменить значение ЗП
+
+        Args:
+            value (Decimal): Значение
+            date (date): Дата изменения
+
+        Returns:
+            ConstantIncomeHistoryItem: Значение ЗП в моменте
+        """
+        return super().bump(value, date)
 
     def get_value_in_month(self, year: int, month: int) -> int:
-        """Получить доходы в месяце
+        """Получить последнее значение дохода в определенном месяце
 
         Args:
             year (int): Год
@@ -104,35 +123,11 @@ class ConstantIncomes(models.Model):
         Returns:
             int: Значение
         """
-        first_date_in_month = date(year, month, 1)
-        last_day = monthrange(year, month)[1]
-        last_date_in_month = date(year, month, last_day)
+        return super().get_value_in_month(year, month)
 
-        # Если доход закончился, то возвращаем 0
-        if last_date_in_month > self.finish_date:
-            return 0
-
-        history_items = ConstantIncomeHistoryItem.objects.filter(income=self)
-        before_month = history_items.filter(date__lte=last_date_in_month)
-        after_month = history_items.filter(date__gte=first_date_in_month)
-        objects_in_month = before_month & after_month
-        try:
-            if len(objects_in_month) == 0:
-                value = before_month.last().value
-            else:
-                value = objects_in_month.last().value
-            return value
-        except AttributeError:
-            return 0
-
-    def get_current_value(self):
-        return ConstantIncomeHistoryItem.objects.filter(income=self).last().value
+    def get_current_value(self) -> Decimal:
+        return super().get_current_value()
 
 
-class ConstantIncomeHistoryItem(models.Model):
-    date = models.DateField()
-    value = models.DecimalField(max_digits=9, decimal_places=2, default=00.00)
-    income = models.ForeignKey(ConstantIncomes, on_delete=models.CASCADE)
 
-    class Meta:
-        ordering = ["date", "id"]
+
