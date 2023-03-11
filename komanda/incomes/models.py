@@ -49,7 +49,7 @@ class AdditionalIncomes(models.Model):
 class ConstantIncomeHistoryItem(models.Model):
     date = models.DateField()
     value = models.DecimalField(max_digits=9, decimal_places=2, default=00.00)
-    income = models.ForeignKey('ConstantIncomes', on_delete=models.CASCADE)
+    income = models.ForeignKey("ConstantIncomes", on_delete=models.CASCADE)
 
     class Meta:
         ordering = ["date", "id"]
@@ -90,7 +90,7 @@ class ConstantIncomes(models.Model, BaseContinousEntity):
 
         Returns:
             Decimal: Сумма за месяц
-        """ 
+        """
         return super().get_sum_in_month(year, month)
 
     def get_history(self) -> models.QuerySet:
@@ -127,7 +127,3 @@ class ConstantIncomes(models.Model, BaseContinousEntity):
 
     def get_current_value(self) -> Decimal:
         return super().get_current_value()
-
-
-
-

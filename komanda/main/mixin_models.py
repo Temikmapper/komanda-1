@@ -7,9 +7,10 @@ from datetime import date
 from decimal import Decimal
 from django.db import models
 
-class BaseContinousEntity():
-    """Базовый класс для трат и доходов, они длятся во времени, могут накапливать в себе дочерние объекты
-    """
+
+class BaseContinousEntity:
+    """Базовый класс для трат и доходов, они длятся во времени, могут накапливать в себе дочерние объекты"""
+
     _name_class: str = ""
     _url_name: str = ""
     _child_class: models.Model = None
@@ -29,9 +30,9 @@ class BaseContinousEntity():
         first_date_in_month = date(year, month, 1)
         last_day = monthrange(year, month)[1]
         last_date_in_month = date(year, month, last_day)
-        objects = cls.objects. \
-            filter(start_date__lte=first_date_in_month). \
-            filter(finish_date__gte=last_date_in_month)
+        objects = cls.objects.filter(start_date__lte=first_date_in_month).filter(
+            finish_date__gte=last_date_in_month
+        )
 
         return objects
 
@@ -45,7 +46,7 @@ class BaseContinousEntity():
 
         Returns:
             Decimal: Сумма за месяц
-        """ 
+        """
         objects = cls.get_objects_in_month(year, month)
         print(objects.explain())
 
@@ -88,9 +89,7 @@ class BaseContinousEntity():
             models.Model: Объект
         """
         link = {f"{self._name_class}": self}
-        return self._child_class.objects.create(
-            date=date, value=value, **link
-        )
+        return self._child_class.objects.create(date=date, value=value, **link)
 
     def get_value_in_month(self, year: int, month: int) -> Decimal:
         """Получить последнее значение в определённом месяце
@@ -109,7 +108,7 @@ class BaseContinousEntity():
         # Если объект больше неактулен, то возвращаем 0
         if last_date_in_month > self.finish_date:
             return 0
-        
+
         # Связь объекта с дочерними
         link = {f"{self._name_class}": self}
 

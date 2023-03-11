@@ -75,13 +75,15 @@ class UsualExpenses(models.Model):
     def __str__(self) -> str:
         return f'Usual: {self.date} category "{self.category.name}" value {self.amount:.2f}'
 
+
 class ConstantExpenseHistoryItem(models.Model):
     date = models.DateField()
     value = models.DecimalField(max_digits=9, decimal_places=2, default=00.00)
-    expense = models.ForeignKey('ConstantExpenses', on_delete=models.CASCADE)
+    expense = models.ForeignKey("ConstantExpenses", on_delete=models.CASCADE)
 
     class Meta:
         ordering = ["date", "id"]
+
 
 class ConstantExpenses(models.Model, BaseContinousEntity):
     _name_class = "expense"
@@ -95,7 +97,6 @@ class ConstantExpenses(models.Model, BaseContinousEntity):
     class Meta:
         ordering = ["name", "start_date"]
 
-    
     @classmethod
     def get_objects_in_month(cls, year: int, month: int) -> models.QuerySet:
         return super().get_objects_in_month(year, month)
