@@ -128,6 +128,19 @@ def delete_goal(request, id):
     goal.delete()
     return view_all_goals(request)
 
+
+@login_required
+def goal_expenses(request, id):
+    """Отобразить страницу трат цели.
+
+    Args:
+        request (_type_): _description_
+        id (int): ID цели
+    """
+    goal = Goals.objects.get(id=id)
+    goal_expenses = GoalExpense.objects.filter(goal=goal)
+    return render(request, "goal_expenses.html", {"instances": goal_expenses, "name": goal.name})
+
 @login_required
 def delete_goal_expense(request, goal_id: int, goal_expense_id: int):
     """Удалить трату цели.
@@ -141,6 +154,18 @@ def delete_goal_expense(request, goal_id: int, goal_expense_id: int):
 
     return redirect(goal)
 
+
+@login_required
+def goal_bumps(request, id):
+    """Отобразить страницу бампов цели.
+
+    Args:
+        request (_type_): _description_
+        id (int): ID цели
+    """
+    goal = Goals.objects.get(id=id)
+    goal_bumps = GoalBump.objects.filter(goal=goal)
+    return render(request, "goal_bumps.html", {"instances": goal_bumps, "name": goal.name})
 
 
 @login_required
