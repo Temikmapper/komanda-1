@@ -37,6 +37,12 @@ class Goals(models.Model):
         # TODO: объединить с Траты и бампы, сделать разделение на шаблоне
         return GoalExpense.objects.filter(goal=self)
 
+    def get_bumps_url(self):
+        return f"/goals/{self.id}/bumps"
+    
+    def get_expenses_url(self):
+        return f"/goals/{self.id}/expenses"
+
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
 
