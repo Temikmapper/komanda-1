@@ -106,7 +106,10 @@ class BaseContinousEntity:
         last_date_in_month = date(year, month, last_day)
 
         # Если объект больше неактулен, то возвращаем 0
-        if last_date_in_month > self.finish_date:
+        if (
+            last_date_in_month > self.finish_date
+            and first_date_in_month > self.start_date
+        ):
             return 0
 
         # Связь объекта с дочерними
