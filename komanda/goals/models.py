@@ -39,7 +39,7 @@ class Goals(models.Model):
 
     def get_bumps_url(self):
         return f"/goals/{self.id}/bumps"
-    
+
     def get_expenses_url(self):
         return f"/goals/{self.id}/expenses"
 

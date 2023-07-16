@@ -139,7 +139,10 @@ def goal_expenses(request, id):
     """
     goal = Goals.objects.get(id=id)
     goal_expenses = GoalExpense.objects.filter(goal=goal)
-    return render(request, "goal_expenses.html", {"instances": goal_expenses, "name": goal.name})
+    return render(
+        request, "goal_expenses.html", {"instances": goal_expenses, "name": goal.name}
+    )
+
 
 @login_required
 def delete_goal_expense(request, goal_id: int, goal_expense_id: int):
@@ -149,7 +152,7 @@ def delete_goal_expense(request, goal_id: int, goal_expense_id: int):
         goal_id (int): ID цели
         goal_expense_id (int): ID траты цели
     """
-    goal = Goals.objects.only('id').get(id=goal_id)
+    goal = Goals.objects.only("id").get(id=goal_id)
     GoalExpense.objects.get(id=goal_expense_id).delete()
 
     return redirect(goal)
@@ -165,7 +168,9 @@ def goal_bumps(request, id):
     """
     goal = Goals.objects.get(id=id)
     goal_bumps = GoalBump.objects.filter(goal=goal)
-    return render(request, "goal_bumps.html", {"instances": goal_bumps, "name": goal.name})
+    return render(
+        request, "goal_bumps.html", {"instances": goal_bumps, "name": goal.name}
+    )
 
 
 @login_required
@@ -176,7 +181,7 @@ def delete_goal_bump(request, goal_id: int, goal_bump_id: int):
         goal_id (int): ID цели
         goal_bump_id (int): ID бампа цели
     """
-    goal = Goals.objects.only('id').get(id=goal_id)
+    goal = Goals.objects.only("id").get(id=goal_id)
     GoalBump.objects.get(id=goal_bump_id).delete()
 
     return redirect(goal)
