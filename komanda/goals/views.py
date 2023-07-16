@@ -142,3 +142,16 @@ def delete_goal_expense(request, goal_id: int, goal_expense_id: int):
     return redirect(goal)
 
 
+
+@login_required
+def delete_goal_bump(request, goal_id: int, goal_bump_id: int):
+    """Удалить бамп цели.
+
+    Args:
+        goal_id (int): ID цели
+        goal_bump_id (int): ID бампа цели
+    """
+    goal = Goals.objects.only('id').get(id=goal_id)
+    GoalBump.objects.get(id=goal_bump_id).delete()
+
+    return redirect(goal)

@@ -246,6 +246,9 @@ class GoalBump(models.Model):
     date = models.DateField(default=timezone.now)
     value = models.DecimalField(max_digits=13, decimal_places=2, default=Decimal(0))
 
+    def get_delete_url(self):
+        return f"/goals/{self.goal.id}/bumps/{self.id}/delete"
+
     class Meta:
         ordering = ["date", "id"]
 
