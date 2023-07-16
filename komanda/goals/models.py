@@ -37,6 +37,12 @@ class Goals(models.Model):
         # TODO: объединить с Траты и бампы, сделать разделение на шаблоне
         return GoalExpense.objects.filter(goal=self)
 
+    def get_bumps_url(self):
+        return f"/goals/{self.id}/bumps"
+
+    def get_expenses_url(self):
+        return f"/goals/{self.id}/expenses"
+
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
 
@@ -224,6 +230,9 @@ class GoalExpense(models.Model):
     percent = models.DecimalField(max_digits=4, decimal_places=2, default=Decimal(0))
     goal = models.ForeignKey(Goals, on_delete=models.CASCADE)
 
+    def get_delete_url(self):
+        return f"/goals/{self.goal.id}/expenses/{self.id}/delete"
+
     class Meta:
         ordering = ["date", "id"]
 
@@ -236,6 +245,9 @@ class GoalBump(models.Model):
     goal = models.ForeignKey(Goals, on_delete=models.CASCADE)
     date = models.DateField(default=timezone.now)
     value = models.DecimalField(max_digits=13, decimal_places=2, default=Decimal(0))
+
+    def get_delete_url(self):
+        return f"/goals/{self.goal.id}/bumps/{self.id}/delete"
 
     class Meta:
         ordering = ["date", "id"]
