@@ -25,6 +25,20 @@
     Есть <span id="percent"><strong>{{ instance.get_current_balance }}</strong> из {{ instance.value }} ₽</span>
 </h2>
 {% endblock third_column %}
+{% block instance_info__extra %}
+<div class="buttons">
+<form method="get" action="{{ instance.get_bumps_url }}">
+    <button class="m-0 button is-warning is-light">
+        <span>Таблица бампов</span>
+    </button>
+</form>
+<form method="get" action="{{ instance.get_expenses_url }}">
+    <button class="m-2 button is-primary is-light">
+        <span>Таблица трат</span>
+    </button>
+</form>
+</div>
+{% endblock instance_info__extra %}
 {% block instance_graphs %}
     {% comment %} <div class="box">
         {% load static %}

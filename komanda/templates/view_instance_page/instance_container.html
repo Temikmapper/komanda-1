@@ -4,7 +4,7 @@
         <div class="columns">
             <div class="column">
                 <form method="get" action="{% block instance_head__view_all_url %}{% endblock instance_head__view_all_url %}">
-                    <button class="button {{ instance_color }}"
+                    <button class="button {{ instance_color }}">
                         <span>Смотреть всех</span>
                     </button>
                 </form>
@@ -47,6 +47,7 @@
                     <span>Редактировать</span>
                 </button>
             </form>
+            {% block instance_info__extra %}{% endblock instance_info__extra %}
         </div>
     {% endblock instance_info %}
     {% block instance_history %}

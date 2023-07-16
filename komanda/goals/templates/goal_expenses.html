@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1 class="title">
+    Траты цели {{ name }}
+</h1>
+<div class="container">
+    <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+        <thead>
+            <tr>
+                <th>
+                    <abbr>Дата</abbr>
+                </th>
+                <th>
+                    <abbr>Количество</abbr>
+                </th>
+                <th>
+                    <abbr>Удалить?</abbr>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for instance in instances %}
+                <tr>
+                    <th>{{ instance.date }}</th>
+                    <th>{{ instance.value }}</th>
+                    <td>
+                        <a href="{{ instance.get_delete_url }}">
+                            <button class="delete"></button>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock content %}
