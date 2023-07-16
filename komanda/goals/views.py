@@ -2,7 +2,7 @@ from datetime import date
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
-from goals.models import Goals
+from goals.models import GoalBump, GoalExpense, Goals
 from goals.forms import GoalAddForm, GoalAddExpenseForm, GoalEditForm, GoalBumpForm
 
 # Create your views here.
@@ -127,3 +127,18 @@ def delete_goal(request, id):
     goal = Goals.objects.get(id=id)
     goal.delete()
     return view_all_goals(request)
+
+@login_required
+def delete_goal_expense(request, goal_id: int, goal_expense_id: int):
+    """Удалить трату цели.
+
+    Args:
+        goal_id (int): ID цели
+        goal_expense_id (int): ID траты цели
+    """
+    goal = Goals.objects.only('id').get(id=goal_id)
+    GoalExpense.objects.get(id=goal_expense_id).delete()
+
+    return redirect(goal)
+
+

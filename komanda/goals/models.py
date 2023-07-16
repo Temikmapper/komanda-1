@@ -230,6 +230,9 @@ class GoalExpense(models.Model):
     percent = models.DecimalField(max_digits=4, decimal_places=2, default=Decimal(0))
     goal = models.ForeignKey(Goals, on_delete=models.CASCADE)
 
+    def get_delete_url(self):
+        return f"/goals/{self.goal.id}/expenses/{self.id}/delete"
+
     class Meta:
         ordering = ["date", "id"]
 
