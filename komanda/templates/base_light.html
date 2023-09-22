@@ -1,0 +1,34 @@
+{% load static %}
+{% now "Y" as current_year %}
+{% now "m" as current_month %}
+{% now "d" as current_day %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet"
+              href="{% static 'css/bulma/bulma.css' %}"
+              type="text/css">
+        <link rel="stylesheet" href="{% static 'css/all.css' %}" type="text/css">
+        <link rel="apple-touch-icon"
+              sizes="180x180"
+              href="{% static 'favicon/apple-touch-icon.png' %}">
+        <link rel="icon"
+              type="image/png"
+              sizes="32x32"
+              href="{% static 'favicon/favicon-32x32.png' %}">
+        <link rel="icon"
+              type="image/png"
+              sizes="16x16"
+              href="{% static 'favicon/favicon-16x16.png' %}">
+        <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
+        <title>
+            {% block title %}Казначевский{% endblock %}
+        </title>
+    </head>
+    <body>
+        {% block content %}
+        {% endblock content %}
+    </body>
+</html>

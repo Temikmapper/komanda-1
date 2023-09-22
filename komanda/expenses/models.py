@@ -1,7 +1,12 @@
 from calendar import monthrange
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 from decimal import Decimal
+from uuid import uuid4
 from django.db import models
+
+from django.utils.functional import cached_property
+from ddd.interfaces.agregates.outcomes.entities import Outcome, UsualOutcome
+from ddd.interfaces.agregates.outcomes.value_objects import Category
 
 from main.mixin_models import BaseContinousEntity
 
@@ -42,12 +47,34 @@ class Categories(models.Model):
 
     def get_edit_url(self):
         return f"/expenses/categories/{self.id}/edit"
+    
+    @cached_property
+    def as_entity(self):
+        return Category(
+            id=self.id,
+            name=self.name,
+            color=self.color,
+        )
 
 
 class UsualExpenses(models.Model):
     date = models.DateField()
     amount = models.DecimalField(max_digits=9, decimal_places=2, default=00.00)
     category = models.ForeignKey(Categories, on_delete=models.CASCADE)
+
+    @cached_property
+    def as_entity(self):
+        return UsualOutcome(
+            id=self.id,
+            uuid=uuid4(),
+            outcome=Outcome(
+                uuid=uuid4(),
+                datetime=datetime(self.date.year, self.date.month, self.date.day, 0, 0, 0),
+                value=self.amount,
+            ),
+            category=self.category.as_entity,
+        )
+
 
     @staticmethod
     def get_objects_in_month(year: int, month: int):

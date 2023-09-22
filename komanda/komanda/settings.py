@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "api",
     "tableau",
     "rest_framework",
+    "ddd.adapters.operations.usual_outcomes",
 ]
 
 MIDDLEWARE = [

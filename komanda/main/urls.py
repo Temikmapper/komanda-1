@@ -13,6 +13,7 @@ from monthly import urls as monthly_urls
 from resume import urls as resume_urls
 from piggy import urls as piggies_urls
 from tableau import views as tableu_views
+from ddd.adapters import urls as ddd_urls
 
 from rest_framework import routers
 
@@ -35,4 +36,5 @@ urlpatterns = [
     path("piggies/", include(piggies_urls), name="view_all_piggies"),
     path("api/", include(router.urls), name="api_root"),
     path("tableau/<int:year>", tableu_views.view_tableau, name="view_tableau"),
+    path("ddd/", include(ddd_urls), name="ddd_urls"),
 ]

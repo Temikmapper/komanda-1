@@ -1,0 +1,6 @@
+
+<a href="{% url "ddd_add_outcome" %}">Добавить новенькое</a>
+{% for item in data %}
+    <a href="{{ outcome_url }}{{ item.id }}">Ссылка</a>
+    <p>{{ item.outcome.datetime }} {{ item.category.name }} {{ item.outcome.value }}</p>
+{% endfor %}

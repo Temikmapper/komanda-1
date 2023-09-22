@@ -1,0 +1,63 @@
+{% extends 'base_light.html' %}
+{% block title %}
+    Посмотреть последние траты
+{% endblock title %}
+{% block subtitle_hero %}
+    Добавить трату и категорию
+{% endblock subtitle_hero %}
+{% block content %}
+    <div class="block">
+        <form method="POST" class="post-form">
+            {% csrf_token %}
+            <div class="block">
+                <div class="field">
+                    <p class="control has-icons-left">
+                        <input class="input is-primary"
+                               type="date"
+                               name="date"
+                               placeholder="Дата"
+                               required
+                               value="{{ current_year }}-{{ current_month }}-{{ current_day }}"
+                               id="date">
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-calendar"></i>
+                        </span>
+                    </p>
+                </div>
+            </div>
+            <div class="block">
+                <div class="field">
+                    <p class="control has-icons-left">
+                        <input class="input is-primary"
+                               type="number"
+                               name="amount"
+                               placeholder="Сколько"
+                               step="0.01"
+                               required
+                               id="amount">
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-ruble-sign"></i>
+                        </span>
+                    </p>
+                </div>
+            </div>
+            <div class="block">
+                <div class="select is-primary">
+                    <select name="category_id" required id="category_id">
+                        {% for category in data %}
+                            <option value="{{ category.id }}">{{ category.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="block">
+                <button type="submit" class="button is-success" id="expense_save_btn">
+                    <span class="icon is-small">
+                        <i class="fas fa-check"></i>
+                    </span>
+                    <span>Сохранить</span>
+                </button>
+            </div>
+        </form>
+    </div>
+{% endblock content %}
